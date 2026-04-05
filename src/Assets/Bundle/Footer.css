@@ -1,0 +1,45 @@
+.footer-wrapper{
+    background-color: transparent;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 100%;
+    height: fit-content;
+    margin:0px auto;
+    padding-top:5px;
+    padding-bottom: 5px;
+}
+.link-div{
+    background-color: transparent;
+    display: flex;
+    margin-top: 5px;
+    width: 100%;
+    height: fit-content;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4px;
+}
+.link-tag, .link-style{
+    color: black;
+    margin: 5px;
+    text-decoration: none;
+    background-color: transparent;
+    font-size: 15px;
+    font-weight: 400;
+    
+}
+.company-reserved{
+    background-color: transparent;
+    margin-bottom: 20px;
+    text-align: center;
+    display: flex;
+    width: 100%;
+    height: fit-content;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+.company-copyright-tag{
+    background-color: transparent;
+    color: gray;
+    font-size: 13px;
+}

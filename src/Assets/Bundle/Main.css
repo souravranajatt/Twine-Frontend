@@ -1,0 +1,601 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Disable User Selection */
+
+.postFeedMainContent, .postHeaderImageMainFeed, .sidePhotoImageBox, .sideProfilePicHeader, .postButtonDesign, .postBottomAction, .iconPost, img{
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Standard syntax */
+}
+
+/* Home Main Container */
+
+.home-main-container {
+  background-color: #fafafa;
+  width: 100%;
+  min-height: 100vh;
+}
+
+
+
+
+
+
+
+
+
+
+/* Full Page Styling */
+
+
+
+/* ---------- Main && Feed ----------- */
+
+.main-wrapper {
+  margin-top:71px;
+  background-color: transparent;
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 40px;
+}
+
+
+/* ------- Side Bar Wrapper Area -------- */
+.slide-bar-wrapper{
+  position: sticky;
+  top: 0px;
+  align-self: flex-start;
+  height: fit-content;
+  background-color: transparent;
+  width: 400px;
+  max-width: 400px;
+}
+/* Side Bar Area */
+.side-bar-box{
+  background-color: #fff;
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  border: 0.5px solid #dbdbdb;
+  box-shadow:0px 4px 15px rgba(0,0,0,0.1);
+  margin: 20px auto;
+  border-radius: 5px;
+}
+/* -- Profile Card Box -- */
+.profile-card-box{
+  background-color: transparent;
+  width: 100%;
+  padding: 15px 20px;
+  padding-bottom: 10px;
+  display: flex;
+}
+.sideProfilePicHeader{
+  border-radius: 50%;
+  border: 1.5px solid #dbdbdb;
+  background-color: #f3f3f3;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.sidePhotoImageBox{
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border: none;
+  background-color: transparent;
+}
+.side-info-box{
+  background-color: transparent;
+  padding: 6px 5px;
+  width: 80%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.fullname-tagbox{
+  font-size: 18px;
+  background-color: transparent;
+  font-weight: 600;
+  margin-left:10px;
+}
+.bio-tagbox{
+  background-color: transparent;
+  font-size: 14px;
+  font-weight: 400;
+  color: grey;
+  margin-left:10px;
+  margin-top: 4px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+}
+/* -- Upload Card Box -- */
+.createPost-card-box{
+  background-color: transparent;
+  width: 100%;
+  padding: 10px 20px;
+}
+.createPost-header{
+  font-weight: 600;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  background-color: transparent;
+  padding: 0 4px;
+}
+.post-form{
+  background-color: transparent;
+  width: 100%;
+}
+.createPost-fields{
+  background-color: transparent;
+  margin:10px auto;
+  display: flex;
+  width: 100%;
+  height: fit-content;
+  align-items: flex-start;
+}
+.postFile{
+  display: none;
+}
+.postIconBtn-Design{
+  margin: 0px 0px;
+  margin-right: 2px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  display: flex;
+  padding: 7px;
+  overflow-wrap: break-word;
+}
+.postIconBtn-Design:hover{
+  /* 3D effect */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), /* shadow below */
+              0 1px 3px rgba(0, 0, 0, 0.1); /* subtle secondary shadow */
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  background-color: #f1f1f1;
+}
+.postBtnAsIconToogle-Box{
+  background-color: transparent;
+  border: none;
+  outline: none;
+  margin: 0px auto;
+  display: flex;
+  padding: 0px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+.iconPost{
+  color: #111;
+  background-color: transparent;
+  fill: transparent;
+  stroke-width: 2.5;
+  overflow-wrap: break-word;
+}
+.iconPostTimelineChange{
+  color: #ff3b6c;
+  background-color: transparent;
+  fill: #ff3b6c;
+  stroke-width: 2.5;
+  overflow-wrap: break-word;
+}
+.previewPost{
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  border: 1px solid #dbdbdb;
+}
+.errorPost{
+  color: red;
+  font-size: 14px;
+  background-color: transparent;
+  padding: 2px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.successPost{
+  color: lightgreen;
+  font-size: 14px;
+  background-color: transparent;
+  padding: 2px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+}
+.captionPost{
+  outline: none;
+  width: 100%;
+  height: 45px;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  border: 0.5px solid #ddd;
+  resize: none;
+  padding: 5px 8px;
+  font-size: 15px;
+}
+.postButtonDesign{
+  width: 100px;
+  outline: none;
+  border: none;
+  height: 32px;
+  cursor: pointer;
+  background-color: #ff3b6c;
+  font-weight: 600;
+  padding: 5px;
+  color: white;
+  font-size: 14px;
+  border-radius: 3px;
+}
+.postButtonDesign:hover{
+  background-color: #E33E5C;
+}
+
+
+
+
+
+
+
+
+
+
+/* ------- Feed Wrapper Area -------- */
+.feed-wrapper{
+  max-width: 520px;
+  width: 100%;
+  height: fit-content;
+  background-color: transparent;
+}
+
+/* ------ Feed Box -------- */
+.feed-post-box{
+  width: 100%;
+  height: auto;
+  margin: 0px auto;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border: .5px solid #dbdbdb;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* Post Header */
+.post-header{
+  display: flex;
+  background-color: transparent;
+  padding: 16px;
+  border: none;
+  height: auto;
+}
+.postHeaderImageMainFeed{
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 2px solid #dbdbdb;
+  background-color: #f3f3f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.imageFeedPostMainHeader{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+}
+.post-header-userText{
+  padding: 0px 12px;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  display: flex;
+  font-weight: 600;
+  font-size: 14.5px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.username-title{
+  color: #262626;
+  background-color: transparent;
+}
+/* Post Caption Style */
+.post-caption-wrapper{
+  height: auto;
+  padding: 8px 16px;
+  padding-top: 2px;
+  background-color:transparent;
+}
+.caption-paraHead{
+  background-color: transparent;
+  font-weight: 400;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  white-space: normal;
+  font-size: 14px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+/* Post Content Image */
+.postFeedMainContent{
+  height: auto;
+  background-color: transparent;
+  width: 100%;
+  padding: 0px 16px;
+}
+.postMainFeedContentMiddleBox{
+  height: auto;
+  width: 100%;
+  border-radius: 5px;
+  background-color: #f3f3f3;
+  border: 0.5px solid #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.mainContentMediaImage{
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  background-color: transparent;
+  object-fit: cover;
+  object-position: center;
+  border: none;
+  display: block;
+}
+
+/* Post Actions */
+.postBottomAction{
+  background-color: transparent;
+  padding: 5px 16px;
+  width: 100%;
+}
+/* Like Buttons */
+.action-toogles{
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+.postAction-Icons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  background-color: transparent;
+  margin:0px 3px;
+}
+.postActionContentBtn-ToogleBox{
+  background-color: transparent;
+  outline: none;
+  border: none;
+  display: flex;
+  margin: 0px auto;
+  padding: 0px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+.bottomAction-icons{
+  stroke-width: 2.5;
+  color: black;
+  cursor: pointer;
+  background-color: transparent;
+}
+.bottomAction-icons:hover{
+  stroke-width: 2.5;
+  color: #ff3b6c;
+  cursor: pointer;
+  background-color: transparent;
+}
+/* Comment */
+.commentPost-Box{
+  width: 100%;
+  display: flex;
+  background-color: #f1f1f1;
+  margin: 10px auto;
+  border-radius:25px;
+  padding: 4px 6px;
+  transition: all 0.3s ease;
+}
+.commentPost-field{
+  padding: 4px 6px;
+  width: 100%;
+  color: black;
+  outline: none;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  resize: none;
+  background-color: transparent;
+}
+.commentIcon-box{
+  display: flex;
+  outline: none;
+  border: none;
+  color: #242424;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  padding: 4px 6px;
+}
+.comment-icon{
+  stroke-width: 2.5;
+  color: black;
+  background-color: transparent;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------ Responsive Main Wrapper ------- */
+
+/* Fit for All Mobile, Mobile max-width = 480px */
+@media (max-width:480px){
+  .main-wrapper{
+    flex-direction: column;
+    justify-content: center;
+    gap: 0px;
+  }
+  .slide-bar-wrapper{
+    max-width: 100%;
+    top: 0px;
+    width: 100%;
+    margin:0px auto;
+    height: fit-content;
+    position: relative;
+    background-color: transparent;
+  }
+  .side-bar-box{
+    background-color: #fff;
+    width: 100%;
+    border: 0px;
+    border-bottom: 0.5px solid #dbdbdb;
+    border-radius: 0px;
+    box-sizing: border-box;
+    margin:0px auto;
+    height: auto;
+  }
+
+  .feed-wrapper{
+    max-width: 100%;
+    width: 100%;
+    margin: 0px auto;
+    height: fit-content;
+    background-color: transparent;
+  }
+  .feed-post-box{
+  width: 100%;
+  height: auto;
+  padding: 0px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-top: .5px solid #dbdbdb;
+  border-bottom: .5px solid #dbdbdb;
+  border-left: none;
+  border-right: none;
+  border-radius: 0px;
+  box-sizing: border-box;
+  box-shadow: none;
+  }
+
+}
+
+/* For all type tab or ipad fit */
+
+@media (min-width: 480px) and (max-width: 767px){ 
+  .main-wrapper{
+    flex-direction: column;
+    justify-content: center;
+    gap:0px;
+  }
+  .slide-bar-wrapper{
+    max-width: 80%;
+    width: 100%;
+    margin: 0px auto;
+    height: fit-content;
+    position: relative;
+    background-color: transparent;
+  }
+  .side-bar-box{
+    background-color: #fff;
+    width: 100%;
+    border: 0px;
+    border-bottom: .5px solid #dbdbdb;
+    border-top: 0px;
+    border-left: .5px solid #dbdbdb;
+    border-right: .5px solid #dbdbdb;
+    border-top-right-radius:0px;
+    border-top-left-radius:0px;
+    border-bottom-right-radius :5px;
+    border-bottom-left-radius :5px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    margin:0px auto;
+    height: auto;
+  }
+
+  .feed-wrapper{
+    max-width: 80%;
+    width: 100%;
+    height: fit-content;
+    background-color: transparent;
+    margin: 0px auto;
+  }
+  .feed-post-box{
+  width: 100%;
+  height: auto;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border: .5px solid #dbdbdb;
+  border-radius: 5px;
+  box-sizing: border-box;
+  }
+
+}
+
+/* Fit for Tab to Desktop 768px to 1023px */
+@media (min-width: 768px) and (max-width: 1023px){ 
+  .main-wrapper{
+    justify-content: center;
+    align-items: flex-start;
+    gap:20px;
+  }
+  .slide-bar-wrapper{
+    max-width: 395px;
+    width: 100%;
+    margin-left:20px;
+    height: fit-content;
+    position: relative;
+    background-color: transparent;
+  }
+
+  .feed-wrapper{
+    max-width: 485px;
+    width: 100%;
+    height: fit-content;
+    background-color: transparent;
+    margin-right: 20px;
+  }
+
+}

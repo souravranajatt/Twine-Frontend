@@ -1,0 +1,258 @@
+/* Header */
+.header, .header-left, .logo, .boxField{
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Standard syntax */
+}
+
+.header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: #fff;
+  border-bottom: 1px solid #dbdbdb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 30px;
+  z-index: 1000;
+}
+
+/* Left Section */ 
+
+.header-left { 
+  background-color: transparent;
+  margin-left: 40px;
+} 
+
+.logo-head{
+  background-color: transparent;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff3b6c;
+  cursor: pointer;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+  
+/* Right Section */ 
+.header-right { 
+  display: flex; 
+  background-color: transparent;
+  gap: 16px; 
+  align-items: center;
+  justify-content: center;
+} 
+
+/* Search Box */ 
+.search-box { 
+  display: flex; 
+  align-items: center; 
+  background: #f1f1f1; 
+  padding: 6px 10px; 
+  border-radius: 25px;
+  transition: all 0.3s ease; 
+} 
+.search-box input.boxField { 
+  border: none; 
+  outline: none; 
+  background: transparent; 
+  padding: 6px 8px;
+  font-size: 14px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 180px;
+} 
+.search-nav-icons{
+  background-color: transparent;
+}
+.search-icon { 
+  color: #555; 
+  cursor: pointer;
+  stroke-width: 2.5;
+  background-color: transparent;
+}
+.search-icon:hover { 
+  color: #ff3b6c;
+} 
+
+/* Icons */ 
+div.nav-bar-icons{
+  background-color: transparent;
+  justify-items: center;
+  display: flex;
+  border-radius: 0px;
+}
+.icon-left{
+  padding: 7px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0px 6px;
+  height: fit-content;
+  width: fit-content;
+  cursor: pointer;
+  background-color: #f1f1f1;
+  border-radius: 50%;
+  /* 3D effect */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), /* shadow below */
+              0 1px 3px rgba(0, 0, 0, 0.1); /* subtle secondary shadow */
+}
+.headerRightIconBtn-ToogleBox{
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 0px;
+  margin: 0px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.header-right > div.nav-bar-icons .iconTabRight{
+  margin-left: 0px;
+  cursor: pointer;
+  background-color: transparent;
+  transition: color 0.3s; 
+  margin: auto;
+  fill: #f1f1f1;
+  color: #555;
+  stroke-width: 2.5;
+} 
+.header-right > div.nav-bar-icons .iconTabRight:hover { 
+  color: #ff3b6c;
+  fill: #ff3b6c;
+} 
+
+/* ============================= */
+/* DROPDOWN STYLING */
+/* ============================= */
+
+.dropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  z-index: 1200;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+.dropdown-unorderList {
+  list-style: none;
+  margin: 0;
+  padding: 3px 0;
+  background-color: transparent;
+}
+
+.dropdown-listItem{
+  cursor: pointer;
+  background-color: transparent;
+  transition: background 0.25s;
+  font-size: 13px;
+  padding: 8px 12px;
+}
+.dropDownBtnDesign-Box{
+  background-color: transparent;
+  color: #111;
+  cursor: pointer;
+  width: 100%;
+  padding: 2px;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  gap:4.5px;
+  outline: none;
+  border: none;
+  font-size: 14px;
+}
+
+.dropdown-listItem:hover {
+  background: #f1f1f1;
+  color: #ff3b6c;
+}
+
+.dropdownIcons{
+  stroke-width: 2;
+  background-color: transparent;
+}
+
+.dropdown-linkList{
+  text-decoration: none;
+  width: 100%;
+  color: inherit;
+}
+
+/* Specific Dropdown Placement */
+.notify-dropdown {
+  right: -20px;
+  width: 200px;
+}
+
+.profile-dropdown {
+  right: 0;
+  width: 160px;
+}
+
+/* Small screen adjustments */
+@media (max-width: 768px) {
+  .search-box input.boxField {
+    width: 120px;
+  }
+  .dropdown {
+    top: 55px;
+    right: -10px;
+    min-width: 160px;
+  }
+  .dropdown-listItem {
+    cursor: pointer;
+    background-color: transparent;
+    transition: background 0.25s;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .search-box {
+    flex: 1;
+    width: 100%;
+  }
+
+  .search-box input.boxField {
+    width: 100%;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

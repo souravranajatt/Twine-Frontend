@@ -1,0 +1,702 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Disable user select */
+.profileSendLikeActionBtns-Box, .profileFollowActionBtns-Box, .profileUnfollowActionBtns-Box, .profileImagePFP-Box, .profilePostMainContentMedia-Box, .profilePostHeaderPFPImage-Box, img, button{
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Standard syntax */
+}
+
+/* Main - Conatiner */
+.main-wrapper-profile{
+    background-color: #fafafa;
+    width: 100%;
+    min-height: 100vh;
+}
+
+
+
+/* -------  Full Page Styling -------- */
+
+/* Middle Main Wrapper */
+.middle-main-container{
+    margin-top: 71px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: transparent;
+}
+
+/* Profile Content Box */
+.profileContent-Box{
+    max-width: 540px;
+    width: 100%;
+    margin:0 auto;
+    background-color: transparent;
+}
+
+
+
+
+
+
+
+/* Profile Header Box */
+.profileHeader-Box{
+    height: fit-content;
+    background-color:#fff;
+    border: .5px solid #dbdbdb;
+    box-shadow:0px 4px 15px rgba(0,0,0,0.1);
+    margin:20px auto;
+    width: 100%;
+    border-radius: 5px;
+    padding: 16px;
+    box-sizing: border-box;
+}
+    /* Profile Image Header Box Info */
+.profileImageHeader-Box{
+    background-color: transparent;
+    width: 100%;
+    height: auto;
+    display: flex;
+    margin:0px auto;
+    align-items: flex-start;
+    gap: 8px;
+}
+.profileImagePFP-Box{
+    background-color: #f3f3f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+    width: 90px;
+    border: 1.5px solid #dbdbdb;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.profileMainImagePFP{
+    background-color: transparent;
+    border-radius: 50%;
+    border:none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;          /* 🔥 key line */
+    object-position: center;
+    display: block;
+}
+.profileNameInfo-Box{
+    background-color: transparent;
+    padding: 5px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+}
+.profileFullNameInfoTag-Box{
+    background-color: transparent;
+    font-size: 19px;
+    font-weight: 600;
+    margin: 3px 1px;
+    color: #262626;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.profileUserNameInfoTag-Box{
+    background-color: transparent;
+    font-size: 15px;
+    width: fit-content;
+    font-weight: 400;
+    margin: 3px 1px;
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    color: gray;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.profileUsernameVerifyBadgeIcon-Box{
+    fill: #111;
+    cursor: pointer;
+    color: white;
+    stroke-width: 2.5;
+    background-color: transparent;
+    padding-top: 1px;
+}
+    /* Profile Extra Data Info */
+.profileExtraData-Box{
+    background-color: transparent;
+    margin: 0 auto;
+    margin-top: 11px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    gap: 8px;
+}
+.profileExtraDataInfoPara-Box{
+    color: #555;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 2px 0px;
+    width: fit-content;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px 2px;
+    gap: 3px;
+}
+.dataUserIcons{
+    fill: #f1f1f1;
+    stroke-width: 2.5px;
+}
+    /* Profile Bio Info */
+.profileBioData-Box{
+    background-color: transparent;
+    width: 100%;
+    margin: 0px auto;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+}
+.profileBioDataInfoPara-Box{
+    flex-direction: column;
+    display: flex;
+    font-size: 15px;
+    color: #242424;
+    width: 100%;
+    background-color: transparent;
+    padding: 4px 2px;
+}
+
+   /* Following-Follower Data Pack */
+.userFollowDataInfoPack{
+    background-color: transparent;
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    padding: 3px 2px;
+    display: flex;
+    gap:5px;
+}
+.userFollowDataContentBox{
+    background-color:transparent;
+    font-size: 14px;
+    font-weight: 600;
+    margin-right: 2px;
+}
+
+   /* Follow Btn Styling */
+.profileActionContentBtn-Box{
+    background-color: transparent;
+    padding-top: 8px;
+    padding-left:5px;
+    padding-right:5px;
+    padding-bottom: 0px;
+    margin: 0px auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 5px;
+}
+.profileSendLikeActionBtns-Box{
+    background:#ff3b6c;
+    width: 100%;
+    font-weight: 600;
+    border-radius: 3px;
+    border: none;
+    color: #fff;
+    outline: none;
+    height: fit-content;
+    padding: 8px 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: flex-start;
+}
+.profileFollowActionBtns-Box{
+    background:#ff3b6c;
+    width: 100%;
+    font-weight: 600;
+    border-radius: 3px;
+    border: none;
+    color: #fff;
+    outline: none;
+    height: fit-content;
+    padding: 8px 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: flex-start;
+}
+.profileUnFollowActionBtns-Box{
+    background:#888;
+    width: 100%;
+    font-weight: 600;
+    border-radius: 3px;
+    border: none;
+    color: #fff;
+    outline: none;
+    height: fit-content;
+    padding: 8px 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: flex-start;
+}
+.profileFollowActionBtns-Box:hover, .profileSendLikeActionBtns-Box:hover{
+    background-color: #E33E5C;
+}
+.profileActionBtnIconDesign{
+    stroke-width: 2.5;
+}
+
+
+
+
+
+
+
+
+
+
+/* Profile Middle Toogle Box */
+.profileMiddle-Box{
+    background-color: transparent;
+    border-bottom: 1px solid #dbdbdb;
+    margin:0px auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profileTabBarMidIconDesign-Box{
+    padding: 5px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+.profileContenttabBtnIconDesign{
+    outline: none;
+    justify-content: center;
+    align-items: center;
+    margin:0px auto;
+    background-color: transparent;
+    display: flex;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+}
+.tabIconsBox-MidProfile{
+    stroke-width: 2.5;
+    color: #262626;
+    cursor: pointer;
+}
+.tabIconsBox-MidProfile:hover{
+    color: #ff3b6c;
+}
+
+
+
+
+
+
+
+/* Account Private Message Handling */
+.AccountPrivateContentMsgBox{
+    background-color: transparent;
+    width: 100%;
+    display: block;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 5px;
+    margin: 20px auto;
+}
+.AccountPrivateDilaugeBox{
+    background-color: transparent;
+    display: flex;
+    width: fit-content;
+    margin: 0px auto;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+}
+.LockedAccountIconBox{
+    width: 80px;
+    height: 80px;
+    background-color: transparent;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.LockedAccountIconContentBox{
+    background-color: transparent;
+    height: 100%;
+    stroke-width: 2;
+    width: 100%;
+    color: #444;
+}
+.LockedAccountSpanMsgBox{
+    background-color: transparent;
+    font-size: 25px;
+    font-weight: 600;
+    padding: 5px;
+    color: #444;
+}
+.contextMsgBox{
+    background-color: transparent;
+    width: 100%;
+    margin: 5px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.contextMsgBoxParagraphText{
+    font-size: 14px;
+    color: #444;
+}
+
+
+
+
+
+
+
+
+
+
+/* Profile footer Box */
+.profileFooter-Box{
+    background-color: transparent;
+    margin:0px auto;
+    width: 100%;
+}
+/*************** Feed Conent Bar ****************/
+.contentSectionDesignFeed-Box{
+    background-color: transparent;
+    margin:0px auto;
+}
+.profilePostCard-Box{
+    width: 100%;
+    height: auto;
+    margin: 0px auto;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    background-color: #fff;
+    border: 0.5px solid #dbdbdb;
+    border-radius: 0px;
+    box-sizing: border-box;
+}
+.profilePostHeaderMain-Box{
+    display: flex;
+    background-color: transparent;
+    padding: 16px;
+    border: none;
+    height: auto;
+}
+.profilePostHeaderPFPImage-Box{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: 2px solid #dbdbdb;
+    background-color: #f3f3f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.profilePostHeaderPFP-Box{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    object-position: center;
+    display: block;
+    border: none;
+    background-color: transparent;
+}
+.profilePostHeaderUsernameText-box{
+    padding: 0px 12px;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    display: flex;
+    font-weight: 600;
+    font-size: 15px;
+    gap: 3px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.profilePostHeaderUserText-Box{
+    color: #262626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+.profilePostVerifyBadgeIcon-Box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+}
+.profilePostUsernameVerifyBadgeIcon-Box{
+    fill: #111;
+    color: white;
+    stroke-width: 2.5;
+}
+.profilePostCaptionMain-Box{
+    height: auto;
+    padding: 8px 16px;
+    padding-top: 2px;
+    background-color:transparent;
+}
+.profilePostCaptionText-Box{
+    background-color: transparent;
+    font-weight: 400;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.profilePostMainContentMedia-Box{
+    height: auto;
+    background-color: transparent;
+    width: 100%;
+    padding: 0px 16px;
+}
+.postMainContentMiddleBox{
+    height: auto;
+    width: 100%;
+    border-radius: 5px;
+    background-color: #f3f3f3;
+    border: 0.5px solid #f1f1f1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.profilePostContentView-Box{
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background-color: transparent;
+    object-fit: cover;
+    object-position: center;
+    border: none;
+    display: block;
+}
+/* No Post Yet Check Error */
+.errorCheckNoPost-Box{
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    padding: 10px 5px;
+    justify-content: center;
+    display: flex;
+}
+.errorCheckNoPostWrapper-Box{
+    background-color: transparent;
+    display: flex;
+    width: fit-content;
+    margin: 40px auto;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+}
+.errorCheckIconPost-Box{
+    width: 80px;
+    height: 80px;
+    background-color: transparent;
+    border-radius: 50px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.errorCheckIconNoPost{
+    background-color: transparent;
+    height: 100%;
+    stroke-width: 2.1;
+    fill: #f1f1f1;
+    color: #444;
+    width: 100%;
+    border-radius: 50px;
+}
+.errorCheckTextNoPost-Box{
+    background-color: transparent;
+    font-size: 25px;
+    font-weight: 600;
+    padding: 5px;
+    color: #444;
+}
+
+
+
+
+
+
+
+
+
+
+
+/************ Timeline Content Box *************/
+.contentSectionDesignTimeline-Box{
+    background-color: transparent;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.timelineConectionContentMainBox{
+    background-color: transparent;
+    margin: auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+.connectionTimelineHeaderBar-Box{
+    background-color: transparent;
+    padding-top: 10px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.spanTimelineHeaderBox{
+    font-size: 15px;
+    color: #111;
+    display: flex;
+    gap: 4px;
+    font-weight: 600;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.usernameTimelineBoxHiighlight{
+    font-weight: 600;
+    font-size: 14px;
+}
+.connectionTimelinePostHeaderBox{
+    background-color: transparent;
+    padding: 12px 2px;
+    font-weight: 600;
+}
+.spanTimeLinePostHeaderTextBox{
+    font-size: 20px;
+}
+.connectionTimelinePostListBox{
+    padding: 5px 0px;
+    background-color: transparent;
+    width: 100%;;
+}
+.grid-3x3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+.grid-item {
+  width: 100%;
+  aspect-ratio: 1 / 1;   /* square */
+  overflow: hidden;
+  background: #000;
+}
+.gridImagesList {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  object-position: center;
+  display: block;
+}
+
+/* no connection yet */
+.errorCheckNoTimeline-Box{
+    background-color: transparent;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    padding: 10px 5px;
+    justify-content: center;
+    display: flex;
+}
+.errorCheckNoTimelineWrapper-Box{
+    background-color: transparent;
+    display: flex;
+    width: fit-content;
+    margin: 40px auto;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+}
+.errorCheckIconTimeline-Box{
+    width: 80px;
+    height: 80px;
+    background-color: transparent;
+    border-radius: 50px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.errorCheckTextTimeline-Box{
+    background-color: transparent;
+    font-size: 25px;
+    font-weight: 600;
+    padding: 5px;
+    color: #444;
+}
+.errorCheckIconNoTimeline{
+    background-color: transparent;
+    height: 100%;
+    stroke-width: 0.5;
+    fill: #ff3b6c;
+    color: #ff3b6c;
+    width: 100%;
+    border-radius: 50px;
+}
+/* No Post Yet */
+.timelineNoPostMsgBox{
+    background-color: transparent;
+}
+.timelineErrorMsgNoPost{
+    background-color: transparent;
+    font-size: 18px;
+    font-weight: 600;
+    color: #444;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: -8px;
+}
+
+
+
+
+/************ Taggeed Content Box *************/
+.contentSectionDesignTagged-Box{
+    background-color: green;
+    margin:0px auto;
+    height: 200px;
+}
