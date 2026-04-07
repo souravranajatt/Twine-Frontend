@@ -256,12 +256,29 @@ function Profile() {
                           )}
                           {/* Post - Main Content */}
                           <div className="profilePostMainContentMedia-Box">
-                            <div className="postMainContentMiddleBox">
-                              <img
-                                src={`http://localhost:8082/uploads/${post.fetchFileName}`}
-                                alt="Post Media"
-                                className="profilePostContentView-Box"
-                              />
+                            <div className="postMainContentMiddleBox" style={{
+                              paddingBottom: post.width && post.height
+                                ? `${(post.height / post.width) * 100}%`
+                                : '100%'   // default square jab width/height null ho
+                            }}>
+
+                              {post.postType === 'VIDEO' ? (
+                                <video
+                                  src={`http://localhost:8082/uploads/${post.fetchFileName}`}
+                                  className="profilePostContentView-Box"
+                                  style={{ position: 'absolute', top: 0, left: 0 }}
+                                  controls
+                                  playsInline
+                                />
+                              ) : (
+                                <img
+                                  src={`http://localhost:8082/uploads/${post.fetchFileName}`}
+                                  alt="Post Media"
+                                  className="profilePostContentView-Box"
+                                  style={{ position: 'absolute', top: 0, left: 0 }}
+                                />
+                              )}
+
                             </div>
                           </div>
                           {/* Post Action Buttons */}
