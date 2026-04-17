@@ -290,15 +290,14 @@ function Profile() {
                               <div className="postAction-Icons"><button type="button" className="postActionContentBtn-ToogleBox" ><MessageCircleDashed size={23} className="bottomAction-icons" /></button></div>
                             </div>
                             {/* Comments Section */}
-                            <form className="action-toogles">
-                              {/* Comment-Box */}
+                            {post.commentEnable === true ? (<div className="action-toogles">
                               <div className="commentPost-Box">
                                 <input type="text" name="commentPost" className="commentPost-field" placeholder="Drop a comment" autoCapitalize="none" autoComplete="off" autoCorrect="off" />
                                 <button type="button" className="commentIcon-box">
                                   <SendHorizontal size={23} className="comment-icon" />
                                 </button>
                               </div>
-                            </form>
+                            </div>) : (<></>)}
                           </div>
                         </div>
                       ))
