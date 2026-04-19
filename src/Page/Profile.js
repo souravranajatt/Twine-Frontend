@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useEffectEvent } from "react";
 import { Heart, HeartPlus, HeartOff, SendHorizontal, UserLock, MessageCircleDashed, UserRoundPlus, Flame, UserRoundCheck, LayoutGrid, History, SquareUser, MapPin, Link2, BadgeCheck, BriefcaseBusiness, CalendarDays, Aperture } from "lucide-react";
 import { useParams } from "react-router-dom";
 import "../Assets/Bundle/Profile.css";
@@ -6,12 +6,18 @@ import HeaderArea from "./Header";
 import FooterArea from "./Footer";
 import NotFoundPage from "../ErrorHandler/ErrrorDesign/ErrorPageDesign";
 import InternalErrorPage from "../ErrorHandler/ErrrorDesign/InternalErrorPageDesign";
-import { followUserAPI, userProfilePageAPI } from "../utils/userProfileAPI";
+import { followUserAPI, userProfilePageAPI, searchUserPostsAPI } from "../utils/userProfileAPI";
 
 function Profile() {
 
   // OnClick Active Visible Tab for Footer Feed, Timeline & Tagged..
   const [contentVisibleTab, setContentVisibleTab] = useState("FeedVisibleTab");
+
+  // --------------- Profile Posts Pagination / Infinite Scroll State ---------------
+  const [profilePosts, setProfilePosts] = useState([]);
+  const [postPage, setPostPage] = useState(0);
+  const [loadingPosts, setLoadingPosts] = useState(false);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
 
   // Profile User URL Fuctionality
   const { username } = useParams(); // get username from URL
@@ -37,6 +43,61 @@ function Profile() {
 
     fetchProfile();
   }, [username]);
+
+
+  // Fetch Paginated Posts when username or page changes
+  useEffect(() => {
+    const fetchPosts = async () => {
+      if (!hasMorePosts) return;
+      setLoadingPosts(true);
+      try {
+        const data = await searchUserPostsAPI(username, postPage);
+
+        if (!data || data.length === 0) {
+          setHasMorePosts(false);
+        } else {
+          setProfilePosts((prevPosts) => {
+            const existingIds = new Set(prevPosts.map((p) => p.fetchPostId));
+            const newPosts = data.filter((p) => !existingIds.has(p.fetchPostId));
+            return [...prevPosts, ...newPosts];
+          });
+        }
+      } catch (err) {
+        console.log("Error loading profile posts!", err);
+      } finally {
+        setLoadingPosts(false);
+      }
+    };
+
+    fetchPosts();
+  }, [username, postPage, hasMorePosts]);
+
+  // Reset posts when username changes
+  useEffect(() => {
+    setProfilePosts([]);
+    setPostPage(0);
+    setHasMorePosts(true);
+  }, [username]);
+
+  // Infinite Scroll for Profile Posts
+  useEffect(() => {
+    // Only attach scroll when on Feed tab
+    if (contentVisibleTab !== "FeedVisibleTab") return;
+
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 100 >=
+        document.documentElement.scrollHeight
+      ) {
+        if (!loadingPosts && hasMorePosts) {
+          setPostPage((prev) => prev + 1);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadingPosts, hasMorePosts, contentVisibleTab]);
 
 
   // Store Follow Status
@@ -222,8 +283,8 @@ function Profile() {
                 {/* Feed Section */}
                 {contentVisibleTab === "FeedVisibleTab" && (
                   <div className="contentSectionDesignFeed-Box">
-                    {userProfileDataURL.userPosts && userProfileDataURL.userPosts.length > 0 ? (
-                      userProfileDataURL.userPosts.map((post) => (
+                    {profilePosts && profilePosts.length > 0 ? (
+                      profilePosts.map((post) => (
                         <div key={post.fetchPostId} className="profilePostCard-Box">
                           {/* Post - Header */}
                           <div className="profilePostHeaderMain-Box">
@@ -302,15 +363,18 @@ function Profile() {
                         </div>
                       ))
                     ) : (
-                      <div className="errorCheckNoPost-Box">
-                        <div className="errorCheckNoPostWrapper-Box">
-                          <div className="errorCheckIconPost-Box">
-                            <Aperture height="24" width="24" className="errorCheckIconNoPost" />
+                      !loadingPosts && (
+                        <div className="errorCheckNoPost-Box">
+                          <div className="errorCheckNoPostWrapper-Box">
+                            <div className="errorCheckIconPost-Box">
+                              <Aperture height="24" width="24" className="errorCheckIconNoPost" />
+                            </div>
+                            <p className="errorCheckTextNoPost-Box">No Post Yet</p>
                           </div>
-                          <p className="errorCheckTextNoPost-Box">No Post Yet</p>
                         </div>
-                      </div>
+                      )
                     )}
+                    {loadingPosts && <p className="feed-loading-text">Loading posts...</p>}
                   </div>
                 )}
 
