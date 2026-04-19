@@ -51,11 +51,10 @@ function Header() {
   const logoutHandle = async () => {
     // Call Logout API
     try {
-      const res = await logoutHandleAPI();
+      await logoutHandleAPI();
       setProfileTabNav(false);
       setNotifyTabNav(false);
       navigate("/login", { replace: true });
-      console.log("Logout Success");
     } catch (err) {
       console.log("Logout Failed!");
     }

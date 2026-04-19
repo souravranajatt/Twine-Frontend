@@ -364,6 +364,20 @@ img {
   background-color: transparent;
 }
 
+.profilePostVerifyBadgeIcon-Box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.profilePostUsernameVerifyBadgeIcon-Box {
+  fill: #111;
+  color: white;
+  stroke-width: 2.5;
+  margin-left: 2px;
+}
+
 /* Post Caption Style */
 .post-caption-wrapper {
   height: auto;

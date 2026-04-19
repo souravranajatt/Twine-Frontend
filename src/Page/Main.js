@@ -1,6 +1,6 @@
 // Main.js
 import React, { useState, useEffect, useRef } from "react";
-import { Image, Heart, Tag, MessageCircleDashed, MapPin, SendHorizontal, Flame } from "lucide-react";
+import { BadgeCheck, Image, Heart, Tag, MessageCircleDashed, MapPin, SendHorizontal, Flame } from "lucide-react";
 import "../Assets/Bundle/Main.css";
 import HeaderArea from "./Header";
 import FooterArea from "./Footer";
@@ -281,6 +281,9 @@ function Main() {
                   </div>
                   <div className="post-header-userText">
                     <span className="username-title">{post.username}</span>
+                    {post.fetchVerified === true && (
+                      <span className="profilePostVerifyBadgeIcon-Box"><BadgeCheck height="20" width="20" className="profilePostUsernameVerifyBadgeIcon-Box" /></span>
+                    )}
                   </div>
                 </div>
                 {/* Post - Caption */}
