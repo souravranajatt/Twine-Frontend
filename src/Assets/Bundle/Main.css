@@ -352,16 +352,24 @@ img {
   padding: 0px 12px;
   justify-content: center;
   align-items: center;
+  text-decoration: none;
   background-color: transparent;
   display: flex;
+
   font-weight: 600;
   font-size: 14.5px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.userLinkTextStyle {
+  text-decoration: none;
+  color: #262626;
+}
+
 .username-title {
   color: #262626;
   background-color: transparent;
+
 }
 
 .profilePostVerifyBadgeIcon-Box {
@@ -674,4 +682,40 @@ img {
     margin-right: 20px;
   }
 
+}
+
+/* Custom Loader Design Added */
+.spinner-icon {
+  animation: spin-loader 1s linear infinite;
+  color: #ff3b6c;
+}
+
+@keyframes spin-loader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.feed-loading-spinner-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
+}
+
+/* Post Caption Show More Design Added */
+.captionShowMoreBtn {
+  color: #8e8e8e;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.captionShowMoreBtn:hover {
+  color: #555;
 }

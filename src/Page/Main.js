@@ -1,6 +1,7 @@
 // Main.js
 import React, { useState, useEffect, useRef } from "react";
-import { BadgeCheck, Image, Heart, Tag, MessageCircleDashed, MapPin, SendHorizontal, Flame } from "lucide-react";
+import { Link } from 'react-router-dom';
+import { BadgeCheck, Image, Heart, Tag, MessageCircleDashed, MapPin, SendHorizontal, Flame, Loader2 } from "lucide-react";
 import "../Assets/Bundle/Main.css";
 import HeaderArea from "./Header";
 import FooterArea from "./Footer";
@@ -33,6 +34,16 @@ function Main() {
   const [page, setPage] = useState(0);         // Current page number (starts from 0)
   const [loadingPosts, setLoadingPosts] = useState(false); // API loading staus tracking
   const [hasMore, setHasMore] = useState(true); // Flag if more posts are available
+
+  // Expanded Captions State
+  const [expandedCaptions, setExpandedCaptions] = useState({});
+
+  const toggleCaption = (postId) => {
+    setExpandedCaptions((prev) => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
 
   // UseEffect for Fetching Posts on Page change
   useEffect(() => {
@@ -280,7 +291,7 @@ function Main() {
                     />
                   </div>
                   <div className="post-header-userText">
-                    <span className="username-title">{post.username}</span>
+                    <span className="username-title"><Link to={`/${post.username}`} className="userLinkTextStyle">{post.username}</Link></span>
                     {post.fetchVerified === true && (
                       <span className="profilePostVerifyBadgeIcon-Box"><BadgeCheck height="20" width="20" className="profilePostUsernameVerifyBadgeIcon-Box" /></span>
                     )}
@@ -289,7 +300,20 @@ function Main() {
                 {/* Post - Caption */}
                 {post.fetchPostCaption && (
                   <div className="post-caption-wrapper">
-                    <p className="caption-paraHead">{post.fetchPostCaption}</p>
+                    <p className="caption-paraHead">
+                      {post.fetchPostCaption.length > 100 && !expandedCaptions[post.fetchPostId]
+                        ? post.fetchPostCaption.slice(0, 100) + "... "
+                        : post.fetchPostCaption}
+
+                      {post.fetchPostCaption.length > 100 && (
+                        <span
+                          className="captionShowMoreBtn"
+                          onClick={() => toggleCaption(post.fetchPostId)}
+                        >
+                          {expandedCaptions[post.fetchPostId] ? " show less" : "more"}
+                        </span>
+                      )}
+                    </p>
                   </div>
                 )}
                 {/* Post - Main Content */}
@@ -341,7 +365,11 @@ function Main() {
                 </div>
               </div>
             ))}
-            {loadingPosts && <p className="feed-loading-text">Loading posts...</p>}
+            {loadingPosts && (
+              <div className="feed-loading-spinner-box">
+                <Loader2 size={30} className="spinner-icon" />
+              </div>
+            )}
           </div>
 
         </main>

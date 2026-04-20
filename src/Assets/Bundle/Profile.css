@@ -778,3 +778,57 @@ button {
     margin: 0px auto;
     height: 200px;
 }
+
+/* Custom Loader Design Added */
+.fullPageLoader-Box {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fafafa;
+}
+
+.spinner-icon {
+    animation: spin-loader 1s linear infinite;
+    color: #ff3b6c;
+}
+
+@keyframes spin-loader {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text-spinner {
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+    letter-spacing: 0.5px;
+}
+
+.feed-loading-spinner-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+}
+
+/* Post Caption Show More Design Added */
+.captionShowMoreBtn {
+    color: #8e8e8e;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.captionShowMoreBtn:hover {
+    color: #555;
+}

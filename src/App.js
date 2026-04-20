@@ -38,6 +38,12 @@ function App() {
             <Profile />
           </ProtectedRoute>
         } />
+        
+        <Route path='/:username/:tab' element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } />
 
         <Route path='/settings/my-account' element={
           <ProtectedRoute>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Heart, HeartPlus, HeartOff, SendHorizontal, UserLock, MessageCircleDashed, UserRoundPlus, Flame, UserRoundCheck, LayoutGrid, History, SquareUser, MapPin, Link2, BadgeCheck, BriefcaseBusiness, CalendarDays, Aperture } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { Heart, HeartPlus, HeartOff, SendHorizontal, UserLock, MessageCircleDashed, UserRoundPlus, Flame, UserRoundCheck, LayoutGrid, History, SquareUser, MapPin, Link2, BadgeCheck, BriefcaseBusiness, CalendarDays, Aperture, Loader2 } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
 import "../Assets/Bundle/Profile.css";
 import HeaderArea from "./Header";
 import FooterArea from "./Footer";
@@ -10,8 +10,36 @@ import { followUserAPI, userProfilePageAPI, searchUserPostsAPI } from "../utils/
 
 function Profile() {
 
+  const { username, tab } = useParams(); // get username and tab from URL
+  const navigate = useNavigate();
+
   // OnClick Active Visible Tab for Footer Feed, Timeline & Tagged..
-  const [contentVisibleTab, setContentVisibleTab] = useState("FeedVisibleTab");
+  const [contentVisibleTab, setContentVisibleTab] = useState(() => {
+    if (tab === "timeline") return "TimeLineVisibleTab";
+    if (tab === "tagged") return "TaggedVisibleTab";
+    return "FeedVisibleTab";
+  });
+
+  // Sync state if URL changes directly
+  useEffect(() => {
+    if (tab === "timeline") {
+      setContentVisibleTab("TimeLineVisibleTab");
+    } else if (tab === "tagged") {
+      setContentVisibleTab("TaggedVisibleTab");
+    } else {
+      setContentVisibleTab("FeedVisibleTab");
+    }
+  }, [tab]);
+
+  const handleTabClick = (newTab) => {
+    if (newTab === "FeedVisibleTab") {
+      navigate(`/${username}/posts`, { replace: true });
+    } else if (newTab === "TimeLineVisibleTab") {
+      navigate(`/${username}/timeline`, { replace: true });
+    } else if (newTab === "TaggedVisibleTab") {
+      navigate(`/${username}/tagged`, { replace: true });
+    }
+  };
 
   // --------------- Profile Posts Pagination / Infinite Scroll State ---------------
   const [profilePosts, setProfilePosts] = useState([]);
@@ -19,36 +47,63 @@ function Profile() {
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [hasMorePosts, setHasMorePosts] = useState(true);
 
+  // Expanded Captions State
+  const [expandedCaptions, setExpandedCaptions] = useState({});
+
+  const toggleCaption = (postId) => {
+    setExpandedCaptions((prev) => ({
+      ...prev,
+      [postId]: !prev[postId]
+    }));
+  };
+
   // Profile User URL Fuctionality
-  const { username } = useParams(); // get username from URL
   const [userProfileDataURL, setUserProfileDataURL] = useState(null); // Collect user data
   const [userProfileStatusURL, setUserProfileStatusURL] = useState("LoadingUserProfileURL");
 
+  // Initial Load — Fetch Profile + First Page Posts
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchInitialData = async () => {
+      // Reset posts state on username change
+      setProfilePosts([]);
+      setPostPage(0);
+      setHasMorePosts(true);
+
       try {
-        const userProfileData = await userProfilePageAPI(username);
-        setUserProfileDataURL(userProfileData);
+        const profileData = await userProfilePageAPI(username);
+        setUserProfileDataURL(profileData);
         setUserProfileStatusURL("FoundUserProfileURL");
+
+        // Fetch first page of posts only if profile is accessible
+        if (profileData.searchPrivateShow === true) {
+          try {
+            const postsData = await searchUserPostsAPI(username, 0);
+            if (!postsData || postsData.length === 0) {
+              setHasMorePosts(false);
+            } else {
+              setProfilePosts(postsData);
+            }
+          } catch (postErr) {
+            console.log("Error loading profile posts!", postErr);
+          }
+        }
       } catch (err) {
         if (err.message === "NotFoundUserProfileURL") {
-          // User not found
           setUserProfileStatusURL("NotFoundUserProfileURL");
         } else {
-          // Any other error
           setUserProfileStatusURL("ErrorUserProfileURL");
         }
       }
     };
 
-    fetchProfile();
+    fetchInitialData();
   }, [username]);
 
-
-  // Fetch Paginated Posts when username or page changes
+  // Pagination — Fetch page 1, 2, 3... (page 0 already loaded above)
   useEffect(() => {
-    const fetchPosts = async () => {
-      if (!hasMorePosts) return;
+    if (postPage === 0) return;
+
+    const fetchMorePosts = async () => {
       setLoadingPosts(true);
       try {
         const data = await searchUserPostsAPI(username, postPage);
@@ -63,21 +118,14 @@ function Profile() {
           });
         }
       } catch (err) {
-        console.log("Error loading profile posts!", err);
+        console.log("Error loading more posts!", err);
       } finally {
         setLoadingPosts(false);
       }
     };
 
-    fetchPosts();
-  }, [username, postPage, hasMorePosts]);
-
-  // Reset posts when username changes
-  useEffect(() => {
-    setProfilePosts([]);
-    setPostPage(0);
-    setHasMorePosts(true);
-  }, [username]);
+    fetchMorePosts();
+  }, [username, postPage]);
 
   // Infinite Scroll for Profile Posts
   useEffect(() => {
@@ -158,8 +206,16 @@ function Profile() {
 
   }
 
-  // Render loading / notfound / error states
-  if (userProfileStatusURL === "LoadingUserProfileURL") return <div className="loading">Loading profile...</div>;
+  // Render loading states with full page loader
+  if (userProfileStatusURL === "LoadingUserProfileURL") {
+    return (
+      <div className="fullPageLoader-Box">
+        <Loader2 size={40} className="spinner-icon" />
+        <p className="loading-text-spinner">Opening Profile...</p>
+      </div>
+    );
+  }
+  
   if (userProfileStatusURL === "NotFoundUserProfileURL") return <div className="error"><NotFoundPage /></div>;
   if (userProfileStatusURL === "ErrorUserProfileURL") return <div className="error"><InternalErrorPage /></div>;
 
@@ -272,9 +328,9 @@ function Profile() {
             {userProfileDataURL.searchPrivateShow === true ? (<>
               {/* Profile Middle Tab Box */}
               <div className="profileMiddle-Box">
-                <div className="profileTabBarMidIconDesign-Box"><button type="button" className="profileContenttabBtnIconDesign" onClick={() => setContentVisibleTab("FeedVisibleTab")}><LayoutGrid size={23} className="tabIconsBox-MidProfile" /></button></div>
-                <div className="profileTabBarMidIconDesign-Box"><button type="button" className="profileContenttabBtnIconDesign" onClick={() => setContentVisibleTab("TimeLineVisibleTab")}><History size={23} className="tabIconsBox-MidProfile" /></button></div>
-                <div className="profileTabBarMidIconDesign-Box"><button type="button" className="profileContenttabBtnIconDesign" onClick={() => setContentVisibleTab("TaggedVisibleTab")}><SquareUser size={23} className="tabIconsBox-MidProfile" /></button></div>
+                <div className="profileTabBarMidIconDesign-Box"><button type="button" className="profileContenttabBtnIconDesign" onClick={() => handleTabClick("FeedVisibleTab")}><LayoutGrid size={23} className="tabIconsBox-MidProfile" /></button></div>
+                <div className="profileTabBarMidIconDesign-Box"><button type="button" className="profileContenttabBtnIconDesign" onClick={() => handleTabClick("TimeLineVisibleTab")}><History size={23} className="tabIconsBox-MidProfile" /></button></div>
+                <div className="profileTabBarMidIconDesign-Box"><button type="button" className="profileContenttabBtnIconDesign" onClick={() => handleTabClick("TaggedVisibleTab")}><SquareUser size={23} className="tabIconsBox-MidProfile" /></button></div>
               </div>
 
               {/* Profile footer */}
@@ -311,7 +367,18 @@ function Profile() {
                           {post?.fetchPostCaption && (
                             <div className="profilePostCaptionMain-Box">
                               <p className="profilePostCaptionText-Box">
-                                {post.fetchPostCaption}
+                                {post.fetchPostCaption.length > 100 && !expandedCaptions[post.fetchPostId] 
+                                  ? post.fetchPostCaption.slice(0, 100) + "... " 
+                                  : post.fetchPostCaption}
+                                
+                                {post.fetchPostCaption.length > 100 && (
+                                  <span 
+                                    className="captionShowMoreBtn"
+                                    onClick={() => toggleCaption(post.fetchPostId)}
+                                  >
+                                    {expandedCaptions[post.fetchPostId] ? " show less" : "more"}
+                                  </span>
+                                )}
                               </p>
                             </div>
                           )}
@@ -374,7 +441,11 @@ function Profile() {
                         </div>
                       )
                     )}
-                    {loadingPosts && <p className="feed-loading-text">Loading posts...</p>}
+                    {loadingPosts && (
+                      <div className="feed-loading-spinner-box">
+                        <Loader2 size={30} className="spinner-icon" />
+                      </div>
+                    )}
                   </div>
                 )}
 
