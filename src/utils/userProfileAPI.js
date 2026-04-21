@@ -45,7 +45,7 @@ export const followUserAPI = async (followData) => {
     const res = await api.post("/action/follow/request/user", followData);
     return res.data;
   } catch (err) {
-    throw new err.response.data || "Something went wrong!";
+    throw err.response?.data || "Something went wrong!";
   }
 }
 
