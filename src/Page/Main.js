@@ -103,6 +103,7 @@ function Main() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [timeLineUserPost, setTimeLineUserPost] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Input File Click Handle
   const fileInputRef = useRef(null);
@@ -180,6 +181,9 @@ function Main() {
     }
 
     try {
+      setIsUploading(true);
+      setError("");
+      setSuccess("");
       await uploadPostAPI(formData);
       setFile(null);
       setPreview(null);
@@ -190,6 +194,8 @@ function Main() {
       setTimeout(() => setSuccess(""), 5000);
     } catch (err) {
       setError(err.message || err);
+    } finally {
+      setIsUploading(false);
     }
 
   };
@@ -218,8 +224,8 @@ function Main() {
                     src={
                       loggedUserData?.profilePhoto &&
                         loggedUserData.profilePhoto !== "null"
-                        ? `http://localhost:8082/uploads/${loggedUserData.profilePhoto}`
-                        : `http://localhost:8082/uploads/defaultImage/Twine_DefaultNullImage.png`
+                        ? `${loggedUserData.profilePhoto}`
+                        : `https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png`
                     }
                     alt="profileImage"
                     className="sidePhotoImageBox" />
@@ -283,8 +289,8 @@ function Main() {
                     <img
                       src={
                         post.profileImage && post.profileImage !== "null"
-                          ? `http://localhost:8082/uploads/${post.profileImage}`
-                          : `http://localhost:8082/uploads/defaultImage/Twine_DefaultNullImage.png`
+                          ? `${post.profileImage}`
+                          : `https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png`
                       }
                       className="imageFeedPostMainHeader"
                       alt="user-profile"
@@ -326,7 +332,7 @@ function Main() {
 
                     {post.postType === 'VIDEO' ? (
                       <video
-                        src={`http://localhost:8082/uploads/${post.fetchFileName}`}
+                        src={post.fetchFileName}
                         className="mainContentMediaVideo"
                         controls
                         playsInline
@@ -334,7 +340,7 @@ function Main() {
                       />
                     ) : (
                       <img
-                        src={`http://localhost:8082/uploads/${post.fetchFileName}`}
+                        src={post.fetchFileName}
                         alt="post-content"
                         className="mainContentMediaImage"
                         style={{ position: 'absolute', top: 0, left: 0 }}

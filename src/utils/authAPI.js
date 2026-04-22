@@ -21,11 +21,11 @@ export const signupUserAuthAPI = async (userData) => {
 };
 
 // Logout Functionality ..
-export const logoutHandleAPI = async() => {
-  try{
+export const logoutHandleAPI = async () => {
+  try {
     const response = await api.post("/auth/logout");
     return response.data;
-  }catch(error){
+  } catch (error) {
     throw error.response?.data || "Something went wrong!";
   }
 }

@@ -74,8 +74,8 @@ function Profile() {
         setUserProfileDataURL(profileData);
         setUserProfileStatusURL("FoundUserProfileURL");
 
-        // Fetch first page of posts only if profile is accessible
-        if (profileData.searchPrivateShow === true) {
+       // Fetch first page of posts only if profile is accessible
+       if (profileData.searchPrivateShow === true) {
           try {
             const postsData = await searchUserPostsAPI(username, 0);
             if (!postsData || postsData.length === 0) {
@@ -241,8 +241,8 @@ function Profile() {
                     src={
                       userProfileDataURL?.searchProfilePhoto &&
                         userProfileDataURL.searchProfilePhoto !== "null"
-                        ? `http://localhost:8082/uploads/${userProfileDataURL.searchProfilePhoto}`
-                        : `http://localhost:8082/uploads/defaultImage/Twine_DefaultNullImage.png`
+                        ? `${userProfileDataURL.searchProfilePhoto}`
+                        : `https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png`
                     }
                     className="profileMainImagePFP"
                     alt="profileImage"
@@ -349,8 +349,8 @@ function Profile() {
                                 src={
                                   userProfileDataURL?.searchProfilePhoto &&
                                     userProfileDataURL.searchProfilePhoto !== "null"
-                                    ? `http://localhost:8082/uploads/${userProfileDataURL.searchProfilePhoto}`
-                                    : `http://localhost:8082/uploads/defaultImage/Twine_DefaultNullImage.png`
+                                    ? `${userProfileDataURL.searchProfilePhoto}`
+                                    : `https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png`
                                 }
                                 className="profilePostHeaderPFP-Box"
                                 alt="profileImage"
@@ -392,7 +392,7 @@ function Profile() {
 
                               {post.postType === 'VIDEO' ? (
                                 <video
-                                  src={`http://localhost:8082/uploads/${post.fetchFileName}`}
+                                  src={post.fetchFileName}
                                   className="profilePostContentView-Box"
                                   style={{ position: 'absolute', top: 0, left: 0 }}
                                   controls
@@ -400,7 +400,7 @@ function Profile() {
                                 />
                               ) : (
                                 <img
-                                  src={`http://localhost:8082/uploads/${post.fetchFileName}`}
+                                  src={post.fetchFileName}
                                   alt="Post Media"
                                   className="profilePostContentView-Box"
                                   style={{ position: 'absolute', top: 0, left: 0 }}
