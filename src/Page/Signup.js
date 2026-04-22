@@ -2,7 +2,7 @@ import '../AuthCSS/AuthPage.css'; // Style File
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUserAuthAPI } from "../utils/authAPI.js"; // Import API
-import FooterArea from "./Footer";
+import FooterArea from "../Components/Footer.js";
 
 function Signup() {
 

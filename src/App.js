@@ -4,10 +4,9 @@ import Login from './Page/Login'; // Login Page
 import Signup from './Page/Signup'; // Signup Page
 import Main from './Page/Main'; // Main Page 
 import Profile from './Page/Profile'; // Profile Page 
-import ProtectedRoute from "./Components/ProtectedRoute"; // To Protect Pages 
-import PublicRoute from "./Components/PublicRoute"; // To Protect Pages 
+import ProtectedRoute from "./AuthChecker/ProtectedRoute"; // To Protect Pages 
+import PublicRoute from "./AuthChecker/PublicRoute"; // To Protect Pages 
 import NotFoundPage from "./ErrorHandler/ErrrorDesign/ErrorPageDesign";
-import MyAccount from "./Page/MyAccount";
 
 function App() {
   return (
@@ -42,12 +41,6 @@ function App() {
         <Route path='/:username/:tab' element={
           <ProtectedRoute>
             <Profile />
-          </ProtectedRoute>
-        } />
-
-        <Route path='/settings/my-account' element={
-          <ProtectedRoute>
-            <MyAccount />
           </ProtectedRoute>
         } />
 

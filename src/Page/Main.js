@@ -3,8 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
 import { BadgeCheck, Image, Heart, Tag, MessageCircleDashed, MapPin, SendHorizontal, Flame, Loader2 } from "lucide-react";
 import "../Assets/Bundle/Main.css";
-import HeaderArea from "./Header";
-import FooterArea from "./Footer";
+import HeaderArea from "../Components/Header";
+import FooterArea from "../Components/Footer";
 import { uploadPostAPI, loggedUserDataAPI } from "../utils/userProfileAPI";
 import { homeFeedFetch } from "../utils/homefeedAPI";
 
