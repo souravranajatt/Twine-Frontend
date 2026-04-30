@@ -10,7 +10,7 @@ import { followUserAPI, userProfilePageAPI, searchUserPostsAPI } from "../utils/
 
 function Profile() {
 
-  const { username, tab } = useParams(); // get username and tab from URL
+  const { username, tab } = useParams(); // get username and tab from URL ..
   const navigate = useNavigate();
 
   // OnClick Active Visible Tab for Footer Feed, Timeline & Tagged..
