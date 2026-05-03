@@ -6,7 +6,7 @@ import HeaderArea from "../Components/Header";
 import FooterArea from "../Components/Footer";
 import NotFoundPage from "../ErrorHandler/ErrrorDesign/ErrorPageDesign";
 import InternalErrorPage from "../ErrorHandler/ErrrorDesign/InternalErrorPageDesign";
-import { followUserAPI, userProfilePageAPI, searchUserPostsAPI } from "../utils/userProfileAPI";
+import { followUserAPI, userProfilePageAPI, searchUserPostsAPI, searchUserTaggedPostsAPI, searchUserTimelinePostsAPI } from "../utils/userProfileAPI";
 
 function Profile() {
 
@@ -41,12 +41,6 @@ function Profile() {
     }
   };
 
-  // --------------- Profile Posts Pagination / Infinite Scroll State ---------------
-  const [profilePosts, setProfilePosts] = useState([]);
-  const [postPage, setPostPage] = useState(0);
-  const [loadingPosts, setLoadingPosts] = useState(false);
-  const [hasMorePosts, setHasMorePosts] = useState(true);
-
   // Expanded Captions State
   const [expandedCaptions, setExpandedCaptions] = useState({});
 
@@ -57,6 +51,13 @@ function Profile() {
     }));
   };
 
+  // --------------- Profile Posts Pagination / Infinite Scroll State ---------------
+  const [profilePosts, setProfilePosts] = useState([]);
+  const [postPage, setPostPage] = useState(0);
+  const [loadingPosts, setLoadingPosts] = useState(false);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+
+  
   // Profile User URL Fuctionality
   const [userProfileDataURL, setUserProfileDataURL] = useState(null); // Collect user data
   const [userProfileStatusURL, setUserProfileStatusURL] = useState("LoadingUserProfileURL");
@@ -148,7 +149,7 @@ function Profile() {
   }, [loadingPosts, hasMorePosts, contentVisibleTab]);
 
 
-  // Store Follow Status
+  // Store Follow State
   const [followCheckStatus, setFollowCheckStatus] = useState(false);
   const [followRequestSentCheckStatus, setFollowRequestSentCheckStatus] = useState(false);
   const [followRequestReceiveCheckStatus, setFollowRequestReceiveCheckStatus] = useState(false);

@@ -1,6 +1,6 @@
 import api from "./instanceAPI";
 
-// ✅ User Profile API (pass username dynamically)....
+//  User Profile API (pass username dynamically)....
 export const userProfilePageAPI = async (username) => {
   try {
     const response = await api.get(`/profile/${encodeURIComponent(username)}`);
@@ -22,7 +22,7 @@ export const uploadPostAPI = async (formData) => {
   } catch (error) {
     throw error.response?.data || "Something went wrong!";
   }
-}
+};
 
 // Fetch Logged User Data...
 export const loggedUserDataAPI = async () => {
@@ -32,7 +32,7 @@ export const loggedUserDataAPI = async () => {
   } catch (error) {
     throw error.response.data || "Something went wrong!";
   }
-}
+};
 
 // Follow User API....
 export const followUserAPI = async (followData) => {
@@ -42,9 +42,9 @@ export const followUserAPI = async (followData) => {
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
   }
-}
+};
 
-// ✅ Search User Posts API (Paginated)...
+// Search User Posts API...
 export const searchUserPostsAPI = async (username, page = 0) => {
   try {
     const response = await api.get(`/profile/${encodeURIComponent(username)}/post?page=${page}`);
@@ -52,7 +52,31 @@ export const searchUserPostsAPI = async (username, page = 0) => {
   } catch (error) {
     throw error.response?.data || "Something went wrong!";
   }
-}
+};
+
+// Search User Timeline Posts API...
+ export const searchUserTimelinePostsAPI = async (username, page = 0) => {
+   try {
+     const response = await api.get(
+       `/profile/${encodeURIComponent(username)}/timeline?page=${page}`
+     );
+     return response.data;
+   } catch (error) {
+     throw error.response?.data || "Something went wrong!";
+   }
+ };
+
+ // Tagged Posts (Paginated Grid)
+export const searchUserTaggedPostsAPI = async (username, page = 0) => {
+  try {
+    const response = await api.get(
+      `/profile/${encodeURIComponent(username)}/tagged?page=${page}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Something went wrong!";
+  }
+};
 
 // Send Like Anonyms API
 export const sendLikeAPI = async () => {
@@ -62,4 +86,4 @@ export const sendLikeAPI = async () => {
   } catch (err) {
     // Err
   }
-}
+};
