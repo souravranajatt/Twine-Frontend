@@ -51,17 +51,17 @@ function Profile() {
     }));
   };
 
+
+  // Profile User URL Fuctionality
+  const [userProfileDataURL, setUserProfileDataURL] = useState(null); // Collect user data
+  const [userProfileStatusURL, setUserProfileStatusURL] = useState("LoadingUserProfileURL");
+
   // --------------- Profile Posts Pagination / Infinite Scroll State ---------------
   const [profilePosts, setProfilePosts] = useState([]);
   const [postPage, setPostPage] = useState(0);
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [hasMorePosts, setHasMorePosts] = useState(true);
-
   
-  // Profile User URL Fuctionality
-  const [userProfileDataURL, setUserProfileDataURL] = useState(null); // Collect user data
-  const [userProfileStatusURL, setUserProfileStatusURL] = useState("LoadingUserProfileURL");
-
   // Initial Load — Fetch Profile + First Page Posts
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -509,7 +509,7 @@ function Profile() {
                 {/* Tagged Section */}
                 {contentVisibleTab === "TaggedVisibleTab" && (
                   <div className="contentSectionDesignTagged-Box">
-
+                    No Tagged Posts Yet
                   </div>
                 )}
 
