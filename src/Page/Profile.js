@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Heart, HeartPlus, HeartOff, SendHorizontal, UserLock, MessageCircleDashed, UserRoundPlus, Flame, UserRoundCheck, LayoutGrid, History, SquareUser, MapPin, Link2, BadgeCheck, BriefcaseBusiness, CalendarDays, Aperture, Loader2 } from "lucide-react";
+import { Heart, HeartPlus, HeartOff, SendHorizontal, UserLock, MessageCircleDashed, UserRoundPlus, Flame, UserRoundCheck, LayoutGrid, History, SquareUser, MapPin, Link2, BadgeCheck, BriefcaseBusiness, CalendarDays, Aperture, Loader2, CircleUser } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../Assets/Bundle/Profile.css";
 import HeaderArea from "../Components/Header";
@@ -56,12 +56,24 @@ function Profile() {
   const [userProfileDataURL, setUserProfileDataURL] = useState(null); // Collect user data
   const [userProfileStatusURL, setUserProfileStatusURL] = useState("LoadingUserProfileURL");
 
-  // --------------- Profile Posts Pagination / Infinite Scroll State ---------------
+  // --------------- FEED POSTS ---------------
   const [profilePosts, setProfilePosts] = useState([]);
   const [postPage, setPostPage] = useState(0);
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [hasMorePosts, setHasMorePosts] = useState(true);
-  
+
+  // ---------------- TIMELINE POSTS ----------------
+  const [timelinePosts, setTimelinePosts] = useState([]);
+  const [timelinePage, setTimelinePage] = useState(0);
+  const [loadingTimeline, setLoadingTimeline] = useState(false);
+  const [hasMoreTimeline, setHasMoreTimeline] = useState(true);
+
+  // ---------------- TAGGED POSTS ----------------
+  const [taggedPosts, setTaggedPosts] = useState([]);
+  const [taggedPage, setTaggedPage] = useState(0);
+  const [loadingTagged, setLoadingTagged] = useState(false);
+  const [hasMoreTagged, setHasMoreTagged] = useState(true);
+
   // Initial Load — Fetch Profile + First Page Posts
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -70,13 +82,23 @@ function Profile() {
       setPostPage(0);
       setHasMorePosts(true);
 
+      // Reset timeline state on username change
+      setTimelinePosts([]);
+      setTimelinePage(0);
+      setHasMoreTimeline(true);
+
+      // Reset tagged state on username change
+      setTaggedPosts([]);
+      setTaggedPage(0);
+      setHasMoreTagged(true);
+
       try {
         const profileData = await userProfilePageAPI(username);
         setUserProfileDataURL(profileData);
         setUserProfileStatusURL("FoundUserProfileURL");
 
-       // Fetch first page of posts only if profile is accessible
-       if (profileData.searchPrivateShow === true) {
+        // Fetch first page of posts only if profile is accessible
+        if (profileData.searchPrivateShow === true) {
           try {
             const postsData = await searchUserPostsAPI(username, 0);
             if (!postsData || postsData.length === 0) {
@@ -86,6 +108,32 @@ function Profile() {
             }
           } catch (postErr) {
             console.log("Error loading profile posts!", postErr);
+          }
+
+          // Fetch first page of timeline posts (if connection exists)
+          if (profileData.searchUserTimeline) {
+            try {
+              const timelineData = await searchUserTimelinePostsAPI(username, 0);
+              if (!timelineData || timelineData.length === 0) {
+                setHasMoreTimeline(false);
+              } else {
+                setTimelinePosts(timelineData);
+              }
+            } catch (timelineErr) {
+              console.log("Error loading timeline posts!", timelineErr);
+            }
+          }
+
+          // Fetch first page of tagged posts
+          try {
+            const taggedData = await searchUserTaggedPostsAPI(username, 0);
+            if (!taggedData || taggedData.length === 0) {
+              setHasMoreTagged(false);
+            } else {
+              setTaggedPosts(taggedData);
+            }
+          } catch (taggedErr) {
+            console.log("Error loading tagged posts!", taggedErr);
           }
         }
       } catch (err) {
@@ -147,6 +195,129 @@ function Profile() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loadingPosts, hasMorePosts, contentVisibleTab]);
+
+
+  // -------------- TIMELINE POSTS (Lazy Load on Tab Open) --------------
+
+  // Initial Timeline Fetch — runs when Timeline tab is first opened
+  useEffect(() => {
+    if (contentVisibleTab !== "TimeLineVisibleTab") return;
+    if (timelinePosts.length > 0 || !hasMoreTimeline) return;
+    if (!userProfileDataURL?.searchPrivateShow || !userProfileDataURL?.searchUserTimeline) return;
+
+    const fetchInitialTimeline = async () => {
+      setLoadingTimeline(true);
+      try {
+        const data = await searchUserTimelinePostsAPI(username, 0);
+        if (!data || data.length === 0) {
+          setHasMoreTimeline(false);
+        } else {
+          setTimelinePosts(data);
+        }
+      } catch (err) {
+        console.log("Error loading timeline posts!", err);
+      } finally {
+        setLoadingTimeline(false);
+      }
+    };
+
+    fetchInitialTimeline();
+  }, [contentVisibleTab, username, userProfileDataURL]);
+
+  // Timeline Pagination — Fetch page 1, 2, 3...
+  useEffect(() => {
+    if (timelinePage === 0) return;
+
+    const fetchMoreTimeline = async () => {
+      setLoadingTimeline(true);
+      try {
+        const data = await searchUserTimelinePostsAPI(username, timelinePage);
+        if (!data || data.length === 0) {
+          setHasMoreTimeline(false);
+        } else {
+          setTimelinePosts((prev) => {
+            const existingIds = new Set(prev.map((p) => p.fetchPostId));
+            const newPosts = data.filter((p) => !existingIds.has(p.fetchPostId));
+            return [...prev, ...newPosts];
+          });
+        }
+      } catch (err) {
+        console.log("Error loading more timeline posts!", err);
+      } finally {
+        setLoadingTimeline(false);
+      }
+    };
+
+    fetchMoreTimeline();
+  }, [username, timelinePage]);
+
+  // Infinite Scroll for Timeline Posts
+  useEffect(() => {
+    if (contentVisibleTab !== "TimeLineVisibleTab") return;
+
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 100 >=
+        document.documentElement.scrollHeight
+      ) {
+        if (!loadingTimeline && hasMoreTimeline) {
+          setTimelinePage((prev) => prev + 1);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadingTimeline, hasMoreTimeline, contentVisibleTab]);
+
+
+  // -------------- TAGGED POSTS --------------
+
+  // Tagged Pagination — Fetch page 1, 2, 3...
+  useEffect(() => {
+    if (taggedPage === 0) return;
+
+    const fetchMoreTagged = async () => {
+      setLoadingTagged(true);
+      try {
+        const data = await searchUserTaggedPostsAPI(username, taggedPage);
+        if (!data || data.length === 0) {
+          setHasMoreTagged(false);
+        } else {
+          setTaggedPosts((prev) => {
+            const existingIds = new Set(prev.map((p) => p.fetchPostId));
+            const newPosts = data.filter((p) => !existingIds.has(p.fetchPostId));
+            return [...prev, ...newPosts];
+          });
+        }
+      } catch (err) {
+        console.log("Error loading more tagged posts!", err);
+      } finally {
+        setLoadingTagged(false);
+      }
+    };
+
+    fetchMoreTagged();
+  }, [username, taggedPage]);
+
+  // Infinite Scroll for Tagged Posts
+  useEffect(() => {
+    if (contentVisibleTab !== "TaggedVisibleTab") return;
+
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 100 >=
+        document.documentElement.scrollHeight
+      ) {
+        if (!loadingTagged && hasMoreTagged) {
+          setTaggedPage((prev) => prev + 1);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadingTagged, hasMoreTagged, contentVisibleTab]);
 
 
   // Store Follow State
@@ -212,11 +383,11 @@ function Profile() {
     return (
       <div className="fullPageLoader-Box">
         <Loader2 size={40} className="spinner-icon" />
-        <p className="loading-text-spinner">Opening Profile...</p>
+        <p className="loading-text-spinner">Loading...</p>
       </div>
     );
   }
-  
+
   if (userProfileStatusURL === "NotFoundUserProfileURL") return <div className="error"><NotFoundPage /></div>;
   if (userProfileStatusURL === "ErrorUserProfileURL") return <div className="error"><InternalErrorPage /></div>;
 
@@ -368,12 +539,12 @@ function Profile() {
                           {post?.fetchPostCaption && (
                             <div className="profilePostCaptionMain-Box">
                               <p className="profilePostCaptionText-Box">
-                                {post.fetchPostCaption.length > 100 && !expandedCaptions[post.fetchPostId] 
-                                  ? post.fetchPostCaption.slice(0, 100) + "... " 
+                                {post.fetchPostCaption.length > 100 && !expandedCaptions[post.fetchPostId]
+                                  ? post.fetchPostCaption.slice(0, 100) + "... "
                                   : post.fetchPostCaption}
-                                
+
                                 {post.fetchPostCaption.length > 100 && (
-                                  <span 
+                                  <span
                                     className="captionShowMoreBtn"
                                     onClick={() => toggleCaption(post.fetchPostId)}
                                   >
@@ -457,39 +628,49 @@ function Profile() {
                   <div className="contentSectionDesignTimeline-Box">
                     {userProfileDataURL.searchUserTimeline ? (
                       <div className="timelineConectionContentMainBox">
-                        {userProfileDataURL.searchUserTimeline && userProfileDataURL.searchUserTimeline !== null && userProfileDataURL.searchUserTimeline !== "" ? (
-                          <div className="connectionTimelineHeaderBar-Box">
-                            <span className="spanTimelineHeaderBox">Sharing a connection with <span className="usernameTimelineBoxHiighlight"> {userProfileDataURL.searchUserTimeline}</span></span>
-                          </div>
-                        ) : (<></>)}
+                        <div className="connectionTimelineHeaderBar-Box">
+                          <span className="spanTimelineHeaderBox">Sharing a connection with <span className="usernameTimelineBoxHiighlight"> {userProfileDataURL.searchUserTimeline}</span></span>
+                        </div>
                         <div>
                           <div className="connectionTimelinePostHeaderBox"><span className="spanTimeLinePostHeaderTextBox">Timeline Photos and Videos</span></div>
                           <div className="connectionTimelinePostListBox">
                             <div className="connectionTimelinePostContainerBox grid-3x3">
-                              {userProfileDataURL.timelinePosts &&
-                                userProfileDataURL.timelinePosts.length > 0 ? (
-
-                                userProfileDataURL.timelinePosts.map((post, index) => (
-                                  <div key={index} className="grid-item">
-                                    <img
-                                      src={`http://localhost:8082/uploads/${post.fetchFileName}`}
-                                      alt="post"
-                                      className="gridImagesList"
-                                    />
+                              {timelinePosts && timelinePosts.length > 0 ? (
+                                timelinePosts.map((post) => (
+                                  <div key={post.fetchPostId} className="grid-item">
+                                    {post.postType === 'VIDEO' ? (
+                                      <video
+                                        src={post.fetchFileName}
+                                        className="gridImagesList"
+                                        muted
+                                        playsInline
+                                      />
+                                    ) : (
+                                      <img
+                                        src={post.fetchFileName}
+                                        alt="Timeline Post"
+                                        className="gridImagesList"
+                                      />
+                                    )}
                                   </div>
-
                                 ))
-
                               ) : (
-                                <div className="timelineNoPostMsgBox">
-                                  <p className="timelineErrorMsgNoPost">
-                                    <span>No Uploads</span>
-                                  </p>
-                                </div>
+                                !loadingTimeline && (
+                                  <div className="timelineNoPostMsgBox">
+                                    <p className="timelineErrorMsgNoPost">
+                                      <span>No Uploads</span>
+                                    </p>
+                                  </div>
+                                )
                               )}
                             </div>
                           </div>
                         </div>
+                        {loadingTimeline && (
+                          <div className="feed-loading-spinner-box">
+                            <Loader2 size={30} className="spinner-icon" />
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div>
@@ -509,7 +690,46 @@ function Profile() {
                 {/* Tagged Section */}
                 {contentVisibleTab === "TaggedVisibleTab" && (
                   <div className="contentSectionDesignTagged-Box">
-                    No Tagged Posts Yet
+                    <div className="connectionTaggedPostListBox">
+                      {taggedPosts && taggedPosts.length > 0 ? (
+                        <div className="connectionTaggedPostContainerBox grid-3x3">
+                          {taggedPosts.map((post) => (
+                            <div key={post.fetchPostId} className="grid-item">
+                              {post.postType === 'VIDEO' ? (
+                                <video
+                                  src={post.fetchFileName}
+                                  className="gridImagesList"
+                                  muted
+                                  playsInline
+                                />
+                              ) : (
+                                <img
+                                  src={post.fetchFileName}
+                                  alt="Tagged Post"
+                                  className="gridImagesList"
+                                />
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        !loadingTagged && (
+                          <div className="errorCheckNoTagged-Box">
+                            <div className="errorCheckNoTaggedWrapper-Box">
+                              <div className="errorCheckIconTagged-Box">
+                                <CircleUser height="24" width="24" className="errorCheckIconNoTagged" />
+                              </div>
+                              <p className="errorCheckTextTagged-Box">No Tagged Post</p>
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                    {loadingTagged && (
+                      <div className="feed-loading-spinner-box">
+                        <Loader2 size={30} className="spinner-icon" />
+                      </div>
+                    )}
                   </div>
                 )}
 

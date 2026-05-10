@@ -14,16 +14,6 @@ export const userProfilePageAPI = async (username) => {
   }
 };
 
-// Post Upload API...
-export const uploadPostAPI = async (formData) => {
-  try {
-    const response = await api.post("/post/uploadpost", formData);
-    return response.data;
-  } catch (error) {
-    throw error.response?.data || "Something went wrong!";
-  }
-};
-
 // Fetch Logged User Data...
 export const loggedUserDataAPI = async () => {
   try {
@@ -55,18 +45,18 @@ export const searchUserPostsAPI = async (username, page = 0) => {
 };
 
 // Search User Timeline Posts API...
- export const searchUserTimelinePostsAPI = async (username, page = 0) => {
-   try {
-     const response = await api.get(
-       `/profile/${encodeURIComponent(username)}/timeline?page=${page}`
-     );
-     return response.data;
-   } catch (error) {
-     throw error.response?.data || "Something went wrong!";
-   }
- };
+export const searchUserTimelinePostsAPI = async (username, page = 0) => {
+  try {
+    const response = await api.get(
+      `/profile/${encodeURIComponent(username)}/timeline?page=${page}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Something went wrong!";
+  }
+};
 
- // Tagged Posts (Paginated Grid)
+// Tagged Posts (Paginated Grid)
 export const searchUserTaggedPostsAPI = async (username, page = 0) => {
   try {
     const response = await api.get(

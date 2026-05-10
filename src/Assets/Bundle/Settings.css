@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. Base Styles & Variables
+   ========================================================================== */
 * {
   margin: 0;
   padding: 0;
@@ -5,6 +8,9 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* ==========================================================================
+   2. Main Layout & Wrappers
+   ========================================================================== */
 /* Container for the entire settings page */
 .main-settings-container {
   background-color: #fafafa;
@@ -20,25 +26,29 @@
   flex: 1;
   margin-top: 71px;
   min-height: calc(100vh - 71px);
-  flex-direction: column;
+  /* Default to row for desktop, will be overridden in mobile media query */
+  flex-direction: row;
 }
 
-/* Sidebar Styling - Instagram Style Horizontal Tabs */
+/* ==========================================================================
+   3. Sidebar Navigation (Desktop First)
+   ========================================================================== */
 .settings-sidebar {
-  width: 100%;
+  width: 280px;
   background-color: #ffffff;
-  padding: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
+  padding: 20px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid #e0e0e0;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
+  flex-direction: column;
+  border-right: 1px solid #e0e0e0;
+  position: sticky;
+  top: 71px;
+  height: calc(100vh - 71px);
 }
 
 .settings-sidebar::-webkit-scrollbar {
-  height: 3px;
+  width: 6px;
 }
 
 .settings-sidebar::-webkit-scrollbar-track {
@@ -55,23 +65,25 @@
 }
 
 .settings-category {
-  margin-bottom: 0;
-  margin-right: 0;
+  margin-bottom: 24px;
   padding: 0;
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
 }
 
 .category-title {
-  display: none;
+  display: block;
+  padding: 0 24px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888888;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
 }
 
 .sidebar-nav {
   display: flex;
-  flex-direction: row;
-  gap: 0;
-  flex-shrink: 0;
+  flex-direction: column;
 }
 
 .nav-item {
@@ -79,58 +91,37 @@
   border: none;
   color: #888888;
   font-size: 14px;
-  padding: 14px 16px;
-  text-align: center;
+  padding: 12px 24px;
+  text-align: left;
   cursor: pointer;
   transition: all 0.3s ease;
-  border-left: none;
-  border-bottom: 3px solid transparent;
-  -webkit-tap-highlight-color: transparent;
-  min-height: 48px;
+  border-left: 3px solid transparent;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   white-space: nowrap;
   background-color: #ffffff;
-  scroll-snap-align: start;
 }
 
 .nav-item:hover {
   color: #1a1a1a;
   background-color: #f5f5f5;
-  border-bottom-color: #e0e0e0;
 }
 
 .nav-item.active {
-  color: #6366f1;
-  border-bottom-color: #6366f1;
-  background-color: #ffffff;
-  border-left: none;
+  color: #111;
+  border-left-color: #6366f1;
+  background-color: #f5f5f5;
+  font-weight: 600;
 }
 
-/* Main Content Area */
+/* ==========================================================================
+   4. Main Content Area
+   ========================================================================== */
 .settings-content {
   flex: 1;
   background-color: #ffffff;
-  padding: 40px;
-  overflow-y: auto;
-}
-
-.settings-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.settings-content::-webkit-scrollbar-track {
-  background: #f0f0f0;
-}
-
-.settings-content::-webkit-scrollbar-thumb {
-  background: #d0d0d0;
-  border-radius: 4px;
-}
-
-.settings-content::-webkit-scrollbar-thumb:hover {
-  background: #b0b0b0;
+  padding: 40px 60px;
 }
 
 .settings-form {
@@ -150,24 +141,128 @@
   margin-bottom: 40px;
 }
 
-/* Form Groups */
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+/* Back Button (Mobile Only, hidden by default on desktop) */
+.back-to-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #6366f1;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 24px;
+  padding: 8px 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-arrow {
+  font-size: 20px;
+}
+
+/* ==========================================================================
+   5. Forms & Inputs
+   ========================================================================== */
+/* Profile Photo Section */
+.profile-photo-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  color: #a0a0a0;
+}
+
+.profile-photo-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.change-photo-btn {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.change-photo-btn:hover {
+  background-color: #f9f9f9;
+}
+
+.remove-photo-btn {
+  padding: 8px 16px;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ef4444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-photo-btn:hover {
+  color: #dc2626;
+  text-decoration: underline;
+}
+
+/* Form Layout */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-row .half-width {
+  flex: 1;
+}
+
 .form-group {
-  margin-bottom: 28px;
+  margin-bottom: 25px;
 }
 
 .form-group label {
   display: block;
   color: #1a1a1a;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   margin-bottom: 10px;
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #dbdbdb;
   border-radius: 6px;
   font-size: 15px;
   color: #1a1a1a;
@@ -176,6 +271,28 @@
   font-family: inherit;
   -webkit-appearance: none;
   appearance: none;
+  outline: none;
+}
+
+/* Select specific styling */
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: '▼';
+  font-size: 10px;
+  color: #888;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.form-group select {
+  padding-right: 40px;
+  cursor: pointer;
 }
 
 .form-group input::placeholder,
@@ -184,11 +301,10 @@
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   outline: none;
-  border-color: #6366f1;
   background-color: #ffffff;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .form-group textarea {
@@ -196,7 +312,9 @@
   resize: vertical;
 }
 
-/* Buttons */
+/* ==========================================================================
+   6. Buttons & Interactive Elements
+   ========================================================================== */
 .save-btn,
 .deactivate-btn,
 .delete-btn,
@@ -210,7 +328,7 @@
   transition: all 0.3s ease;
   -webkit-tap-highlight-color: transparent;
   min-height: 44px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
 }
@@ -260,7 +378,9 @@
   background-color: #d1d5db;
 }
 
-/* Text Styles */
+/* ==========================================================================
+   7. Specific Components (Text, Sessions, Toggles, Lists)
+   ========================================================================== */
 .warning-text {
   color: #888888;
   font-size: 14px;
@@ -354,16 +474,69 @@
   margin-top: 24px;
 }
 
-/* Responsive Design */
+/* ==========================================================================
+   8. Responsive Design (Mobile View Settings)
+   ========================================================================== */
 @media (max-width: 1024px) {
   .settings-content {
-    padding: 32px;
+    padding: 32px 40px;
   }
 }
 
 @media (max-width: 768px) {
+
+  /* On mobile, stack layout */
+  .settings-wrapper {
+    flex-direction: column;
+    margin-top: 71px;
+    height: auto;
+    min-height: calc(100vh - 71px);
+  }
+
+  /* Mobile Sidebar styling: 
+     Takes full width, vertical list style. */
+  .settings-sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    padding: 16px 0;
+    overflow-y: visible;
+    /* Let it grow naturally */
+  }
+
+  .settings-category {
+    margin-bottom: 16px;
+  }
+
+  .category-title {
+    font-size: 13px;
+    padding: 0 20px;
+    margin-bottom: 12px;
+  }
+
+  .nav-item {
+    padding: 16px 20px;
+    font-size: 16px;
+    border-left: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  /* Hide left border logic for mobile menu */
+  .nav-item.active {
+    border-left-color: transparent;
+    background-color: #f5f5f5;
+  }
+
+  /* Show back button when content is active on mobile */
+  .back-to-menu-btn {
+    display: flex;
+  }
+
   .settings-content {
-    padding: 28px 20px;
+    padding: 24px 20px;
+    height: auto;
+    flex: 1;
+    overflow-y: visible;
   }
 
   .settings-form h2 {
@@ -372,64 +545,12 @@
 
   .section-subtitle {
     font-size: 15px;
-  }
-
-  .form-group input,
-  .form-group textarea {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .main-settings-container {
-    min-height: auto;
-  }
-
-  .settings-wrapper {
-    margin-top: 71px;
-    min-height: auto;
-    flex-direction: column;
-  }
-
-  .settings-content {
-    padding: 20px 16px;
-    background-color: #ffffff;
-    flex: 1;
-    overflow-y: auto;
-  }
-
-  .settings-form {
-    max-width: 100%;
-  }
-
-  .settings-form h2 {
-    font-size: 20px;
-    margin-bottom: 8px;
-  }
-
-  .section-subtitle {
-    font-size: 14px;
     margin-bottom: 24px;
   }
 
-  .form-group {
-    margin-bottom: 18px;
-  }
-
-  .form-group label {
-    font-size: 13px;
-    margin-bottom: 8px;
-  }
-
   .form-group input,
   .form-group textarea {
-    padding: 11px 12px;
     font-size: 16px;
-    border-radius: 5px;
-  }
-
-  .form-group textarea {
-    min-height: 100px;
   }
 
   .save-btn,
@@ -437,69 +558,47 @@
   .delete-btn,
   .logout-btn {
     width: 100%;
-    padding: 12px 16px;
-    font-size: 14px;
     margin-top: 16px;
   }
 
-  .warning-text,
-  .info-text {
-    font-size: 13px;
-    margin-bottom: 20px;
-  }
-
-  /* Sessions */
-  .sessions-list {
-    gap: 12px;
-  }
-
+  /* Session items stacking on small screens */
   .session-item {
     flex-direction: column;
-    align-items: stretch;
+    align-items: flex-start;
     gap: 12px;
-    padding: 12px;
   }
 
-  .session-info {
+  .logout-btn {
     width: 100%;
   }
 
-  .session-device {
-    font-size: 14px;
-  }
-
-  .session-location {
-    font-size: 12px;
-  }
-
-  /* Toggle & Checkbox */
-  .toggle-group {
-    margin-top: 20px;
-  }
-
   .toggle-item {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
     padding: 12px;
   }
 
-  .toggle-item span {
-    font-size: 14px;
+  .form-row {
+    flex-direction: column;
+    gap: 0;
   }
 
-  .toggle-checkbox {
-    width: 20px;
-    height: 20px;
+  .profile-photo-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-content {
+    padding: 20px 16px;
   }
 
-  /* Blocked Users */
-  .blocked-list {
-    margin-top: 20px;
+  .settings-form h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
   }
 
-  .empty-text {
-    padding: 30px 16px;
-    font-size: 14px;
+  .form-group {
+    margin-bottom: 20px;
   }
 }
