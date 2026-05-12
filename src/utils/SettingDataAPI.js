@@ -19,3 +19,15 @@ export const updateProfileAPI = async (data) => {
         throw err.response?.data || err;
     }
 };
+
+// Privacy Status Update API (Partial Update)
+export const updatePrivacyAPI = async (isPrivate) => {
+    try {
+        const res = await api.put("/profile/setting/privacy/private/update", isPrivate, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return res.data;
+    } catch (err) {
+        throw err.response?.data || err;
+    }
+};

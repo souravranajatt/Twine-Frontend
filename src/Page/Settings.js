@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import HeaderArea from "../Components/Header";
 import FooterArea from "../Components/Footer";
 import "../Assets/Bundle/Settings.css";
-import { settingDataAPI, updateProfileAPI } from "../utils/SettingDataAPI";
+import { settingDataAPI, updateProfileAPI, updatePrivacyAPI } from "../utils/SettingDataAPI";
 
 function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -129,6 +129,30 @@ function Settings() {
       setStatusType("error");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Handle Privacy API
+  const handlePrivacyToggle = async () => {
+    const newPrivacyStatus = !profileData.privateAccount;
+
+    // Optimistic Update
+    setProfileData(prev => ({
+      ...prev,
+      privateAccount: newPrivacyStatus
+    }));
+
+    try {
+      await updatePrivacyAPI(newPrivacyStatus);
+    } catch (err) {
+      // Revert on error
+      setProfileData(prev => ({
+        ...prev,
+        privateAccount: !newPrivacyStatus
+      }));
+      setStatusMessage("Error Occurred");
+      setStatusType("error");
+      setTimeout(() => setStatusMessage(null), 3000);
     }
   };
 
@@ -451,15 +475,26 @@ function Settings() {
             <h2>Private Account</h2>
             <p className="section-subtitle">Control who can see your profile and posts</p>
 
-            <div className="toggle-group">
-              <div className="toggle-item">
-                <span>Make account private</span>
-                <input type="checkbox" className="toggle-checkbox" />
+            <div className="privacy-toggle-container">
+              <div className="privacy-info">
+                <h3>Private Account</h3>
+                <p>When private, people must request to follow you and cannot see your posts.</p>
               </div>
-              <p className="info-text">When private, people must request to follow you and cannot see your posts.</p>
+              <label className="toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={profileData?.privateAccount || false}
+                  onChange={handlePrivacyToggle}
+                />
+                <span className="toggle-slider"></span>
+              </label>
             </div>
 
-            <button className="save-btn">Save changes</button>
+            {statusMessage && activeSection === "private-account" && (
+              <p className={`status-text ${statusType}`} style={{ marginTop: '16px' }}>
+                {statusMessage}
+              </p>
+            )}
           </div>
         );
 
