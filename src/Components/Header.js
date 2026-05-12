@@ -102,18 +102,10 @@ function Header() {
               <div className="dropdown profile-dropdown">
                 <ul className="dropdown-unorderList">
                   <li className="dropdown-listItem">
-                    <Link to="/settings/my-account" className="dropdown-linkList">
+                    <Link to="/account/settings" className="dropdown-linkList">
                       <button type="button" className="dropDownBtnDesign-Box">
                         <CircleUserRound size={18} className="dropdownIcons" />
-                        My Account
-                      </button>
-                    </Link>
-                  </li>
-                  <li className="dropdown-listItem">
-                    <Link to="/account" className="dropdown-linkList">
-                      <button type="button" className="dropDownBtnDesign-Box">
-                        <Settings2 size={18} className="dropdownIcons" />
-                        Settings
+                        Settings & Privacy
                       </button>
                     </Link>
                   </li>

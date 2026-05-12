@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import HeaderArea from "../Components/Header";
 import FooterArea from "../Components/Footer";
 import "../Assets/Bundle/Settings.css";
-import { settingDataAPI } from "../utils/SettingDataAPI";
+import { settingDataAPI, updateProfileAPI } from "../utils/SettingDataAPI";
 
 function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,6 +16,9 @@ function Settings() {
   const [isMobileView, setIsMobileView] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
+  const [statusMessage, setStatusMessage] = useState(null);
+  const [statusType, setStatusType] = useState("");
+  const fileInputRef = useRef(null);
 
   // Fetch initial data
   useEffect(() => {
@@ -35,12 +38,95 @@ function Settings() {
   }, []);
 
   // Handle Input Changes
-  const handleProfileChange = (e) => {
+  const handleProfileInputChange = (e) => {
     const { name, value } = e.target;
     setProfileData(prev => ({
       ...prev,
       [name]: value
     }));
+  };
+
+  // Handle Photo Upload (Convert to Base64)
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileData(prev => ({
+          ...prev,
+          profilePictureUrl: reader.result // Base64 string
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleChangePhotoClick = (e) => {
+    e.preventDefault();
+    fileInputRef.current.click(); // Open hidden file input
+  };
+
+  const handleRemovePhoto = (e) => {
+    e.preventDefault();
+    setProfileData(prev => ({
+      ...prev,
+      profilePictureUrl: "" // Clear photo
+    }));
+  };
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    setStatusMessage(null);
+
+    // ====== Frontend Validation ======
+    const fullname = profileData.fullname?.trim() || "";
+    const username = profileData.username?.trim() || "";
+    const bio = profileData.bio || "";
+
+    if (!fullname) {
+      setStatusType("error");
+      return setStatusMessage("Fullname is required!");
+    }
+    if (fullname.length > 30) {
+      setStatusType("error");
+      return setStatusMessage("Fullname can't exceed 30 characters!");
+    }
+
+    if (!username) {
+      setStatusType("error");
+      return setStatusMessage("Username is required!");
+    }
+    if (username.length > 25) {
+      setStatusType("error");
+      return setStatusMessage("Username can't exceed 25 characters!");
+    }
+    if (!/^[a-z0-9_.]+$/.test(username.toLowerCase())) {
+      setStatusType("error");
+      return setStatusMessage("Username can only contain lowercase letters, digits, '.', and '_' !");
+    }
+
+    if (bio && bio.length > 101) {
+      setStatusType("error");
+      return setStatusMessage("Bio can't exceed 101 characters!");
+    }
+
+    try {
+      setIsLoading(true);
+      await updateProfileAPI(profileData);
+      setStatusMessage("Profile updated successfully!");
+      setStatusType("success");
+
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setStatusMessage(null);
+      }, 5000);
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      setStatusMessage(err.message || err.error || (typeof err === 'string' ? err : "Failed to update profile. Please try again."));
+      setStatusType("error");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -100,18 +186,26 @@ function Settings() {
             <h2>Edit Profile</h2>
             <p className="section-subtitle">Update your profile information and how you appear on Twine.</p>
 
+
             {/* Profile Photo Section */}
             <div className="profile-photo-section">
               <div className="profile-avatar">
                 <img
-                  src={profileData.profilePhoto || "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png"}
+                  src={profileData.profilePictureUrl || "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png"}
                   alt="Profile Avatar"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>
               <div className="profile-photo-actions">
-                <button className="change-photo-btn">Change Photo</button>
-                <button className="remove-photo-btn">Remove</button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                  onChange={handlePhotoUpload}
+                />
+                <button type="button" className="change-photo-btn" onClick={handleChangePhotoClick}>Change Photo</button>
+                <button type="button" className="remove-photo-btn" onClick={handleRemovePhoto}>Remove</button>
               </div>
             </div>
 
@@ -121,9 +215,9 @@ function Settings() {
                 <input
                   type="text"
                   placeholder="Your name"
-                  name="fullName"
-                  value={profileData.fullname}
-                  onChange={handleProfileChange}
+                  name="fullname"
+                  value={profileData.fullname || ""}
+                  onChange={handleProfileInputChange}
                 />
               </div>
 
@@ -133,8 +227,8 @@ function Settings() {
                   type="text"
                   placeholder="@username"
                   name="username"
-                  value={profileData.username}
-                  onChange={handleProfileChange}
+                  value={profileData.username || ""}
+                  onChange={handleProfileInputChange}
                 />
               </div>
             </div>
@@ -144,8 +238,8 @@ function Settings() {
               <textarea
                 placeholder="Write a short bio about yourself..."
                 name="bio"
-                value={profileData.bio}
-                onChange={handleProfileChange}
+                value={profileData.bio || ""}
+                onChange={handleProfileInputChange}
               ></textarea>
             </div>
 
@@ -156,8 +250,8 @@ function Settings() {
                   type="text"
                   placeholder="e.g. San Francisco, CA"
                   name="location"
-                  value={profileData.location}
-                  onChange={handleProfileChange}
+                  value={profileData.location || ""}
+                  onChange={handleProfileInputChange}
                 />
               </div>
 
@@ -166,9 +260,9 @@ function Settings() {
                 <input
                   type="url"
                   placeholder="https://yoursite.com"
-                  name="link"
-                  value={profileData.websiteLink}
-                  onChange={handleProfileChange}
+                  name="websiteLink"
+                  value={profileData.websiteLink || ""}
+                  onChange={handleProfileInputChange}
                 />
               </div>
             </div>
@@ -179,8 +273,8 @@ function Settings() {
                 <div className="select-wrapper">
                   <select
                     name="gender"
-                    value={profileData.gender}
-                    onChange={handleProfileChange}
+                    value={profileData.gender || ""}
+                    onChange={handleProfileInputChange}
                   >
                     <option value="">Select Gender</option>
                     <option value="Male">Male</option>
@@ -192,23 +286,69 @@ function Settings() {
 
               <div className="form-group half-width">
                 <label>Profile Badge</label>
-                <div className="select-wrapper">
-                  <select
+                <div>
+                  <input
+                    type="text"
                     name="profileBadge"
-                    value={profileData.profileBBadge}
-                    onChange={handleProfileChange}
-                  >
-                    <option value="">Select Badge</option>
-                    <option value="developer">Developer</option>
-                    <option value="designer">Designer</option>
-                    <option value="creator">Creator</option>
-                    <option value="pro">Sport Club</option>
-                  </select>
+                    value={profileData.profileBadge || ""}
+                    onChange={handleProfileInputChange}
+                    list="badge-options"
+                    maxLength="15"
+                    placeholder="Select or type badge"
+                    className="datalist-input"
+                  />
+                  <datalist id="badge-options">
+                    <option value="Actor" />
+                    <option value="Artist" />
+                    <option value="Beauty & Cosmetic" />
+                    <option value="Blogger" />
+                    <option value="Business" />
+                    <option value="Clothing Brand" />
+                    <option value="Comedian" />
+                    <option value="Community" />
+                    <option value="Creator" />
+                    <option value="Dancer" />
+                    <option value="Designer" />
+                    <option value="Developer" />
+                    <option value="Educationist" />
+                    <option value="Entertainer" />
+                    <option value="Entrepreneur" />
+                    <option value="Fashion Designer" />
+                    <option value="Gamer" />
+                    <option value="Health & Wellness" />
+                    <option value="Influencer" />
+                    <option value="Investor" />
+                    <option value="Journalist" />
+                    <option value="Makeup Artist" />
+                    <option value="Musician" />
+                    <option value="Official Account" />
+                    <option value="Photographer" />
+                    <option value="Politician" />
+                    <option value="Public Figure" />
+                    <option value="Restaurant" />
+                    <option value="Shopping & Retail" />
+                    <option value="Sport Club" />
+                    <option value="Sports Person" />
+                    <option value="Streamer" />
+                    <option value="Video Creator" />
+                    <option value="Vlogger" />
+                    <option value="Writer" />
+                    <option value="Other" />
+                  </datalist>
                 </div>
               </div>
             </div>
 
-            <button className="save-btn">Save changes</button>
+            <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <button className="save-btn" onClick={handleUpdateProfile} disabled={isLoading}>
+                {isLoading ? 'Saving...' : 'Save changes'}
+              </button>
+              {statusMessage && (
+                <span className={`status-text ${statusType}`}>
+                  {statusMessage}
+                </span>
+              )}
+            </div>
           </div>
         );
 

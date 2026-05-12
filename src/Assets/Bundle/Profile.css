@@ -204,6 +204,7 @@ button {
     width: 100%;
     background-color: transparent;
     padding: 4px 2px;
+    white-space: pre-wrap;
 }
 
 /* Following-Follower Data Pack */
@@ -530,7 +531,7 @@ button {
     font-weight: 400;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    white-space: normal;
+    white-space: pre-wrap;
     font-size: 14px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

@@ -442,7 +442,7 @@ img {
   font-weight: 400;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  white-space: normal;
+  white-space: pre-wrap;
   font-size: 14px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

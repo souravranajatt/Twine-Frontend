@@ -3,7 +3,17 @@ import api from "./instanceAPI";
 // Setting Data API
 export const settingDataAPI = async () => {
     try {
-        const res = await api.get("/profile/data/setting");
+        const res = await api.get("/profile/setting/fetch");
+        return res.data;
+    } catch (err) {
+        throw err.response?.data || err;
+    }
+};
+
+// Setting Profile Data Update API
+export const updateProfileAPI = async (data) => {
+    try {
+        const res = await api.put("/profile/setting/update", data);
         return res.data;
     } catch (err) {
         throw err.response?.data || err;
