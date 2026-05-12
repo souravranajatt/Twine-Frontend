@@ -91,7 +91,7 @@
   border: none;
   color: #888888;
   font-size: 14px;
-  padding: 12px 24px;
+  padding: 10px 20px;
   text-align: left;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -295,7 +295,8 @@
   appearance: auto !important;
 }
 
-datalist, datalist option {
+datalist,
+datalist option {
   background-color: #ffffff !important;
   color: #000000 !important;
 }
@@ -362,7 +363,7 @@ datalist, datalist option {
 .save-btn {
   background-color: #6366f1;
   color: #ffffff;
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
 .save-btn:hover {
@@ -374,7 +375,7 @@ datalist, datalist option {
 .deactivate-btn {
   background-color: #f59e0b;
   color: #ffffff;
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
 .deactivate-btn:hover {
@@ -386,7 +387,7 @@ datalist, datalist option {
 .delete-btn {
   background-color: #ef4444;
   color: #ffffff;
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
 .delete-btn:hover {
@@ -411,7 +412,7 @@ datalist, datalist option {
   color: #888888;
   font-size: 14px;
   line-height: 1.6;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
 }
 
 .warning-text.danger {

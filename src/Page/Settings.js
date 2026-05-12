@@ -11,7 +11,7 @@ function Settings() {
 
   // State Management
   const [activeSection, setActiveSection] = useState(() => {
-    return tabFromUrl || localStorage.getItem("twine_settings_tab") || "edit-profile";
+    return tabFromUrl || "edit-profile";
   });
   const [isMobileView, setIsMobileView] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -61,11 +61,13 @@ function Settings() {
     }
   };
 
+  // Photo Select Change
   const handleChangePhotoClick = (e) => {
     e.preventDefault();
     fileInputRef.current.click(); // Open hidden file input
   };
 
+  // Photo Remove Function
   const handleRemovePhoto = (e) => {
     e.preventDefault();
     setProfileData(prev => ({
@@ -74,6 +76,7 @@ function Settings() {
     }));
   };
 
+  // Update Profile Functionality
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     setStatusMessage(null);
@@ -131,10 +134,8 @@ function Settings() {
 
   useEffect(() => {
     if (activeSection) {
-      localStorage.setItem("twine_settings_tab", activeSection);
       setSearchParams({ tab: activeSection }, { replace: true });
     } else {
-      localStorage.removeItem("twine_settings_tab");
       searchParams.delete("tab");
       setSearchParams(searchParams, { replace: true });
     }
