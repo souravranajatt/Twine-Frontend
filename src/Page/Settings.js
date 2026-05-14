@@ -185,7 +185,7 @@ function Settings() {
       // 2. Call Logout API
       await logoutHandleAPI();
 
-      // 3. Show "Session Expired" popup
+      // 3. Show "Session Expired" Msg
       setShowExpiredPopup(true);
 
       // 4. Wait for 5 seconds then redirect
