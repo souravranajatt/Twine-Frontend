@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import HeaderArea from "../Components/Header";
 import FooterArea from "../Components/Footer";
 import "../Assets/Bundle/Settings.css";
-import { settingDataAPI, updateProfileAPI, updatePrivacyAPI } from "../utils/SettingDataAPI";
+import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI } from "../utils/SettingDataAPI";
+import { logoutHandleAPI } from "../utils/authAPI";
 
 function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const tabFromUrl = searchParams.get("tab");
 
   // State Management
@@ -18,6 +20,9 @@ function Settings() {
   const [profileData, setProfileData] = useState(null);
   const [statusMessage, setStatusMessage] = useState(null);
   const [statusType, setStatusType] = useState("");
+  const [deactivatePassword, setDeactivatePassword] = useState("");
+  const [deactivateReason, setDeactivateReason] = useState("Need a break");
+  const [showExpiredPopup, setShowExpiredPopup] = useState(false);
   const fileInputRef = useRef(null);
 
   // Fetch initial data
@@ -153,6 +158,46 @@ function Settings() {
       setStatusMessage("Error Occurred");
       setStatusType("error");
       setTimeout(() => setStatusMessage(null), 3000);
+    }
+  };
+
+  // Handle Account Deactivation
+  const handleDeactivateAccount = async (e) => {
+    e.preventDefault();
+
+    if (!deactivatePassword) {
+      setStatusMessage("Please enter your password to deactivate.");
+      setStatusType("error");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const deactivationData = {
+        password: deactivatePassword,
+        reason: deactivateReason
+      };
+
+      // 1. Deactivate Account
+      await deactivateAccountAPI(deactivationData);
+
+      // 2. Call Logout API
+      await logoutHandleAPI();
+
+      // 3. Show "Session Expired" popup
+      setShowExpiredPopup(true);
+
+      // 4. Wait for 5 seconds then redirect
+      setTimeout(() => {
+        navigate("/login", { replace: true });
+      }, 5000);
+
+    } catch (err) {
+      setStatusMessage(err.message || err.error || "Failed to deactivate account.");
+      setStatusType("error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -402,8 +447,42 @@ function Settings() {
           <div className="settings-form">
             <h2>Deactivate Account</h2>
             <p className="section-subtitle">Temporarily deactivate your account</p>
-            <p className="warning-text">Your account will be hidden from public view. You can reactivate it anytime.</p>
-            <button className="deactivate-btn">Deactivate Account</button>
+            <p className="warning-text">Your account will be hidden from public view. You can reactivate it anytime by logging back in.</p>
+
+            <div className="form-group" style={{ marginTop: '20px' }}>
+              <label>Reason for Deactivation</label>
+              <div className="select-wrapper">
+                <select
+                  value={deactivateReason}
+                  onChange={(e) => setDeactivateReason(e.target.value)}
+                >
+                  <option value="Need a break">Need a break</option>
+                  <option value="Privacy concerns">Privacy concerns</option>
+                  <option value="Too many notifications">Too many notifications</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="form-group" style={{ marginTop: '20px' }}>
+              <label>Enter Password to Confirm</label>
+              <input
+                type="password"
+                placeholder="Password"
+                value={deactivatePassword}
+                onChange={(e) => setDeactivatePassword(e.target.value)}
+              />
+            </div>
+
+            <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
+              <button className="deactivate-btn" onClick={handleDeactivateAccount} disabled={isLoading}>
+                {isLoading ? 'Deactivating...' : 'Deactivate Account'}
+              </button>
+              {statusMessage && activeSection === "deactivate" && (
+                <span className={`status-text ${statusType}`}>
+                  {statusMessage}
+                </span>
+              )}
+            </div>
           </div>
         );
 
@@ -616,6 +695,16 @@ function Settings() {
 
         <FooterArea />
       </div>
+
+      {showExpiredPopup && (
+        <div className="expired-popup-overlay">
+          <div className="expired-popup-content">
+            <h3>Session Expired</h3>
+            <p>Your session has expired. Redirecting to login page...</p>
+            <div className="loading-spinner-small"></div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

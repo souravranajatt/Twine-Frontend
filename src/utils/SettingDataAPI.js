@@ -31,3 +31,16 @@ export const updatePrivacyAPI = async (isPrivate) => {
         throw err.response?.data || err;
     }
 };
+
+// Account Deactivate API
+export const deactivateAccountAPI = async (deactivationData) => {
+    try {
+        const res = await api.put("/profile/setting/account/deactivate", deactivationData, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
