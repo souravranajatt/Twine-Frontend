@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import HeaderArea from "../Components/Header";
 import FooterArea from "../Components/Footer";
 import "../Assets/Bundle/Settings.css";
-import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI } from "../utils/SettingDataAPI";
+import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI } from "../utils/SettingDataAPI";
 import { logoutHandleAPI } from "../utils/authAPI";
 
 function Settings() {
@@ -23,6 +23,7 @@ function Settings() {
   const [deactivatePassword, setDeactivatePassword] = useState("");
   const [deactivateReason, setDeactivateReason] = useState("Need a break");
   const [showExpiredPopup, setShowExpiredPopup] = useState(false);
+  const [password, setPassword] = useState({ oldPassword: "", newPassword: "", confirmPassword: "" });
   const fileInputRef = useRef(null);
 
   // Fetch initial data
@@ -137,7 +138,7 @@ function Settings() {
     }
   };
 
-  // Handle Privacy API
+  // Handle Private Account Privacy API
   const handlePrivacyToggle = async () => {
     const newPrivacyStatus = !profileData.privateAccount;
 
@@ -201,6 +202,60 @@ function Settings() {
     }
   };
 
+  // Handle Password Update
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    setStatusMessage(null);
+
+    // ====== Frontend Validation ======
+    if (!password.oldPassword) {
+      setStatusType("error");
+      return setStatusMessage("Current password is required!");
+    }
+    if (!password.newPassword) {
+      setStatusType("error");
+      return setStatusMessage("New password is required!");
+    }
+    if (password.newPassword.length < 8) {
+      setStatusType("error");
+      return setStatusMessage("New password must be at least 8 characters!");
+    }
+    if (password.newPassword !== password.confirmPassword) {
+      setStatusType("error");
+      return setStatusMessage("Passwords do not match!");
+    }
+    if (password.oldPassword === password.newPassword) {
+      setStatusType("error");
+      return setStatusMessage("New password must be different from current password!");
+    }
+
+    try {
+      setIsLoading(true);
+
+      const passwordData = {
+        oldPassword: password.oldPassword,
+        newPassword: password.newPassword
+      };
+      await updatePasswordAPI(passwordData);
+      setStatusMessage("Password updated successfully!");
+      setStatusType("success");
+
+      // Reset password fields on success
+      setPassword({ oldPassword: "", newPassword: "", confirmPassword: "" });
+
+      // Clear success message after 5 seconds
+      setTimeout(() => {
+        setStatusMessage(null);
+      }, 5000);
+    } catch (err) {
+      console.error("Error updating password:", err);
+      setStatusMessage(err.message || err.error || (typeof err === 'string' ? err : "Failed to update password. Please try again."));
+      setStatusType("error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (activeSection) {
       setSearchParams({ tab: activeSection }, { replace: true });
@@ -256,169 +311,170 @@ function Settings() {
             <h2>Edit Profile</h2>
             <p className="section-subtitle">Update your profile information and how you appear on Twine.</p>
 
-
-            {/* Profile Photo Section */}
-            <div className="profile-photo-section">
-              <div className="profile-avatar">
-                <img
-                  src={profileData.profilePictureUrl || "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png"}
-                  alt="Profile Avatar"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-              <div className="profile-photo-actions">
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={fileInputRef}
-                  style={{ display: 'none' }}
-                  onChange={handlePhotoUpload}
-                />
-                <button type="button" className="change-photo-btn" onClick={handleChangePhotoClick}>Change Photo</button>
-                <button type="button" className="remove-photo-btn" onClick={handleRemovePhoto}>Remove</button>
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group half-width">
-                <label>Full name</label>
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  name="fullname"
-                  value={profileData.fullname || ""}
-                  onChange={handleProfileInputChange}
-                />
-              </div>
-
-              <div className="form-group half-width">
-                <label>Username</label>
-                <input
-                  type="text"
-                  placeholder="@username"
-                  name="username"
-                  value={profileData.username || ""}
-                  onChange={handleProfileInputChange}
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Bio</label>
-              <textarea
-                placeholder="Write a short bio about yourself..."
-                name="bio"
-                value={profileData.bio || ""}
-                onChange={handleProfileInputChange}
-              ></textarea>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group half-width">
-                <label>Location</label>
-                <input
-                  type="text"
-                  placeholder="e.g. San Francisco, CA"
-                  name="location"
-                  value={profileData.location || ""}
-                  onChange={handleProfileInputChange}
-                />
-              </div>
-
-              <div className="form-group half-width">
-                <label>Website / Link</label>
-                <input
-                  type="url"
-                  placeholder="https://yoursite.com"
-                  name="websiteLink"
-                  value={profileData.websiteLink || ""}
-                  onChange={handleProfileInputChange}
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group half-width">
-                <label>Gender</label>
-                <div className="select-wrapper">
-                  <select
-                    name="gender"
-                    value={profileData.gender || ""}
-                    onChange={handleProfileInputChange}
-                  >
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
+            <form onSubmit={handleUpdateProfile}>
+              {/* Profile Photo Section */}
+              <div className="profile-photo-section">
+                <div className="profile-avatar">
+                  <img
+                    src={profileData.profilePictureUrl || "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png"}
+                    alt="Profile Avatar"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+                <div className="profile-photo-actions">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handlePhotoUpload}
+                  />
+                  <button type="button" className="change-photo-btn" onClick={handleChangePhotoClick}>Change Photo</button>
+                  <button type="button" className="remove-photo-btn" onClick={handleRemovePhoto}>Remove</button>
                 </div>
               </div>
 
-              <div className="form-group half-width">
-                <label>Profile Badge</label>
-                <div>
+              <div className="form-row">
+                <div className="form-group half-width">
+                  <label>Full name</label>
                   <input
                     type="text"
-                    name="profileBadge"
-                    value={profileData.profileBadge || ""}
+                    placeholder="Your name"
+                    name="fullname"
+                    value={profileData.fullname || ""}
                     onChange={handleProfileInputChange}
-                    list="badge-options"
-                    maxLength="15"
-                    placeholder="Select or type badge"
-                    className="datalist-input"
                   />
-                  <datalist id="badge-options">
-                    <option value="Actor" />
-                    <option value="Artist" />
-                    <option value="Beauty & Cosmetic" />
-                    <option value="Blogger" />
-                    <option value="Business" />
-                    <option value="Clothing Brand" />
-                    <option value="Comedian" />
-                    <option value="Community" />
-                    <option value="Creator" />
-                    <option value="Dancer" />
-                    <option value="Designer" />
-                    <option value="Developer" />
-                    <option value="Educationist" />
-                    <option value="Entertainer" />
-                    <option value="Entrepreneur" />
-                    <option value="Fashion Designer" />
-                    <option value="Gamer" />
-                    <option value="Health & Wellness" />
-                    <option value="Influencer" />
-                    <option value="Investor" />
-                    <option value="Journalist" />
-                    <option value="Makeup Artist" />
-                    <option value="Musician" />
-                    <option value="Official Account" />
-                    <option value="Photographer" />
-                    <option value="Politician" />
-                    <option value="Public Figure" />
-                    <option value="Restaurant" />
-                    <option value="Shopping & Retail" />
-                    <option value="Sport Club" />
-                    <option value="Sports Person" />
-                    <option value="Streamer" />
-                    <option value="Video Creator" />
-                    <option value="Vlogger" />
-                    <option value="Writer" />
-                    <option value="Other" />
-                  </datalist>
+                </div>
+
+                <div className="form-group half-width">
+                  <label>Username</label>
+                  <input
+                    type="text"
+                    placeholder="@username"
+                    name="username"
+                    value={profileData.username || ""}
+                    onChange={handleProfileInputChange}
+                  />
                 </div>
               </div>
-            </div>
 
-            <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <button className="save-btn" onClick={handleUpdateProfile} disabled={isLoading}>
-                {isLoading ? 'Saving...' : 'Save changes'}
-              </button>
-              {statusMessage && (
-                <span className={`status-text ${statusType}`}>
-                  {statusMessage}
-                </span>
-              )}
-            </div>
+              <div className="form-group">
+                <label>Bio</label>
+                <textarea
+                  placeholder="Write a short bio about yourself..."
+                  name="bio"
+                  value={profileData.bio || ""}
+                  onChange={handleProfileInputChange}
+                ></textarea>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group half-width">
+                  <label>Location</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. San Francisco, CA"
+                    name="location"
+                    value={profileData.location || ""}
+                    onChange={handleProfileInputChange}
+                  />
+                </div>
+
+                <div className="form-group half-width">
+                  <label>Website / Link</label>
+                  <input
+                    type="url"
+                    placeholder="https://yoursite.com"
+                    name="websiteLink"
+                    value={profileData.websiteLink || ""}
+                    onChange={handleProfileInputChange}
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group half-width">
+                  <label>Gender</label>
+                  <div className="select-wrapper">
+                    <select
+                      name="gender"
+                      value={profileData.gender || ""}
+                      onChange={handleProfileInputChange}
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group half-width">
+                  <label>Profile Badge</label>
+                  <div>
+                    <input
+                      type="text"
+                      name="profileBadge"
+                      value={profileData.profileBadge || ""}
+                      onChange={handleProfileInputChange}
+                      list="badge-options"
+                      maxLength="15"
+                      placeholder="Select or type badge"
+                      className="datalist-input"
+                    />
+                    <datalist id="badge-options">
+                      <option value="Actor" />
+                      <option value="Artist" />
+                      <option value="Beauty & Cosmetic" />
+                      <option value="Blogger" />
+                      <option value="Business" />
+                      <option value="Clothing Brand" />
+                      <option value="Comedian" />
+                      <option value="Community" />
+                      <option value="Creator" />
+                      <option value="Dancer" />
+                      <option value="Designer" />
+                      <option value="Developer" />
+                      <option value="Educationist" />
+                      <option value="Entertainer" />
+                      <option value="Entrepreneur" />
+                      <option value="Fashion Designer" />
+                      <option value="Gamer" />
+                      <option value="Health & Wellness" />
+                      <option value="Influencer" />
+                      <option value="Investor" />
+                      <option value="Journalist" />
+                      <option value="Makeup Artist" />
+                      <option value="Musician" />
+                      <option value="Official Account" />
+                      <option value="Photographer" />
+                      <option value="Politician" />
+                      <option value="Public Figure" />
+                      <option value="Restaurant" />
+                      <option value="Shopping & Retail" />
+                      <option value="Sport Club" />
+                      <option value="Sports Person" />
+                      <option value="Streamer" />
+                      <option value="Video Creator" />
+                      <option value="Vlogger" />
+                      <option value="Writer" />
+                      <option value="Other" />
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <button type="submit" className="save-btn" disabled={isLoading}>
+                  {isLoading ? 'Saving...' : 'Save changes'}
+                </button>
+                {statusMessage && (
+                  <span className={`status-text ${statusType}`}>
+                    {statusMessage}
+                  </span>
+                )}
+              </div>
+            </form>
           </div>
         );
 
@@ -449,40 +505,43 @@ function Settings() {
             <p className="section-subtitle">Temporarily deactivate your account</p>
             <p className="warning-text">Your account will be hidden from public view. You can reactivate it anytime by logging back in.</p>
 
-            <div className="form-group" style={{ marginTop: '20px' }}>
-              <label>Reason for Deactivation</label>
-              <div className="select-wrapper">
-                <select
-                  value={deactivateReason}
-                  onChange={(e) => setDeactivateReason(e.target.value)}
-                >
-                  <option value="Need a break">Need a break</option>
-                  <option value="Privacy concerns">Privacy concerns</option>
-                  <option value="Too many notifications">Too many notifications</option>
-                </select>
+            <form onSubmit={handleDeactivateAccount}>
+              <div className="form-group" style={{ marginTop: '20px' }}>
+                <label>Reason for Deactivation</label>
+                <div className="select-wrapper">
+                  <select
+                    value={deactivateReason}
+                    onChange={(e) => setDeactivateReason(e.target.value)}
+                  >
+                    <option value="Need a break">Need a break</option>
+                    <option value="Privacy concerns">Privacy concerns</option>
+                    <option value="Too many notifications">Too many notifications</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div className="form-group" style={{ marginTop: '20px' }}>
-              <label>Enter Password to Confirm</label>
-              <input
-                type="password"
-                placeholder="Password"
-                value={deactivatePassword}
-                onChange={(e) => setDeactivatePassword(e.target.value)}
-              />
-            </div>
+              <div className="form-group" style={{ marginTop: '20px' }}>
+                <label>Enter Password to Confirm</label>
+                <input
+                  type="password"
+                  name="current-password"
+                  placeholder="Password"
+                  value={deactivatePassword}
+                  onChange={(e) => setDeactivatePassword(e.target.value)}
+                />
+              </div>
 
-            <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
-              <button className="deactivate-btn" onClick={handleDeactivateAccount} disabled={isLoading}>
-                {isLoading ? 'Deactivating...' : 'Deactivate Account'}
-              </button>
-              {statusMessage && activeSection === "deactivate" && (
-                <span className={`status-text ${statusType}`}>
-                  {statusMessage}
-                </span>
-              )}
-            </div>
+              <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
+                <button type="submit" className="deactivate-btn" disabled={isLoading}>
+                  {isLoading ? 'Deactivating...' : 'Deactivate Account'}
+                </button>
+                {statusMessage && activeSection === "deactivate" && (
+                  <span className={`status-text ${statusType}`}>
+                    {statusMessage}
+                  </span>
+                )}
+              </div>
+            </form>
           </div>
         );
 
@@ -502,22 +561,55 @@ function Settings() {
             <h2>Change Password</h2>
             <p className="section-subtitle">Update your password to keep your account secure</p>
 
-            <div className="form-group">
-              <label>Current Password</label>
-              <input type="password" placeholder="Enter current password" />
-            </div>
+            <form onSubmit={handleUpdatePassword}>
+              <div className="form-group">
+                <label>Current Password</label>
+                <input
+                  type="password"
+                  id="current-password"
+                  name="current-password"
+                  autoComplete="current-password"
+                  placeholder="Enter current password"
+                  value={password.oldPassword}
+                  onChange={(e) => setPassword(prev => ({ ...prev, oldPassword: e.target.value }))}
+                />
+              </div>
 
-            <div className="form-group">
-              <label>New Password</label>
-              <input type="password" placeholder="Enter new password" />
-            </div>
+              <div className="form-group">
+                <label>New Password</label>
+                <input
+                  type="password"
+                  id="new-password"
+                  name="new-password"
+                  autoComplete="new-password"
+                  placeholder="Enter new password (min 8 characters)"
+                  value={password.newPassword}
+                  onChange={(e) => setPassword(prev => ({ ...prev, newPassword: e.target.value }))}
+                />
+              </div>
 
-            <div className="form-group">
-              <label>Confirm Password</label>
-              <input type="password" placeholder="Confirm new password" />
-            </div>
+              <div className="form-group">
+                <label>Confirm New Password</label>
+                <input
+                  type="password"
+                  id="confirm-password"
+                  name="confirm-password"
+                  autoComplete="new-password"
+                  placeholder="Confirm new password"
+                  value={password.confirmPassword}
+                  onChange={(e) => setPassword(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                />
+              </div>
 
-            <button className="save-btn">Save changes</button>
+              <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
+                <button type="submit" className="save-btn" disabled={isLoading}>
+                  {isLoading ? "Updating..." : "Update Password"}
+                </button>
+                {statusMessage && activeSection === "change-password" && (
+                  <span className={`status-text ${statusType}`}>{statusMessage}</span>
+                )}
+              </div>
+            </form>
           </div>
         );
 
@@ -607,72 +699,109 @@ function Settings() {
           {(!isMobileView || !activeSection) && (
             <aside className="settings-sidebar">
               <div className="settings-category">
-                <h3 className="category-title">YOUR ACCOUNT</h3>
+                <h3 className="category-title">Your Account</h3>
                 <nav className="sidebar-nav">
                   <button
                     className={`nav-item ${activeSection === "edit-profile" ? "active" : ""}`}
                     onClick={() => setActiveSection("edit-profile")}
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
                     Edit Profile
                   </button>
                   <button
                     className={`nav-item ${activeSection === "change-details" ? "active" : ""}`}
                     onClick={() => setActiveSection("change-details")}
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
                     Change Details
                   </button>
                   <button
                     className={`nav-item ${activeSection === "deactivate" ? "active" : ""}`}
                     onClick={() => setActiveSection("deactivate")}
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+                    </svg>
                     Deactivate Account
                   </button>
                   <button
                     className={`nav-item ${activeSection === "delete-account" ? "active" : ""}`}
                     onClick={() => setActiveSection("delete-account")}
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      <line x1="10" y1="11" x2="10" y2="17" />
+                      <line x1="14" y1="11" x2="14" y2="17" />
+                    </svg>
                     Account Deletion
                   </button>
                 </nav>
               </div>
 
               <div className="settings-category">
-                <h3 className="category-title">SECURITY</h3>
+                <h3 className="category-title">Security</h3>
                 <nav className="sidebar-nav">
                   <button
                     className={`nav-item ${activeSection === "change-password" ? "active" : ""}`}
                     onClick={() => setActiveSection("change-password")}
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+                    </svg>
                     Change Password
                   </button>
                   <button
                     className={`nav-item ${activeSection === "active-sessions" ? "active" : ""}`}
                     onClick={() => setActiveSection("active-sessions")}
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                      <line x1="8" y1="21" x2="16" y2="21" />
+                      <line x1="12" y1="17" x2="12" y2="21" />
+                    </svg>
                     Active Sessions
                   </button>
                   <button
                     className={`nav-item ${activeSection === "2fa" ? "active" : ""}`}
                     onClick={() => setActiveSection("2fa")}
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                      <line x1="12" y1="18" x2="12.01" y2="18" />
+                    </svg>
                     2F Authentication
                   </button>
                 </nav>
               </div>
 
               <div className="settings-category">
-                <h3 className="category-title">PRIVACY</h3>
+                <h3 className="category-title">Privacy</h3>
                 <nav className="sidebar-nav">
                   <button
                     className={`nav-item ${activeSection === "private-account" ? "active" : ""}`}
                     onClick={() => setActiveSection("private-account")}
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
                     Private Account
                   </button>
                   <button
                     className={`nav-item ${activeSection === "blocked-users" ? "active" : ""}`}
                     onClick={() => setActiveSection("blocked-users")}
                   >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                    </svg>
                     Blocked Users
                   </button>
                 </nav>
