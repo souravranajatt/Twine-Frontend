@@ -1,9 +1,9 @@
-import '../Assets/Bundle/Footer.css';
-import {Link} from 'react-router-dom';
+import './Footer.css';
+import { Link } from 'react-router-dom';
 
 function Footer() {
     const currentYear = new Date().getFullYear();
-    return(
+    return (
         <footer className="footer-wrapper">
             <div className="link-div">
                 <span className='link-tag'><Link className='link-style'>Policies</Link></span>

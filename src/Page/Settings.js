@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import HeaderArea from "../Components/Header";
-import FooterArea from "../Components/Footer";
+import HeaderArea from "../Components/Header/Header.js";
+import FooterArea from "../Components/Footer/Footer.js";
 import "../Assets/Bundle/Settings.css";
 import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI } from "../utils/SettingDataAPI";
 import { logoutHandleAPI } from "../utils/authAPI";
@@ -811,18 +811,19 @@ function Settings() {
 
           {/* Main Content - Shown on Desktop always, or on Mobile when a section is active */}
           {(!isMobileView || activeSection) && (
-            <main className="settings-content">
-              {isMobileView && activeSection && (
-                <button className="back-to-menu-btn" onClick={handleBackClick}>
-                  <span className="back-arrow">&larr;</span> Back to Settings
-                </button>
-              )}
-              {activeSection ? renderContent() : null}
+            <main className="settings-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
+              <div style={{ flex: '1 0 auto' }}>
+                {isMobileView && activeSection && (
+                  <button className="back-to-menu-btn" onClick={handleBackClick}>
+                    <span className="back-arrow">&larr;</span> Back to Settings
+                  </button>
+                )}
+                {activeSection ? renderContent() : null}
+              </div>
+              <FooterArea />
             </main>
           )}
         </div>
-
-        <FooterArea />
       </div>
 
       {showExpiredPopup && (

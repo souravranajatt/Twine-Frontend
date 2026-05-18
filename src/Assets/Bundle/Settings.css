@@ -698,9 +698,8 @@ input:checked+.toggle-slider:before {
     margin-bottom: 20px;
   }
 }
-/* ==========================================================================
-   9. Expired Session Popup
-   ========================================================================== */
+
+/* ===== 9. Expired Session Popup ===== */
 .expired-popup-overlay {
   position: fixed;
   top: 0;
@@ -750,11 +749,67 @@ input:checked+.toggle-slider:before {
 }
 
 @keyframes popupScale {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Footer CSS for Right Side on Desktop and full width on Mobile */
+.main-settings-container .footer-wrapper {
+  margin-top: 60px;
+  border-top: 1px solid #f1f5f9;
+  padding: 24px 0 10px 0;
+  width: 100%;
+  max-width: 600px;
+  background-color: transparent;
+  align-self: center;
+}
+
+.main-settings-container .link-div {
+  justify-content: center;
+  padding: 0;
+  margin-top: 0;
+}
+
+.main-settings-container .link-tag {
+  margin: 0 12px;
+}
+
+.main-settings-container .link-style {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.main-settings-container .link-style:hover {
+  color: #6366f1;
+}
+
+.main-settings-container .company-reserved {
+  justify-content: center;
+  padding: 0;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.main-settings-container .company-copyright-tag {
+  color: #cbd5e1;
+  font-size: 11px;
 }

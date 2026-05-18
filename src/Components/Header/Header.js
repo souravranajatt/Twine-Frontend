@@ -1,8 +1,8 @@
-import { Bell, User, Search, LogOut, CircleUserRound, Settings2 } from "lucide-react";
+import { Bell, User, Search, LogOut, CircleUserRound } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../Assets/Bundle/Header.css";
-import { logoutHandleAPI } from "../utils/authAPI";
+import "./Header.css";
+import { logoutHandleAPI } from "../../utils/authAPI";
 
 function Header() {
 
