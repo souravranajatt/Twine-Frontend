@@ -3,8 +3,8 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import "../Assets/Bundle/Settings.css";
-import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI } from "../utils/SettingDataAPI";
-import { logoutHandleAPI } from "../utils/authAPI";
+import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI } from "../utils/SettingDataAPI.js";
+import { logoutHandleAPI } from "../utils/authAPI.js";
 
 function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();

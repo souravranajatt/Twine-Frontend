@@ -5,9 +5,9 @@ import { BadgeCheck, Image, Heart, Tag, MessageCircleDashed, MapPin, SendHorizon
 import "../Assets/Bundle/Main.css";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
-import { loggedUserDataAPI } from "../utils/userProfileAPI";
-import { uploadPostAPI } from "../utils/PostUploadAPI";
-import { homeFeedFetch } from "../utils/homefeedAPI";
+import { loggedUserDataAPI } from "../utils/userProfileAPI.js";
+import { uploadPostAPI } from "../utils/PostUploadAPI.js";
+import { homeFeedFetch } from "../utils/homefeedAPI.js";
 
 function Main() {
 
