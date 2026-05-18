@@ -57,89 +57,111 @@ function Signup() {
   return (
     <div className='content-aut-wrapper'>
 
-      <div className="auth-container">
-        <div className="auth-box">
-
-          {/* Logo */}
-          <div className="logo-container">
-            <h1 className="auth-logo">Twine</h1>
-            <p className="logo-tagline">“Connect. Match. Unfold”</p>
+      <div className="auth-split-container">
+        
+        {/* Left Side: Brand Info Panel */}
+        <div className="auth-left-panel">
+          <div className="brand-info-content">
+            <h1 className="brand-title">Twine</h1>
+            <p className="brand-tagline">Connect. Match. Unfold</p>
+            
+            <ul className="brand-features">
+              <li>
+                <span className="feature-icon"></span>
+                <span className="feature-text">Find your people</span>
+              </li>
+              <li>
+                <span className="feature-icon"></span>
+                <span className="feature-text">Share moments</span>
+              </li>
+              <li>
+                <span className="feature-icon"></span>
+                <span className="feature-text">Build your timeline</span>
+              </li>
+            </ul>
           </div>
-
-          {/* Form */}
-          {message && <p className="error-msg">{message}</p>}
-          <form className="auth-form" onSubmit={handleSignup}>
-
-            {/* Full Name */}
-            <div className="fields-input">
-              <input
-                type="text"
-                name="fullName"
-                placeholder="Full Name"
-                className="auth-input"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-              />
-            </div>
-
-            {/* Username */}
-            <div className="fields-input">
-              <input
-                type="text"
-                name="userName"
-                placeholder="Username"
-                className="auth-input"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-              />
-            </div>
-
-            {/* Email */}
-            <div className="fields-input">
-              <input
-                type="email"
-                name="emailId"
-                placeholder="Email"
-                className="auth-input"
-                value={emailId}
-                onChange={(e) => setEmailId(e.target.value)}
-              />
-            </div>
-
-            {/* Password */}
-            <div className="fields-input">
-              <input
-                type="password"
-                name="userPass"
-                placeholder="Password"
-                className="auth-input"
-                value={userPass}
-                onChange={(e) => setUserPass(e.target.value)}
-                autoCapitalize="none"
-                autoComplete="off"
-                autoCorrect="off"
-              />
-            </div>
-
-            {/* Button */}
-            <div className="fields-input">
-              <button type="submit" className="auth-btn">
-                Sign Up
-              </button>
-            </div>
-
-            {/* Footer-box */}
-            <div className="other">
-              <p className="auth-footer">
-                Already have an account? <span><Link to="/login" className="link-col">Log in</Link></span>
-              </p>
-            </div>
-
-          </form>
         </div>
+
+        {/* Right Side: Form Panel */}
+        <div className="auth-right-panel">
+          <div className="auth-box">
+            {message && <p className="error-msg">{message}</p>}
+            <form className="auth-form" onSubmit={handleSignup}>
+
+              {/* Full Name */}
+              <div className="fields-input">
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="Full Name"
+                  className="auth-input"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </div>
+
+              {/* Username */}
+              <div className="fields-input">
+                <input
+                  type="text"
+                  name="userName"
+                  placeholder="Username"
+                  className="auth-input"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect="off"
+                />
+              </div>
+
+              {/* Email */}
+              <div className="fields-input">
+                <input
+                  type="email"
+                  name="emailId"
+                  placeholder="Email"
+                  className="auth-input"
+                  value={emailId}
+                  onChange={(e) => setEmailId(e.target.value)}
+                />
+              </div>
+
+              {/* Password */}
+              <div className="fields-input">
+                <input
+                  type="password"
+                  name="userPass"
+                  placeholder="Password"
+                  className="auth-input"
+                  value={userPass}
+                  onChange={(e) => setUserPass(e.target.value)}
+                  autoCapitalize="none"
+                  autoComplete="off"
+                  autoCorrect="off"
+                />
+              </div>
+
+              {/* Button */}
+              <div className="fields-input">
+                <button type="submit" className="auth-btn">
+                  Sign Up
+                </button>
+              </div>
+
+              <div className="divider-line"></div>
+
+              {/* Footer-box */}
+              <div className="other">
+                <p className="auth-footer">
+                  Already have an account? <span><Link to="/login" className="link-col">Log in</Link></span>
+                </p>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
       </div>
 
       {/* Footer-Section */}

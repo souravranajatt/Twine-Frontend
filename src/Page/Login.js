@@ -39,46 +39,84 @@ function Login() {
 
   return (
     <div className='content-aut-wrapper'>
-      <div className="auth-container">
-        <div className="auth-box">
-
-          {/* Logo */}
-          <div className="logo-container">
-            <h1 className="auth-logo">Twine</h1>
-            <p className="logo-tagline">“Connect. Match. Unfold”</p>
+      
+      <div className="auth-split-container">
+        
+        {/* Left Side: Brand Info Panel */}
+        <div className="auth-left-panel">
+          <div className="brand-info-content">
+            <h1 className="brand-title">Twine</h1>
+            <p className="brand-tagline">Connect. Match. Unfold</p>
+            
+            <ul className="brand-features">
+              <li>
+                <span className="feature-icon"></span>
+                <span className="feature-text">Find your people</span>
+              </li>
+              <li>
+                <span className="feature-icon"></span>
+                <span className="feature-text">Share moments</span>
+              </li>
+              <li>
+                <span className="feature-icon"></span>
+                <span className="feature-text">Build your timeline</span>
+              </li>
+            </ul>
           </div>
-
-          {/* Form */}
-          {message && <p className="error-msg">{message}</p>}
-          <form className="auth-form" onSubmit={handleSubmit}>
-
-            <div className="fields-input">
-              <input type="text" placeholder="Username or Email" value={UserId} className="auth-input" onChange={(e) => setUserId(e.target.value)} />
-            </div>
-
-            <div className="fields-input">
-              <input type="password" placeholder="Password" value={UserPwd} className="auth-input" onChange={(e) => setUserPwd(e.target.value)} autoCapitalize="none" autoComplete="off" autoCorrect="off" />
-            </div>
-
-            <div className="fields-input">
-              <button type="submit" className="auth-btn">Log In</button>
-            </div>
-
-            {/* Forgot password */}
-            <div className="other">
-              <p className="auth-footer">
-                <span><Link to="/forgot-password" className="link-col">Forgot password?</Link></span>
-              </p>
-
-              {/* Footer */}
-              <p className="auth-footer">
-                Don’t have an account?{" "}
-                <span><Link to="/signup" className="link-col">Sign up</Link></span>
-              </p>
-            </div>
-
-          </form>
         </div>
+
+        {/* Right Side: Form Panel */}
+        <div className="auth-right-panel">
+          <div className="auth-box">
+            {message && <p className="error-msg">{message}</p>}
+            <form className="auth-form" onSubmit={handleSubmit}>
+              
+              <div className="fields-input">
+                <input 
+                  type="text" 
+                  placeholder="Username or email" 
+                  value={UserId} 
+                  className="auth-input" 
+                  onChange={(e) => setUserId(e.target.value)} 
+                />
+              </div>
+
+              <div className="fields-input">
+                <input 
+                  type="password" 
+                  placeholder="Password" 
+                  value={UserPwd} 
+                  className="auth-input" 
+                  onChange={(e) => setUserPwd(e.target.value)} 
+                  autoCapitalize="none" 
+                  autoComplete="off" 
+                  autoCorrect="off" 
+                />
+              </div>
+
+              <div className="fields-input">
+                <button type="submit" className="auth-btn">Log in</button>
+              </div>
+
+              {/* Forgot password */}
+              <div className="forgot-password-wrapper">
+                <Link to="/forgot-password" className="forgot-password-link">Forgot password?</Link>
+              </div>
+
+              <div className="divider-line"></div>
+
+              {/* Footer navigation */}
+              <div className="other">
+                <p className="auth-footer">
+                  Don’t have an account?{" "}
+                  <span><Link to="/signup" className="link-col">Sign up</Link></span>
+                </p>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
       </div>
 
       {/* Footer-Section*/}

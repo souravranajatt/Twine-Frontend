@@ -304,6 +304,14 @@ function Settings() {
       );
     }
 
+    if (!profileData && (activeSection === "edit-profile" || activeSection === "private-account" || activeSection === "change-details")) {
+      return (
+        <div className="settings-form empty-state">
+          <p className="empty-text">Failed to load profile settings. Please refresh the page.</p>
+        </div>
+      );
+    }
+
     switch (activeSection) {
       case "edit-profile":
         return (
