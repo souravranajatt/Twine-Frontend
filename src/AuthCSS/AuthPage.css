@@ -6,7 +6,10 @@
 }
 
 /* Disable The User Selection */
-.brand-title, .brand-features, .fields-input, .auth-input {
+.brand-title,
+.brand-features,
+.fields-input,
+.auth-input {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -30,18 +33,23 @@
   display: flex;
   flex-grow: 1;
   width: 100%;
-  min-height: calc(100vh - 70px); /* Leave room for footer */
+  max-width: 1050px;
+  /* Bring left checklist and right form closer together */
+  margin: 0 auto;
+  /* Center the layout on large screens */
+  min-height: calc(100vh - 70px);
+  /* Leave room for footer */
 }
 
 /* Left Brand Panel */
 .auth-left-panel {
   width: 50%;
-  background-color: #fff0f3; /* Beautiful soft pink background */
+  background-color: #fafafa;
+  /* Uniform background to match the right side and footer perfectly */
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 60px 40px;
-  border-right: 1px solid #ffe3e8;
 }
 
 .brand-info-content {
@@ -54,7 +62,8 @@
   font-family: 'Billabong', 'Georgia', serif;
   font-size: 76px;
   font-weight: 500;
-  color: #ff3b6c; /* Signature pink */
+  color: #ff3b6c;
+  /* Signature pink */
   margin-bottom: 8px;
   letter-spacing: -0.5px;
 }
@@ -64,6 +73,11 @@
   color: #c94a65;
   font-weight: 400;
   margin-bottom: 48px;
+}
+
+/* Mobile-only logo container hidden on desktop */
+.mobile-logo-container {
+  display: none;
 }
 
 /* Features Checklist */
@@ -80,12 +94,11 @@
   gap: 16px;
 }
 
-.feature-icon {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ff7895;
-  border-radius: 4px;
-  display: inline-block;
+.feature-lucide-icon {
+  width: 24px;
+  height: 24px;
+  color: #ff3b6c;
+  /* Elegant pink brand color */
   flex-shrink: 0;
 }
 
@@ -98,7 +111,8 @@
 /* Right Form Panel */
 .auth-right-panel {
   width: 50%;
-  background-color: #fafafa; /* Keep previous light-grey background */
+  background-color: #fafafa;
+  /* Keep previous light-grey background */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -152,12 +166,14 @@
 }
 
 .auth-input:focus {
-  border-color: #ff3b6c; /* Pink focus outline */
-  box-shadow: 0 0 0 3px rgba(255, 59, 108, 0.1);
+  border-color: #a8a8a8;
+  /* Clean simple grey border on focus */
+  box-shadow: none;
 }
 
 .auth-btn {
-  background-color: #262626; /* Dark slate button like screenshot */
+  background-color: #262626;
+  /* Dark slate button like screenshot */
   color: #ffffff;
   border: none;
   width: 100%;
@@ -185,7 +201,8 @@
 }
 
 .forgot-password-link {
-  color: #ff3b6c; /* Pink color */
+  color: #ff3b6c;
+  /* Pink color */
   font-weight: 600;
   font-size: 14px;
   text-decoration: none;
@@ -215,7 +232,8 @@
 }
 
 .link-col {
-  color: #ff3b6c; /* Pink redirect link */
+  color: #ff3b6c;
+  /* Pink redirect link */
   font-weight: 600;
   text-decoration: none;
   transition: opacity 0.2s ease;
@@ -228,14 +246,40 @@
 /* Responsive Grid Split Layout */
 @media (max-width: 900px) {
   .auth-left-panel {
-    display: none; /* Hide left info panel on smaller screens */
+    display: none;
+    /* Hide left info panel on smaller screens */
   }
+
   .auth-right-panel {
     width: 100%;
     padding: 40px 20px;
-    background-color: #ffffff; /* Smooth mobile experience */
+    background-color: #ffffff;
+    /* Smooth mobile experience */
   }
+
   .content-aut-wrapper {
     background-color: #ffffff;
+  }
+
+  /* Show mobile brand logo on mobile screen */
+  .mobile-logo-container {
+    display: block;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .mobile-auth-logo {
+    font-family: 'Billabong', 'Georgia', serif;
+    font-size: 44px;
+    font-weight: 500;
+    color: #ff3b6c;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  .mobile-logo-tagline {
+    font-size: 14px;
+    color: #c94a65;
+    font-weight: 400;
   }
 }

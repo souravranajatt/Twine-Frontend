@@ -325,6 +325,7 @@ function Profile() {
   const [followRequestSentCheckStatus, setFollowRequestSentCheckStatus] = useState(false);
   const [followRequestReceiveCheckStatus, setFollowRequestReceiveCheckStatus] = useState(false);
   const [accountPrivateCheckStatus, setAccountPrivateCheckStatus] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     if (userProfileDataURL !== null) {
@@ -362,12 +363,15 @@ function Profile() {
     }
 
     try {
+      setIsFollowing(true);
       await followUserAPI(followData);
       const freshProfile = await userProfilePageAPI(username);
       setUserProfileDataURL(freshProfile);
       console.log("Follow Success");
     } catch (error) {
       console.log("Error occured!");
+    } finally {
+      setIsFollowing(false);
     }
 
   }
@@ -468,22 +472,22 @@ function Profile() {
                 <div className="profileActionContentBtn-Box">
 
                   {actionType === "UNFOLLOWBTN" && (
-                    <button className="profileUnFollowActionBtns-Box" onClick={handleFollow}>
-                      <UserRoundCheck size={20} className="profileActionBtnIconDesign" />
+                    <button className="profileUnFollowActionBtns-Box" onClick={handleFollow} disabled={isFollowing}>
+                      {isFollowing ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" /> : <UserRoundCheck size={20} className="profileActionBtnIconDesign" />}
                       <span className="followActionButtonSpan">Unfollow</span>
                     </button>
                   )}
 
                   {actionType === "REQUESTEDBTN" && (
-                    <button className="profileUnFollowActionBtns-Box" onClick={handleFollow}>
-                      <UserRoundCheck size={20} className="profileActionBtnIconDesign" />
+                    <button className="profileUnFollowActionBtns-Box" onClick={handleFollow} disabled={isFollowing}>
+                      {isFollowing ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" /> : <UserRoundCheck size={20} className="profileActionBtnIconDesign" />}
                       <span className="followActionButtonSpan">Requested</span>
                     </button>
                   )}
 
                   {actionType === "FOLLOWBTN" && (
-                    <button className="profileFollowActionBtns-Box" onClick={handleFollow}>
-                      <UserRoundPlus size={20} className="profileActionBtnIconDesign" />
+                    <button className="profileFollowActionBtns-Box" onClick={handleFollow} disabled={isFollowing}>
+                      {isFollowing ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" /> : <UserRoundPlus size={20} className="profileActionBtnIconDesign" />}
                       <span className="followActionButtonSpan">
                         {userProfileDataURL.followerStatus === true ? (<>Follows you</>) : (<>Follow</>)}
                       </span>

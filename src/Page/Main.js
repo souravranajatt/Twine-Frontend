@@ -269,7 +269,9 @@ function Main() {
                     <textarea type="text" className="captionPost" value={captionPost} onChange={(e) => setCaption(e.target.value)} placeholder="Write caption..." autoCorrect="off" autoComplete="off" autoCapitalize="none"></textarea>
                   </div>
                   <div className="createPost-fields">
-                    <button type="submit" className="postButtonDesign" disabled={!file}>Upload Post</button>
+                    <button type="submit" className="postButtonDesign" disabled={!file || isUploading}>
+                      {isUploading ? 'Uploading...' : 'Upload Post'}
+                    </button>
                   </div>
                 </form>
               </div>

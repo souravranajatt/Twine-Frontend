@@ -2,6 +2,7 @@ import '../AuthCSS/AuthPage.css'; // Style File
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUserAuthAPI } from "../utils/authAPI.js"; // Import API
+import { Image, UserRoundPlus, TrendingUp } from "lucide-react";
 import FooterArea from "../Components/Footer/Footer.js";
 
 function Signup() {
@@ -12,6 +13,7 @@ function Signup() {
   const [emailId, setEmailId] = useState("");
   const [userPass, setUserPass] = useState("");
   const [message, setMessage] = useState("");
+  const [isSignup, setIsSignup] = useState(false);
   const navigate = useNavigate();
 
   // Final submit validation
@@ -45,10 +47,13 @@ function Signup() {
     }
 
     try {
+      setIsSignup(true);
       await signupUserAuthAPI(userData);
       navigate("/");
     } catch (err) {
       setMessage(err.message || err);
+    } finally {
+      setIsSignup(false);
     }
 
   }
@@ -58,24 +63,24 @@ function Signup() {
     <div className='content-aut-wrapper'>
 
       <div className="auth-split-container">
-        
+
         {/* Left Side: Brand Info Panel */}
         <div className="auth-left-panel">
           <div className="brand-info-content">
             <h1 className="brand-title">Twine</h1>
             <p className="brand-tagline">Connect. Match. Unfold</p>
-            
+
             <ul className="brand-features">
               <li>
-                <span className="feature-icon"></span>
+                <UserRoundPlus className="feature-lucide-icon" />
                 <span className="feature-text">Find your people</span>
               </li>
               <li>
-                <span className="feature-icon"></span>
+                <Image className="feature-lucide-icon" />
                 <span className="feature-text">Share moments</span>
               </li>
               <li>
-                <span className="feature-icon"></span>
+                <TrendingUp className="feature-lucide-icon" />
                 <span className="feature-text">Build your timeline</span>
               </li>
             </ul>
@@ -85,6 +90,13 @@ function Signup() {
         {/* Right Side: Form Panel */}
         <div className="auth-right-panel">
           <div className="auth-box">
+
+            {/* Mobile Brand Logo (Visible only on mobile/tablet) */}
+            <div className="mobile-logo-container">
+              <h1 className="mobile-auth-logo">Twine</h1>
+              <p className="mobile-logo-tagline">Connect. Match. Unfold</p>
+            </div>
+
             {message && <p className="error-msg">{message}</p>}
             <form className="auth-form" onSubmit={handleSignup}>
 
@@ -144,8 +156,8 @@ function Signup() {
 
               {/* Button */}
               <div className="fields-input">
-                <button type="submit" className="auth-btn">
-                  Sign Up
+                <button type="submit" className="auth-btn" disabled={isSignup}>
+                  {isSignup ? "Signing Up..." : "Sign Up"}
                 </button>
               </div>
 
