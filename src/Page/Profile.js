@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Heart, HeartPlus, HeartOff, SendHorizontal, UserLock, MessageCircleDashed, UserRoundPlus, Flame, UserRoundCheck, LayoutGrid, History, SquareUser, MapPin, Link2, BadgeCheck, BriefcaseBusiness, CalendarDays, Aperture, Loader2, CircleUser } from "lucide-react";
+import { Heart, HeartPlus, HeartOff, SendHorizontal, UserLock, MessageCircleDashed, UserRoundPlus, Flame, UserRoundCheck, LayoutGrid, History, SquareUser, MapPin, Link2, BadgeCheck, BriefcaseBusiness, CalendarDays, Aperture, Loader2, CircleUser, Play } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../Assets/Bundle/Profile.css";
 import HeaderArea from "../Components/Header/Header.js";
@@ -7,6 +7,23 @@ import FooterArea from "../Components/Footer/Footer.js";
 import NotFoundPage from "../ErrorHandler/ErrrorDesign/ErrorPageDesign";
 import InternalErrorPage from "../ErrorHandler/ErrrorDesign/InternalErrorPageDesign";
 import { followUserAPI, userProfilePageAPI, searchUserPostsAPI, searchUserTaggedPostsAPI, searchUserTimelinePostsAPI } from "../utils/userProfileAPI.js";
+
+const formatPostTime = (dateTimeString) => {
+  if (!dateTimeString) return "";
+  const date = new Date(dateTimeString);
+  const now = new Date();
+  const diffInMs = now - date;
+  const diffInMins = Math.floor(diffInMs / 60000);
+  const diffInHours = Math.floor(diffInMins / 60);
+  const diffInDays = Math.floor(diffInHours / 24);
+
+  if (diffInMins < 1) return "Just now";
+  if (diffInMins < 60) return `${diffInMins}m ago`;
+  if (diffInHours < 24) return `${diffInHours}h ago`;
+  if (diffInDays < 7) return `${diffInDays}d ago`;
+
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+};
 
 function Profile() {
 
@@ -523,19 +540,29 @@ function Profile() {
                             <div className="profilePostHeaderPFPImage-Box">
                               <img
                                 src={
-                                  userProfileDataURL?.searchProfilePhoto &&
-                                    userProfileDataURL.searchProfilePhoto !== "null"
-                                    ? `${userProfileDataURL.searchProfilePhoto}`
-                                    : `https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png`
+                                  post.profileImage && post.profileImage !== "null"
+                                    ? `${post.profileImage}`
+                                    : userProfileDataURL?.searchProfilePhoto &&
+                                      userProfileDataURL.searchProfilePhoto !== "null"
+                                      ? `${userProfileDataURL.searchProfilePhoto}`
+                                      : `https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png`
                                 }
                                 className="profilePostHeaderPFP-Box"
                                 alt="profileImage"
                               />
                             </div>
                             <div className="profilePostHeaderUsernameText-box">
-                              <span className="profilePostHeaderUserText-Box">{userProfileDataURL.searchUsername}</span>
-                              {post.fetchVerified === true && (
-                                <span className="profilePostVerifyBadgeIcon-Box"><BadgeCheck height="20" width="20" className="profilePostUsernameVerifyBadgeIcon-Box" /></span>
+                              <div className="profilePostHeaderUserRow">
+                                <span className="profilePostHeaderUserText-Box">{post.username || userProfileDataURL.searchUsername}</span>
+                                {post.fetchVerified === true && (
+                                  <BadgeCheck height="16" width="16" className="profilePostUsernameVerifyBadgeIcon-Box" />
+                                )}
+                                {post.fetchUploadAt && (
+                                  <span className="profilePostTimeText">• {formatPostTime(post.fetchUploadAt)}</span>
+                                )}
+                              </div>
+                              {post.fetchPostLocation && (
+                                <span className="profilePostLocationText">{post.fetchPostLocation}</span>
                               )}
                             </div>
                           </div>
@@ -556,6 +583,15 @@ function Profile() {
                                   </span>
                                 )}
                               </p>
+                            </div>
+                          )}
+                          {/* Post Tagged Users */}
+                          {post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0 && (
+                            <div className="profilePostTaggedUsers-Box">
+                              <span className="taggedUserLabel">With </span>
+                              {post.fetchTaggedUsers.map((taggedUser) => (
+                                <span key={taggedUser} className="taggedUserPill">@{taggedUser}</span>
+                              ))}
                             </div>
                           )}
                           {/* Post - Main Content */}
@@ -589,9 +625,36 @@ function Profile() {
                           <div className="postBottomAction">
                             {/* Like Buttons */}
                             <div className="action-toogles">
-                              <div className="postAction-Icons"><button type="button" className="postActionContentBtn-ToogleBox" ><Heart size={23} className="bottomAction-icons" /></button></div>
-                              <div className="postAction-Icons"><button type="button" className="postActionContentBtn-ToogleBox" ><Flame size={23} className="bottomAction-icons" /></button></div>
-                              <div className="postAction-Icons"><button type="button" className="postActionContentBtn-ToogleBox" ><MessageCircleDashed size={23} className="bottomAction-icons" /></button></div>
+                              <div className="postAction-Icons">
+                                <button type="button" className="postActionContentBtn-ToogleBox">
+                                  <Heart size={23} className="bottomAction-icons" />
+                                  {!post.likeHide && post.likeCount && post.likeCount !== "0" && (
+                                    <span className="postActionCountText">{post.likeCount}</span>
+                                  )}
+                                </button>
+                              </div>
+                              <div className="postAction-Icons">
+                                <button type="button" className="postActionContentBtn-ToogleBox">
+                                  <Flame size={23} className="bottomAction-icons" />
+                                </button>
+                              </div>
+                              {post.commentEnable === true && (
+                                <div className="postAction-Icons">
+                                  <button type="button" className="postActionContentBtn-ToogleBox">
+                                    <MessageCircleDashed size={23} className="bottomAction-icons" />
+                                    {post.commentCount && post.commentCount !== "0" && (
+                                      <span className="postActionCountText">{post.commentCount}</span>
+                                    )}
+                                  </button>
+                                </div>
+                              )}
+                              {post.shareEnable === true && (
+                                <div className="postAction-Icons">
+                                  <button type="button" className="postActionContentBtn-ToogleBox" title="Copy Link">
+                                    <Link2 size={23} className="bottomAction-icons" />
+                                  </button>
+                                </div>
+                              )}
                             </div>
                             {/* Comments Section */}
                             {post.commentEnable === true ? (<div className="action-toogles">
@@ -643,12 +706,17 @@ function Profile() {
                                 timelinePosts.map((post) => (
                                   <div key={post.fetchPostId} className="grid-item">
                                     {post.postType === 'VIDEO' ? (
-                                      <video
-                                        src={post.fetchFileName}
-                                        className="gridImagesList"
-                                        muted
-                                        playsInline
-                                      />
+                                      <>
+                                        <video
+                                          src={post.fetchFileName}
+                                          className="gridImagesList"
+                                          muted
+                                          playsInline
+                                        />
+                                        <div className="gridItemVideoBadge">
+                                          <Play size={12} fill="white" color="white" />
+                                        </div>
+                                      </>
                                     ) : (
                                       <img
                                         src={post.fetchFileName}
@@ -700,12 +768,17 @@ function Profile() {
                           {taggedPosts.map((post) => (
                             <div key={post.fetchPostId} className="grid-item">
                               {post.postType === 'VIDEO' ? (
-                                <video
-                                  src={post.fetchFileName}
-                                  className="gridImagesList"
-                                  muted
-                                  playsInline
-                                />
+                                <>
+                                  <video
+                                    src={post.fetchFileName}
+                                    className="gridImagesList"
+                                    muted
+                                    playsInline
+                                  />
+                                  <div className="gridItemVideoBadge">
+                                    <Play size={12} fill="white" color="white" />
+                                  </div>
+                                </>
                               ) : (
                                 <img
                                   src={post.fetchFileName}

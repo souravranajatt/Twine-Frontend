@@ -1,11 +1,20 @@
 /* Header */
-.header, .header-left, .logo, .boxField{
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Standard syntax */
+.header,
+.header-left,
+.logo,
+.boxField {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Standard syntax */
 }
 
 .header {
@@ -24,72 +33,124 @@
   z-index: 1000;
 }
 
-/* Left Section */ 
+/* Left Section */
 
-.header-left { 
+.header-left {
   background-color: transparent;
   margin-left: 40px;
-} 
+}
 
-.logo-head{
+.header-logo-link {
+  text-decoration: none;
   background-color: transparent;
-  font-size: 24px;
-  font-weight: bold;
-  color: #ff3b6c;
+  display: flex;
+  align-items: center;
+}
+
+.logo-head {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header-logo-svg {
+  width: 40px;
+  height: 24px;
+  overflow: visible;
+  transition: transform 0.25s ease;
+}
+
+.header-rings-group {
+  transform-origin: 58px 35px;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.header-brand-text {
+  font-family: 'Outfit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+}
+
+.header-brand-text .brand-t {
+  color: #F0186E;
+  /* Brand Pink */
+}
+
+.header-brand-text .brand-wine {
+  color: #111010;
+  /* Brand Dark */
+  margin-left: -1px;
+}
+
+/* Micro-animations on hover */
+.logo-head:hover .header-logo-svg {
+  transform: scale(1.05);
+}
+
+.logo-head:hover .header-rings-group {
+  transform: rotate(15deg);
 }
 
 
-  
-/* Right Section */ 
-.header-right { 
-  display: flex; 
+
+/* Right Section */
+.header-right {
+  display: flex;
   background-color: transparent;
-  gap: 16px; 
+  gap: 16px;
   align-items: center;
   justify-content: center;
-} 
+}
 
-/* Search Box */ 
-.search-box { 
-  display: flex; 
-  align-items: center; 
-  background: #f1f1f1; 
-  padding: 6px 10px; 
+/* Search Box */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 6px 10px;
   border-radius: 25px;
-  transition: all 0.3s ease; 
-} 
-.search-box input.boxField { 
-  border: none; 
-  outline: none; 
-  background: transparent; 
+  transition: all 0.3s ease;
+}
+
+.search-box input.boxField {
+  border: none;
+  outline: none;
+  background: transparent;
   padding: 6px 8px;
   font-size: 14px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   width: 180px;
-} 
-.search-nav-icons{
+}
+
+.search-nav-icons {
   background-color: transparent;
 }
-.search-icon { 
-  color: #555; 
+
+.search-icon {
+  color: #555;
   cursor: pointer;
   stroke-width: 2.5;
   background-color: transparent;
 }
-.search-icon:hover { 
-  color: #ff3b6c;
-} 
 
-/* Icons */ 
-div.nav-bar-icons{
+.search-icon:hover {
+  color: #ff3b6c;
+}
+
+/* Icons */
+div.nav-bar-icons {
   background-color: transparent;
   justify-items: center;
   display: flex;
   border-radius: 0px;
 }
-.icon-left{
+
+.icon-left {
   padding: 7px;
   position: relative;
   display: flex;
@@ -102,10 +163,13 @@ div.nav-bar-icons{
   background-color: #f1f1f1;
   border-radius: 50%;
   /* 3D effect */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), /* shadow below */
-              0 1px 3px rgba(0, 0, 0, 0.1); /* subtle secondary shadow */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15),
+    /* shadow below */
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  /* subtle secondary shadow */
 }
-.headerRightIconBtn-ToogleBox{
+
+.headerRightIconBtn-ToogleBox {
   background-color: transparent;
   border: none;
   outline: none;
@@ -116,20 +180,22 @@ div.nav-bar-icons{
   align-items: center;
   cursor: pointer;
 }
-.header-right > div.nav-bar-icons .iconTabRight{
+
+.header-right>div.nav-bar-icons .iconTabRight {
   margin-left: 0px;
   cursor: pointer;
   background-color: transparent;
-  transition: color 0.3s; 
+  transition: color 0.3s;
   margin: auto;
   fill: #f1f1f1;
   color: #555;
   stroke-width: 2.5;
-} 
-.header-right > div.nav-bar-icons .iconTabRight:hover { 
+}
+
+.header-right>div.nav-bar-icons .iconTabRight:hover {
   color: #ff3b6c;
   fill: #ff3b6c;
-} 
+}
 
 /* ============================= */
 /* DROPDOWN STYLING */
@@ -155,14 +221,15 @@ div.nav-bar-icons{
   background-color: transparent;
 }
 
-.dropdown-listItem{
+.dropdown-listItem {
   cursor: pointer;
   background-color: transparent;
   transition: background 0.25s;
   font-size: 13px;
   padding: 8px 12px;
 }
-.dropDownBtnDesign-Box{
+
+.dropDownBtnDesign-Box {
   background-color: transparent;
   color: #111;
   cursor: pointer;
@@ -171,7 +238,7 @@ div.nav-bar-icons{
   margin: 0px;
   display: flex;
   align-items: center;
-  gap:4.5px;
+  gap: 4.5px;
   outline: none;
   border: none;
   font-size: 14px;
@@ -182,12 +249,12 @@ div.nav-bar-icons{
   color: #ff3b6c;
 }
 
-.dropdownIcons{
+.dropdownIcons {
   stroke-width: 2;
   background-color: transparent;
 }
 
-.dropdown-linkList{
+.dropdown-linkList {
   text-decoration: none;
   width: 100%;
   color: inherit;
@@ -209,11 +276,13 @@ div.nav-bar-icons{
   .search-box input.boxField {
     width: 120px;
   }
+
   .dropdown {
     top: 55px;
     right: -10px;
     min-width: 160px;
   }
+
   .dropdown-listItem {
     cursor: pointer;
     background-color: transparent;
@@ -251,6 +320,7 @@ div.nav-bar-icons{
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

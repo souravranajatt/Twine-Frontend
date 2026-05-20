@@ -27,7 +27,17 @@ export const loggedUserDataAPI = async () => {
 // Follow User API....
 export const followUserAPI = async (followData) => {
   try {
-    const res = await api.post("/action/follow/request/user", followData);
+    const res = await api.post("/v1/user/follow", followData);
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || "Something went wrong!";
+  }
+};
+
+// Block User API....
+export const blockUserAPI = async (blockData) => {
+  try {
+    const res = await api.post("/v1/user/block", blockData);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";

@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../utils/instanceAPI"; // tumhara axios instance (withCredentials:true)
+import Loader from "../Components/Loader/Loader";
 
 const ProtectedRoute = ({ children }) => {
   const [auth, setAuth] = useState(null); // null → loading
@@ -18,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
     verifyAuth();
   }, []);
 
-  if (auth === null) return <div>Loading...</div>; // optional loading
+  if (auth === null) return <Loader />; // optional loading
 
   return auth ? children : <Navigate to="/login" replace />;
 };

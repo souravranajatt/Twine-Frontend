@@ -64,9 +64,47 @@ function Header() {
     <header className="header">
       {/* Header Left */}
       <div className="header-left">
-        <div className="logo-head">
-          Twine
-        </div>
+        <Link to="/" className="header-logo-link">
+          <div className="logo-head">
+            <svg className="header-logo-svg" viewBox="0 0 120 70" xmlns="http://www.w3.org/2000/svg">
+              <g className="header-rings-group">
+                {/* Left Ring (Brand Dark) */}
+                <circle
+                  className="header-ring ring-left"
+                  cx="45"
+                  cy="35"
+                  r="18"
+                  stroke="#111010"
+                  strokeWidth="4.5"
+                  fill="none"
+                />
+                {/* Right Ring (Brand Pink) */}
+                <circle
+                  className="header-ring ring-right"
+                  cx="71"
+                  cy="35"
+                  r="18"
+                  stroke="#F0186E"
+                  strokeWidth="4.5"
+                  fill="none"
+                />
+                {/* Overlapping arc of Left Ring to interlock them */}
+                <path
+                  className="header-ring-overlap"
+                  d="M 61 26.75 A 18 18 0 0 0 41.5 17.35"
+                  stroke="#111010"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+              </g>
+            </svg>
+            <span className="header-brand-text">
+              <span className="brand-t">T</span>
+              <span className="brand-wine">wine</span>
+            </span>
+          </div>
+        </Link>
       </div>
 
       {/* Header Right */}

@@ -54,7 +54,7 @@ button {
 
 /* Profile Content Box */
 .profileContent-Box {
-    max-width: 540px;
+    max-width: 550px;
     width: 100%;
     margin: 0 auto;
     background-color: transparent;
@@ -70,12 +70,12 @@ button {
 .profileHeader-Box {
     height: fit-content;
     background-color: #fff;
-    border: .5px solid #dbdbdb;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f2f2f6;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.04), 0px 1px 2px rgba(0, 0, 0, 0.02);
     margin: 20px auto;
     width: 100%;
-    border-radius: 5px;
-    padding: 16px;
+    border-radius: 16px;
+    padding: 24px;
     box-sizing: border-box;
 }
 
@@ -86,17 +86,17 @@ button {
     height: auto;
     display: flex;
     margin: 0px auto;
-    align-items: flex-start;
-    gap: 8px;
+    align-items: center;
+    gap: 20px;
 }
 
 .profileImagePFP-Box {
-    background-color: #f3f3f3;
+    background-color: #f8f9fa;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90px;
-    width: 90px;
+    height: 100px;
+    width: 100px;
     border: 1.5px solid #dbdbdb;
     border-radius: 50%;
     overflow: hidden;
@@ -115,94 +115,89 @@ button {
 
 .profileNameInfo-Box {
     background-color: transparent;
-    padding: 5px;
+    padding: 0;
     overflow-wrap: break-word;
     word-wrap: break-word;
     white-space: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .profileFullNameInfoTag-Box {
     background-color: transparent;
-    font-size: 19px;
-    font-weight: 600;
-    margin: 3px 1px;
-    color: #262626;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 23px;
+    font-weight: 700;
+    margin: 0;
+    color: #111010;
+    font-family: 'Outfit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .profileUserNameInfoTag-Box {
     background-color: transparent;
     font-size: 15px;
     width: fit-content;
-    font-weight: 400;
-    margin: 3px 1px;
+    font-weight: 500;
+    margin: 0;
     display: flex;
     align-items: center;
-    gap: 1px;
-    color: gray;
+    gap: 4px;
+    color: #8e8e93;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .profileUsernameVerifyBadgeIcon-Box {
-    fill: #111;
+    fill: #F0186E;
     cursor: pointer;
     color: white;
-    stroke-width: 2.5;
+    stroke-width: 2;
     background-color: transparent;
-    padding-top: 1px;
+    margin-left: 2px;
 }
 
-/* Profile Extra Data Info */
+/* Profile Extra Data Info (Twitter style location, joined and occupation) */
 .profileExtraData-Box {
     background-color: transparent;
-    margin: 0 auto;
-    margin-top: 11px;
+    margin-top: 16px;
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    white-space: normal;
-    gap: 8px;
+    gap: 16px;
 }
 
 .profileExtraDataInfoPara-Box {
-    color: #555;
-    font-size: 12px;
-    font-weight: 600;
-    margin: 2px 0px;
-    width: fit-content;
+    color: #8e8e93;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
     background-color: transparent;
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 2px 2px;
-    gap: 3px;
+    gap: 6px;
 }
 
 .dataUserIcons {
-    fill: #f1f1f1;
-    stroke-width: 2.5px;
+    color: #8e8e93;
+    stroke-width: 2px;
 }
 
 /* Profile Bio Info */
 .profileBioData-Box {
     background-color: transparent;
     width: 100%;
-    margin: 0px auto;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    white-space: normal;
+    margin-top: 14px;
 }
 
 .profileBioDataInfoPara-Box {
-    flex-direction: column;
     display: flex;
     font-size: 15px;
-    color: #242424;
+    color: #2c2c2e;
     width: 100%;
     background-color: transparent;
-    padding: 4px 2px;
+    padding: 0;
+    margin: 0;
+    line-height: 1.5;
     white-space: pre-wrap;
 }
 
@@ -210,122 +205,122 @@ button {
 .userFollowDataInfoPack {
     background-color: transparent;
     width: 100%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
-    padding: 3px 2px;
+    padding-top: 16px;
     display: flex;
-    gap: 5px;
+    gap: 20px;
+    border-top: 1px solid #f4f4f5;
+    margin-top: 18px;
 }
 
 .userFollowDataContentBox {
     background-color: transparent;
     font-size: 14px;
     font-weight: 600;
-    margin-right: 2px;
+    color: #1c1c1e;
+    margin: 0;
 }
 
-/* Follow Btn Styling */
+/* Follow & Action Buttons styling */
 .profileActionContentBtn-Box {
     background-color: transparent;
-    padding-top: 8px;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-bottom: 0px;
-    margin: 0px auto;
+    padding: 0;
+    margin-top: 18px;
+    width: 100%;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 5px;
+    gap: 12px;
 }
 
 .profileSendLikeActionBtns-Box {
-    background: #ff3b6c;
+    background: #f4f4f5;
     width: 100%;
-    font-weight: 600;
-    border-radius: 3px;
-    border: none;
-    color: #fff;
+    font-weight: 700;
+    border-radius: 10px;
+    border: 1px solid #e4e4e7;
+    color: #18181b;
     outline: none;
-    height: fit-content;
-    padding: 8px 5px;
-    font-size: 16px;
+    height: 42px;
+    font-size: 14px;
     cursor: pointer;
     display: flex;
-    gap: 5px;
+    gap: 8px;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    transition: background-color 0.2s, transform 0.1s;
 }
 
 .profileFollowActionBtns-Box {
-    background: #ff3b6c;
+    background: #F0186E;
     width: 100%;
-    font-weight: 600;
-    border-radius: 3px;
+    font-weight: 700;
+    border-radius: 10px;
     border: none;
     color: #fff;
     outline: none;
-    height: fit-content;
-    padding: 8px 5px;
-    font-size: 16px;
+    height: 42px;
+    font-size: 14px;
     cursor: pointer;
     display: flex;
-    gap: 5px;
+    gap: 8px;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    transition: background-color 0.2s, transform 0.1s;
 }
 
 .profileUnFollowActionBtns-Box {
-    background: #888;
+    background: #f4f4f5;
     width: 100%;
-    font-weight: 600;
-    border-radius: 3px;
-    border: none;
-    color: #fff;
+    font-weight: 700;
+    border-radius: 10px;
+    border: 1px solid #e4e4e7;
+    color: #18181b;
     outline: none;
-    height: fit-content;
-    padding: 8px 5px;
-    font-size: 16px;
+    height: 42px;
+    font-size: 14px;
     cursor: pointer;
     display: flex;
-    gap: 5px;
+    gap: 8px;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    transition: background-color 0.2s, transform 0.1s;
 }
 
-.profileFollowActionBtns-Box:hover,
-.profileSendLikeActionBtns-Box:hover {
-    background-color: #E33E5C;
+.profileFollowActionBtns-Box:hover {
+    background-color: #d61562;
+    transform: translateY(-1px);
+}
+
+.profileSendLikeActionBtns-Box:hover,
+.profileUnFollowActionBtns-Box:hover {
+    background-color: #e4e4e7;
+    transform: translateY(-1px);
+}
+
+.profileFollowActionBtns-Box:active,
+.profileSendLikeActionBtns-Box:active,
+.profileUnFollowActionBtns-Box:active {
+    transform: translateY(0);
 }
 
 .profileActionBtnIconDesign {
-    stroke-width: 2.5;
+    stroke-width: 2.2;
 }
 
-
-
-
-
-
-
-
-
-
-/* Profile Middle Toogle Box */
+/* Profile Middle Tab Box */
 .profileMiddle-Box {
-    background-color: transparent;
-    border-bottom: 1px solid #dbdbdb;
-    margin: 0px auto;
+    background-color: #fff;
+    border-bottom: 1px solid #f4f4f5;
+    margin: 15px auto 0;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    border-radius: 12px;
+    padding: 6px 0;
 }
 
 .profileTabBarMidIconDesign-Box {
-    padding: 5px;
+    padding: 4px;
     display: flex;
-    width: 100%;
     justify-content: center;
     align-items: center;
     background-color: transparent;
@@ -335,22 +330,23 @@ button {
     outline: none;
     justify-content: center;
     align-items: center;
-    margin: 0px auto;
     background-color: transparent;
     display: flex;
     border: none;
-    padding: 2px;
+    padding: 4px;
     cursor: pointer;
 }
 
 .tabIconsBox-MidProfile {
-    stroke-width: 2.5;
-    color: #262626;
+    stroke-width: 2.2;
+    color: #8e8e93;
     cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
 }
 
 .tabIconsBox-MidProfile:hover {
-    color: #ff3b6c;
+    color: #F0186E;
+    transform: scale(1.08);
 }
 
 
@@ -445,13 +441,13 @@ button {
 .profilePostCard-Box {
     width: 100%;
     height: auto;
-    margin: 0px auto;
-    margin-top: 20px;
-    margin-bottom: 50px;
+    margin: 16px auto 24px;
     background-color: #fff;
-    border: 0.5px solid #dbdbdb;
-    border-radius: 0px;
+    border: 1px solid #f2f2f6;
+    border-radius: 16px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.04), 0px 1px 2px rgba(0, 0, 0, 0.02);
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .profilePostHeaderMain-Box {
@@ -466,8 +462,8 @@ button {
     height: 40px;
     width: 40px;
     border-radius: 50%;
-    border: 2px solid #dbdbdb;
-    background-color: #f3f3f3;
+    border: 1.5px solid #dbdbdb;
+    background-color: #f8f9fa;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -487,22 +483,42 @@ button {
 
 .profilePostHeaderUsernameText-box {
     padding: 0px 12px;
-    justify-content: center;
-    align-items: center;
-    background-color: transparent;
     display: flex;
-    font-weight: 600;
-    font-size: 15px;
-    gap: 3px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: transparent;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.profilePostHeaderUserRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.profilePostTimeText {
+    font-size: 12.5px;
+    color: #8e8e93;
+    font-weight: 400;
+    margin-left: 2px;
+}
+
+.profilePostLocationText {
+    font-size: 11.5px;
+    color: #8e8e93;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
 .profilePostHeaderUserText-Box {
-    color: #262626;
+    color: #111010;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: transparent;
+    font-weight: 600;
+    font-size: 15px;
 }
 
 .profilePostVerifyBadgeIcon-Box {
@@ -513,9 +529,27 @@ button {
 }
 
 .profilePostUsernameVerifyBadgeIcon-Box {
-    fill: #111;
+    fill: #F0186E;
     color: white;
-    stroke-width: 2.5;
+    stroke-width: 2;
+}
+
+.postActionContentBtn-ToogleBox {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 0px;
+}
+
+.postActionCountText {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1c1c1e;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 .profilePostCaptionMain-Box {
@@ -531,7 +565,9 @@ button {
     overflow-wrap: break-word;
     word-wrap: break-word;
     white-space: pre-wrap;
-    font-size: 14px;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: #1c1c1e;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -539,23 +575,23 @@ button {
     height: auto;
     background-color: transparent;
     width: 100%;
-    padding: 0px 16px;
+    padding: 0px 16px 16px 16px;
+    /* Added bottom padding for a balanced card spacing */
 }
 
 .postMainContentMiddleBox {
     width: 100%;
     position: relative;
-    /* ← add */
-    border-radius: 5px;
-    background-color: #f3f3f3;
-    border: 0.5px solid #f1f1f1;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #f1f1f1;
     overflow: hidden;
 }
 
 .profilePostContentView-Box {
     width: 100%;
     height: 100%;
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: transparent;
     object-fit: cover;
     object-position: center;
@@ -570,25 +606,23 @@ button {
     display: flex;
     padding: 10px 5px;
     justify-content: center;
-    display: flex;
 }
 
 .errorCheckNoPostWrapper-Box {
     background-color: transparent;
     display: flex;
+    flex-direction: column;
     width: fit-content;
     margin: 40px auto;
     justify-content: center;
     align-items: center;
-    gap: 3px;
+    gap: 12px;
 }
 
 .errorCheckIconPost-Box {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
     background-color: transparent;
-    border-radius: 50px;
-    padding: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -597,30 +631,20 @@ button {
 .errorCheckIconNoPost {
     background-color: transparent;
     height: 100%;
-    stroke-width: 2.1;
-    fill: #f1f1f1;
-    color: #444;
+    stroke-width: 1.5;
+    fill: none;
+    color: #8e8e93;
     width: 100%;
-    border-radius: 50px;
 }
 
 .errorCheckTextNoPost-Box {
     background-color: transparent;
-    font-size: 25px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
     padding: 5px;
-    color: #444;
+    color: #111010;
+    font-family: 'Outfit', sans-serif;
 }
-
-
-
-
-
-
-
-
-
-
 
 /************ Timeline Content Box *************/
 .contentSectionDesignTimeline-Box {
@@ -637,64 +661,71 @@ button {
 }
 
 .connectionTimelineHeaderBar-Box {
-    background-color: transparent;
-    padding-top: 10px;
-    padding-bottom: 2px;
-    padding-left: 2px;
-    padding-right: 2px;
+    background-color: #f8f9fa;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #eaeaea;
+    display: flex;
+    gap: 6px;
+    align-items: center;
     overflow-wrap: break-word;
     word-wrap: break-word;
     white-space: normal;
-    display: flex;
-    gap: 5px;
-    align-items: center;
 }
 
 .spanTimelineHeaderBox {
-    font-size: 15px;
-    color: #111;
+    font-size: 14px;
+    color: #555;
     display: flex;
     gap: 4px;
-    font-weight: 600;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .usernameTimelineBoxHiighlight {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
+    color: #111;
 }
 
 .connectionTimelinePostHeaderBox {
     background-color: transparent;
-    padding: 12px 2px;
-    font-weight: 600;
+    padding: 16px 2px 8px;
+    border-bottom: 2px solid #f2f2f6;
+    margin-bottom: 12px;
 }
 
 .spanTimeLinePostHeaderTextBox {
-    font-size: 20px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111010;
+    font-family: 'Outfit', 'Segoe UI', sans-serif;
+    letter-spacing: -0.5px;
 }
 
 .connectionTimelinePostListBox {
     padding: 5px 0px;
     background-color: transparent;
     width: 100%;
-    ;
 }
 
 .grid-3x3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 3px;
+    gap: 8px;
+    margin-top: 15px;
 }
 
 .grid-item {
     width: 100%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    background: #f0f0f0;
-    border-radius: 2px;
+    background: #f4f4f5;
+    border-radius: 10px;
     position: relative;
     cursor: pointer;
+    border: 1px solid #f2f2f6;
 }
 
 .grid-item::after {
@@ -708,7 +739,7 @@ button {
 }
 
 .grid-item:hover::after {
-    background: rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.04);
 }
 
 .gridImagesList {
@@ -721,7 +752,7 @@ button {
 }
 
 .grid-item:hover .gridImagesList {
-    transform: scale(1.03);
+    transform: scale(1.04);
 }
 
 /* no connection yet */
@@ -732,25 +763,23 @@ button {
     display: flex;
     padding: 10px 5px;
     justify-content: center;
-    display: flex;
 }
 
 .errorCheckNoTimelineWrapper-Box {
     background-color: transparent;
     display: flex;
+    flex-direction: column;
     width: fit-content;
     margin: 40px auto;
     justify-content: center;
     align-items: center;
-    gap: 3px;
+    gap: 12px;
 }
 
 .errorCheckIconTimeline-Box {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
     background-color: transparent;
-    border-radius: 50px;
-    padding: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -758,20 +787,20 @@ button {
 
 .errorCheckTextTimeline-Box {
     background-color: transparent;
-    font-size: 25px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
     padding: 5px;
-    color: #444;
+    color: #111010;
+    font-family: 'Outfit', sans-serif;
 }
 
 .errorCheckIconNoTimeline {
     background-color: transparent;
     height: 100%;
-    stroke-width: 0.5;
-    fill: #ff3b6c;
-    color: #ff3b6c;
+    stroke-width: 1.5;
+    fill: none;
+    color: #8e8e93;
     width: 100%;
-    border-radius: 50px;
 }
 
 /* No Post Yet */
@@ -791,8 +820,6 @@ button {
     margin-right: 2px;
     margin-top: -8px;
 }
-
-
 
 /************ Tagged Content Box *************/
 .contentSectionDesignTagged-Box {
@@ -820,7 +847,8 @@ button {
 .connectionTaggedPostContainerBox {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
+    gap: 8px;
+    margin-top: 15px;
 }
 
 /* No Tagged Posts */
@@ -830,25 +858,23 @@ button {
     display: flex;
     padding: 10px 5px;
     justify-content: center;
-    display: flex;
 }
 
 .errorCheckNoTaggedWrapper-Box {
     background-color: transparent;
     display: flex;
+    flex-direction: column;
     width: fit-content;
     margin: 40px auto;
     justify-content: center;
     align-items: center;
-    gap: 3px;
+    gap: 12px;
 }
 
 .errorCheckIconTagged-Box {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
     background-color: transparent;
-    border-radius: 50px;
-    padding: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -857,19 +883,19 @@ button {
 .errorCheckIconNoTagged {
     background-color: transparent;
     height: 100%;
-    stroke-width: 2.1;
-    fill: #f1f1f1;
-    color: #444;
+    stroke-width: 1.5;
+    fill: none;
+    color: #8e8e93;
     width: 100%;
-    border-radius: 50px;
 }
 
 .errorCheckTextTagged-Box {
     background-color: transparent;
-    font-size: 25px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
     padding: 5px;
-    color: #444;
+    color: #111010;
+    font-family: 'Outfit', sans-serif;
 }
 
 
@@ -937,4 +963,49 @@ button {
 
 .captionShowMoreBtn:hover {
     color: #555;
+}
+
+/* Video badge overlay inside grid items */
+.gridItemVideoBadge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(17, 16, 16, 0.7);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Post Tagged Users styling */
+.profilePostTaggedUsers-Box {
+    padding: 0px 16px 10px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    background-color: transparent;
+}
+
+.taggedUserLabel {
+    font-size: 13px;
+    color: #8e8e93;
+    font-weight: 500;
+}
+
+.taggedUserPill {
+    font-size: 12.5px;
+    color: #F0186E;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.taggedUserPill:hover {
+    opacity: 0.8;
 }

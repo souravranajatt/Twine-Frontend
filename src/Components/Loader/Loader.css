@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&display=swap');
+
+/* Main Wrapper styles */
+.twine-loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Fullscreen Splash Screen */
+.twine-loader-wrapper.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #fafafa;
+  /* Light/White background */
+  z-index: 99999;
+}
+
+/* Container-level Loader (useful inside pages/cards) */
+.twine-loader-wrapper.container {
+  width: 100%;
+  min-height: 350px;
+  padding: 40px;
+  background-color: transparent;
+}
+
+/* Loader Card Container */
+.twine-loader-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: twine-pulse-glow 2s ease-in-out infinite;
+  user-select: none;
+}
+
+/* Card design when inside a light container page (like Settings/Profile) */
+.twine-loader-wrapper.container .twine-loader-card {
+  background-color: #fafafa;
+  /* Light/White Card */
+  padding: 40px 60px;
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* SVG Styling */
+.twine-loader-logo-container {
+  width: 120px;
+  height: 70px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.twine-loader-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Interlocked Rings Animation */
+.twine-rings-group {
+  transform-origin: 58px 35px;
+  animation: twine-rotate-rings 6s linear infinite;
+}
+
+.ring-left {
+  transform-origin: 45px 35px;
+  animation: twine-left-pulse 2.2s ease-in-out infinite;
+}
+
+.twine-ring-overlap {
+  transform-origin: 45px 35px;
+  animation: twine-left-pulse 2.2s ease-in-out infinite;
+}
+
+.ring-right {
+  transform-origin: 71px 35px;
+  animation: twine-right-pulse 2.2s ease-in-out infinite;
+}
+
+/* Typography styles matching the branding */
+.twine-loader-brand {
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-t {
+  color: #F0186E;
+  /* Brand Pink */
+}
+
+.brand-wine {
+  color: #111010;
+  /* Brand Dark */
+  margin-left: -1px;
+}
+
+/* Keyframe Animations */
+@keyframes twine-rotate-rings {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes twine-pulse-glow {
+
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.03)) drop-shadow(0 0 2px rgba(240, 24, 110, 0.1));
+    opacity: 0.95;
+  }
+
+  50% {
+    transform: scale(1.03);
+    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.05)) drop-shadow(0 0 8px rgba(240, 24, 110, 0.25));
+    opacity: 1;
+  }
+}
+
+@keyframes twine-left-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    stroke-width: 4.5;
+  }
+
+  50% {
+    transform: scale(1.08);
+    stroke-width: 5.2;
+  }
+}
+
+@keyframes twine-right-pulse {
+
+  0%,
+  100% {
+    transform: scale(1.08);
+    stroke-width: 5.2;
+  }
+
+  50% {
+    transform: scale(1);
+    stroke-width: 4.5;
+  }
+}

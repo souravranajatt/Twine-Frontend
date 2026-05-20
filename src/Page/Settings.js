@@ -5,6 +5,7 @@ import FooterArea from "../Components/Footer/Footer.js";
 import "../Assets/Bundle/Settings.css";
 import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI } from "../utils/SettingDataAPI.js";
 import { logoutHandleAPI } from "../utils/authAPI.js";
+import Loader from "../Components/Loader/Loader";
 
 function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -298,9 +299,7 @@ function Settings() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="settings-loading">
-          <p>Loading...</p>
-        </div>
+        <Loader fullScreen={false} />
       );
     }
 
