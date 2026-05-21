@@ -7,8 +7,8 @@ import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import NotFoundPage from "../ErrorHandler/ErrrorDesign/ErrorPageDesign";
 import InternalErrorPage from "../ErrorHandler/ErrrorDesign/InternalErrorPageDesign";
-import { followUserAPI, userProfilePageAPI, searchUserPostsAPI, searchUserTaggedPostsAPI, searchUserTimelinePostsAPI } from "../utils/userProfileAPI.js";
-import { formatPostTime } from "../Lib/formatPostTime.js";
+import { followUserAPI, userProfilePageAPI, searchUserPostsAPI, searchUserTaggedPostsAPI, searchUserTimelinePostsAPI, blockUserAPI } from "../utils/userProfileAPI.js";
+import formatPostTime from "../Lib/formatPostTime.js";
 
 function Profile() {
 

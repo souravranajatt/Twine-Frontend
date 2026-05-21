@@ -1,0 +1,132 @@
+import React, { useState, useEffect, useCallback } from "react";
+import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
+import { searchUserTimelinePostsAPI } from "../../../utils/userProfileAPI.js";
+import { HeartOff, Loader2, Play } from "lucide-react";
+
+function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
+
+    const [timelinePosts, setTimelinePosts] = useState([]);
+    const [timelinePage, setTimelinePage] = useState(0);
+    const [loadingTimeline, setLoadingTimeline] = useState(false);
+    const [hasMoreTimeline, setHasMoreTimeline] = useState(true);
+
+    // Initial Load — lazy, sirf jab tab khule
+    useEffect(() => {
+        if (contentVisibleTab !== "TimeLineVisibleTab") return;
+        if (timelinePosts.length > 0 || !hasMoreTimeline) return;
+        if (!userProfileDataURL?.searchPrivateShow || !userProfileDataURL?.searchUserTimeline) return;
+
+        const fetchInitial = async () => {
+            setLoadingTimeline(true);
+            try {
+                const data = await searchUserTimelinePostsAPI(username, 0);
+                if (!data || data.length === 0) setHasMoreTimeline(false);
+                else setTimelinePosts(data);
+            } catch (err) {
+                console.log("Error loading timeline posts!", err);
+            } finally {
+                setLoadingTimeline(false);
+            }
+        };
+
+        fetchInitial();
+    }, [contentVisibleTab, username, userProfileDataURL]);
+
+    // Pagination
+    useEffect(() => {
+        if (timelinePage === 0) return;
+
+        const fetchMore = async () => {
+            setLoadingTimeline(true);
+            try {
+                const data = await searchUserTimelinePostsAPI(username, timelinePage);
+                if (!data || data.length === 0) {
+                    setHasMoreTimeline(false);
+                } else {
+                    setTimelinePosts((prev) => {
+                        const existingIds = new Set(prev.map((p) => p.fetchPostId));
+                        return [...prev, ...data.filter((p) => !existingIds.has(p.fetchPostId))];
+                    });
+                }
+            } catch (err) {
+                console.log("Error loading more timeline posts!", err);
+            } finally {
+                setLoadingTimeline(false);
+            }
+        };
+
+        fetchMore();
+    }, [username, timelinePage]);
+
+    useInfiniteScroll({
+        loading: loadingTimeline,
+        hasMore: hasMoreTimeline,
+        onLoadMore: useCallback(() => setTimelinePage((prev) => prev + 1), []),
+        activeTab: contentVisibleTab,
+        tabName: "TimeLineVisibleTab",
+    });
+
+    return (
+        <div className="contentSectionDesignTimeline-Box">
+            {userProfileDataURL.searchUserTimeline ? (
+                <div className="timelineConectionContentMainBox">
+                    <div className="connectionTimelineHeaderBar-Box">
+                        <span className="spanTimelineHeaderBox">
+                            Sharing a connection with{" "}
+                            <span className="usernameTimelineBoxHiighlight">
+                                {userProfileDataURL.searchUserTimeline}
+                            </span>
+                        </span>
+                    </div>
+                    <div>
+                        <div className="connectionTimelinePostHeaderBox">
+                            <span className="spanTimeLinePostHeaderTextBox">Timeline Photos and Videos</span>
+                        </div>
+                        <div className="connectionTimelinePostListBox">
+                            <div className="connectionTimelinePostContainerBox grid-3x3">
+                                {timelinePosts && timelinePosts.length > 0 ? (
+                                    timelinePosts.map((post) => (
+                                        <div key={post.fetchPostId} className="grid-item">
+                                            {post.postType === "VIDEO" ? (
+                                                <>
+                                                    <video src={post.fetchFileName} className="gridImagesList" muted playsInline />
+                                                    <div className="gridItemVideoBadge">
+                                                        <Play size={12} fill="white" color="white" />
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <img src={post.fetchFileName} alt="Timeline Post" className="gridImagesList" />
+                                            )}
+                                        </div>
+                                    ))
+                                ) : (
+                                    !loadingTimeline && (
+                                        <div className="timelineNoPostMsgBox">
+                                            <p className="timelineErrorMsgNoPost"><span>No Uploads</span></p>
+                                        </div>
+                                    )
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                    {loadingTimeline && (
+                        <div className="feed-loading-spinner-box">
+                            <Loader2 size={30} className="spinner-icon" />
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <div className="errorCheckNoTimeline-Box">
+                    <div className="errorCheckNoTimelineWrapper-Box">
+                        <div className="errorCheckIconTimeline-Box">
+                            <HeartOff height="24" width="24" className="errorCheckIconNoTimeline" />
+                        </div>
+                        <p className="errorCheckTextTimeline-Box">No Connection Yet</p>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default TimelinePosts;
