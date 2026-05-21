@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import useInfiniteScroll from "../Hooks/useInfiniteScroll.js";
 import { Heart, HeartPlus, HeartOff, SendHorizontal, UserLock, MessageCircleDashed, UserRoundPlus, Flame, UserRoundCheck, LayoutGrid, History, SquareUser, MapPin, Link2, BadgeCheck, BriefcaseBusiness, CalendarDays, Aperture, Loader2, CircleUser, Play } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../Assets/Bundle/Profile.css";
@@ -7,23 +8,7 @@ import FooterArea from "../Components/Footer/Footer.js";
 import NotFoundPage from "../ErrorHandler/ErrrorDesign/ErrorPageDesign";
 import InternalErrorPage from "../ErrorHandler/ErrrorDesign/InternalErrorPageDesign";
 import { followUserAPI, userProfilePageAPI, searchUserPostsAPI, searchUserTaggedPostsAPI, searchUserTimelinePostsAPI } from "../utils/userProfileAPI.js";
-
-const formatPostTime = (dateTimeString) => {
-  if (!dateTimeString) return "";
-  const date = new Date(dateTimeString);
-  const now = new Date();
-  const diffInMs = now - date;
-  const diffInMins = Math.floor(diffInMs / 60000);
-  const diffInHours = Math.floor(diffInMins / 60);
-  const diffInDays = Math.floor(diffInHours / 24);
-
-  if (diffInMins < 1) return "Just now";
-  if (diffInMins < 60) return `${diffInMins}m ago`;
-  if (diffInHours < 24) return `${diffInHours}h ago`;
-  if (diffInDays < 7) return `${diffInDays}d ago`;
-
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-};
+import { formatPostTime } from "../Hooks/formatPostTime.js";
 
 function Profile() {
 
@@ -194,24 +179,13 @@ function Profile() {
   }, [username, postPage]);
 
   // Infinite Scroll for Profile Posts
-  useEffect(() => {
-    // Only attach scroll when on Feed tab
-    if (contentVisibleTab !== "FeedVisibleTab") return;
-
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 100 >=
-        document.documentElement.scrollHeight
-      ) {
-        if (!loadingPosts && hasMorePosts) {
-          setPostPage((prev) => prev + 1);
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loadingPosts, hasMorePosts, contentVisibleTab]);
+  useInfiniteScroll({
+    loading: loadingPosts,
+    hasMore: hasMorePosts,
+    onLoadMore: useCallback(() => setPostPage((prev) => prev + 1), []),
+    activeTab: contentVisibleTab,
+    tabName: "FeedVisibleTab",
+  });
 
 
   // -------------- TIMELINE POSTS (Lazy Load on Tab Open) --------------
@@ -269,23 +243,13 @@ function Profile() {
   }, [username, timelinePage]);
 
   // Infinite Scroll for Timeline Posts
-  useEffect(() => {
-    if (contentVisibleTab !== "TimeLineVisibleTab") return;
-
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 100 >=
-        document.documentElement.scrollHeight
-      ) {
-        if (!loadingTimeline && hasMoreTimeline) {
-          setTimelinePage((prev) => prev + 1);
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loadingTimeline, hasMoreTimeline, contentVisibleTab]);
+  useInfiniteScroll({
+    loading: loadingTimeline,
+    hasMore: hasMoreTimeline,
+    onLoadMore: useCallback(() => setTimelinePage((prev) => prev + 1), []),
+    activeTab: contentVisibleTab,
+    tabName: "TimeLineVisibleTab",
+  });
 
 
   // -------------- TAGGED POSTS --------------
@@ -318,23 +282,13 @@ function Profile() {
   }, [username, taggedPage]);
 
   // Infinite Scroll for Tagged Posts
-  useEffect(() => {
-    if (contentVisibleTab !== "TaggedVisibleTab") return;
-
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 100 >=
-        document.documentElement.scrollHeight
-      ) {
-        if (!loadingTagged && hasMoreTagged) {
-          setTaggedPage((prev) => prev + 1);
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loadingTagged, hasMoreTagged, contentVisibleTab]);
+  useInfiniteScroll({
+    loading: loadingTagged,
+    hasMore: hasMoreTagged,
+    onLoadMore: useCallback(() => setTaggedPage((prev) => prev + 1), []),
+    activeTab: contentVisibleTab,
+    tabName: "TaggedVisibleTab",
+  });
 
 
   // Store Follow State
