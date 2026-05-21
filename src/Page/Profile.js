@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import useInfiniteScroll from "../Hooks/useInfiniteScroll.js";
+import useInfiniteScroll from "../Lib/useInfiniteScroll.js";
 import { Heart, HeartPlus, HeartOff, SendHorizontal, UserLock, MessageCircleDashed, UserRoundPlus, Flame, UserRoundCheck, LayoutGrid, History, SquareUser, MapPin, Link2, BadgeCheck, BriefcaseBusiness, CalendarDays, Aperture, Loader2, CircleUser, Play } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../Assets/Bundle/Profile.css";
@@ -8,7 +8,7 @@ import FooterArea from "../Components/Footer/Footer.js";
 import NotFoundPage from "../ErrorHandler/ErrrorDesign/ErrorPageDesign";
 import InternalErrorPage from "../ErrorHandler/ErrrorDesign/InternalErrorPageDesign";
 import { followUserAPI, userProfilePageAPI, searchUserPostsAPI, searchUserTaggedPostsAPI, searchUserTimelinePostsAPI } from "../utils/userProfileAPI.js";
-import { formatPostTime } from "../Hooks/formatPostTime.js";
+import { formatPostTime } from "../Lib/formatPostTime.js";
 
 function Profile() {
 
