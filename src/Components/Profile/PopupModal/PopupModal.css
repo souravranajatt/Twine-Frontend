@@ -1,0 +1,162 @@
+/* Backdrop — full screen blur */
+.popupBackdrop-Box {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 999;
+    animation: backdropFadeIn 0.2s ease;
+}
+
+@keyframes backdropFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Modal Box */
+.popupModal-Box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: #ffffff;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 360px;
+    box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.15), 0px 4px 16px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    animation: modalSlideIn 0.25s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -48%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Modal Header */
+.popupModalHeader-Box {
+    padding: 20px 20px 14px;
+    border-bottom: 1px solid #f2f2f6;
+    background-color: #fafafa;
+}
+
+.popupModalUsername-Box {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111010;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+
+/* Modal Info Section */
+.popupModalInfo-Box {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.popupModalInfoRow-Box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.popupModalInfoIcon-Box {
+    color: #8e8e93;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+.popupModalVerifiedIcon-Box {
+    fill: #F0186E;
+    color: white;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+.popupModalInfoText-Box {
+    font-size: 13.5px;
+    color: #3a3a3c;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.popupModalInfoLink-Box {
+    font-size: 13.5px;
+    color: #F0186E;
+    font-weight: 500;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 260px;
+}
+
+.popupModalInfoLink-Box:hover {
+    text-decoration: underline;
+}
+
+/* Modal Bottom Actions */
+.popupModalActions-Box {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #f2f2f6;
+    padding: 0;
+}
+
+.popupActionBtn-Box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 14px 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3a3a3c;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: background-color 0.15s ease;
+}
+
+.popupActionBtn-Box:hover {
+    background-color: #f4f4f5;
+}
+
+.popupActionDanger-Box {
+    color: #e0183e;
+}
+
+.popupActionDanger-Box .popupActionIcon-Box {
+    color: #e0183e;
+}
+
+.popupActionDivider-Box {
+    width: 1px;
+    height: 40px;
+    background-color: #f2f2f6;
+    flex-shrink: 0;
+}
+
+.popupActionIcon-Box {
+    stroke-width: 2;
+    color: #3a3a3c;
+}

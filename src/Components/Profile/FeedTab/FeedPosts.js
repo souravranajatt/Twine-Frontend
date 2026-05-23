@@ -6,6 +6,7 @@ import {
     Heart, Flame, MessageCircleDashed, Link2,
     BadgeCheck, Aperture, Loader2, SendHorizontal
 } from "lucide-react";
+import "./FeedPosts.css";
 
 function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
 

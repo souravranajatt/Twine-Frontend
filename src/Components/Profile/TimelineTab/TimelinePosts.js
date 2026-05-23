@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserTimelinePostsAPI } from "../../../utils/userProfileAPI.js";
 import { HeartOff, Loader2, Play } from "lucide-react";
+import "./TimelinePosts.css";
 
 function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
 

@@ -3,8 +3,9 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import "../Assets/Bundle/Settings.css";
-import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI } from "../utils/SettingDataAPI.js";
+import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI, fetchBlockedListAPI } from "../utils/SettingDataAPI.js";
 import { logoutHandleAPI } from "../utils/authAPI.js";
+import { unblockUserAPI } from "../utils/userProfileAPI.js";
 import Loader from "../Components/Loader/Loader";
 
 function Settings() {
@@ -26,6 +27,9 @@ function Settings() {
   const [showExpiredPopup, setShowExpiredPopup] = useState(false);
   const [password, setPassword] = useState({ oldPassword: "", newPassword: "", confirmPassword: "" });
   const fileInputRef = useRef(null);
+  const [blockedList, setBlockedList] = useState([]);
+  const [unblockingUsers, setUnblockingUsers] = useState(new Set());
+  const [isUnblocking, setIsUnblocking] = useState(false);
 
   // Fetch initial data
   useEffect(() => {
@@ -42,6 +46,23 @@ function Settings() {
     };
 
     fetchSettingsData();
+  }, []);
+
+  // Fetching Blocked List
+  useEffect(() => {
+    const fetchBlockedList = async () => {
+      try {
+        setIsLoading(true);
+        const dataList = await fetchBlockedListAPI();
+        setBlockedList(dataList);
+      } catch (err) {
+        console.error("Error fetching blocked list:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchBlockedList();
   }, []);
 
   // Handle Input Changes
@@ -256,6 +277,27 @@ function Settings() {
       setIsLoading(false);
     }
   };
+
+  // Handle Unblock User API
+  const handleUnBlockUser = async (userId) => {
+    setIsUnblocking(true);
+    setUnblockingUsers(prev => new Set(prev).add(userId));
+
+    try {
+      await unblockUserAPI({ userUid: userId });
+      setBlockedList(prev => prev.filter(user => user.userId !== userId));
+    } catch (err) {
+      console.error("Error unblocking user:", err);
+    } finally {
+      setIsUnblocking(false);
+      setUnblockingUsers(prev => {
+        const updated = new Set(prev);
+        updated.delete(userId);
+        return updated;
+      });
+    }
+  };
+
 
   useEffect(() => {
     if (activeSection) {
@@ -682,7 +724,21 @@ function Settings() {
             <h2>Blocked Users</h2>
             <p className="section-subtitle">Manage users you've blocked</p>
             <div className="blocked-list">
-              <p className="empty-text">You haven't blocked anyone yet</p>
+              {blockedList.length === 0 ? (
+                <p className="empty-text">You haven't blocked anyone yet</p>
+              ) : (
+                blockedList.map(user => (
+                  <div key={user.userId} className="blocked-user-item">
+                    <div className="blocked-user-avatar">
+                      <img src={user.profilePicture || "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png"} alt={user.username} className="AvaatarIcon-PFP" />
+                    </div>
+                    <span className="blocked-user-name">{user.username}</span>
+                    <button className="unblock-Btn" onClick={() => handleUnBlockUser(user.userId)} disabled={isUnblocking}>
+                      {unblockingUsers.has(user.userId) ? "Unblocking..." : "Unblock"}
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         );

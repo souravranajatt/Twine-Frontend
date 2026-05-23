@@ -44,6 +44,16 @@ export const blockUserAPI = async (blockData) => {
   }
 };
 
+// UnBlock User API....
+export const unblockUserAPI = async (blockData) => {
+  try {
+    const res = await api.post("/v1/user/unblock", blockData);
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || "Something went wrong!";
+  }
+};
+
 // Search User Posts API...
 export const searchUserPostsAPI = async (username, page = 0) => {
   try {

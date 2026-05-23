@@ -57,3 +57,15 @@ export const updatePasswordAPI = async (passwordData) => {
         throw typeof errorData === 'string' ? { message: errorData } : errorData;
     }
 };
+
+// Fetch Blocked List API
+export const fetchBlockedListAPI = async () => {
+    try {
+        const res = await api.get("/setting/block/list/fetch");
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+

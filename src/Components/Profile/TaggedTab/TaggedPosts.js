@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserTaggedPostsAPI } from "../../../utils/userProfileAPI.js";
 import { CircleUser, Loader2, Play } from "lucide-react";
+import "./TaggedPosts.css";
 
 function TaggedPosts({ username, contentVisibleTab }) {
 

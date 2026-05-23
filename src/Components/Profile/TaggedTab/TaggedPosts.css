@@ -1,0 +1,66 @@
+/* Tagged Content Box */
+.contentSectionDesignTagged-Box {
+    background-color: transparent;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.connectionTaggedPostListBox {
+    padding: 5px 0px;
+    background-color: transparent;
+    width: 100%;
+}
+
+.connectionTaggedPostContainerBox {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 15px;
+}
+
+/* No Tagged Post */
+.errorCheckNoTagged-Box {
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    padding: 10px 5px;
+    justify-content: center;
+}
+
+.errorCheckNoTaggedWrapper-Box {
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: 40px auto;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.errorCheckIconTagged-Box {
+    width: 64px;
+    height: 64px;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.errorCheckIconNoTagged {
+    background-color: transparent;
+    height: 100%;
+    stroke-width: 1.5;
+    fill: none;
+    color: #8e8e93;
+    width: 100%;
+}
+
+.errorCheckTextTagged-Box {
+    background-color: transparent;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 5px;
+    color: #111010;
+    font-family: 'Outfit', sans-serif;
+}

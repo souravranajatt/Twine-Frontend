@@ -1,0 +1,249 @@
+/* Feed Content Box */
+.contentSectionDesignFeed-Box {
+    background-color: transparent;
+    margin: 0px auto;
+}
+
+/* Post Card */
+.profilePostCard-Box {
+    width: 100%;
+    height: auto;
+    margin: 16px auto 24px;
+    background-color: #fff;
+    border: 1px solid #f2f2f6;
+    border-radius: 16px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.04), 0px 1px 2px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Post Header */
+.profilePostHeaderMain-Box {
+    display: flex;
+    background-color: transparent;
+    padding: 16px;
+    border: none;
+    height: auto;
+}
+
+.profilePostHeaderPFPImage-Box {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: 1.5px solid #dbdbdb;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.profilePostHeaderPFP-Box {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    object-position: center;
+    display: block;
+    border: none;
+    background-color: transparent;
+}
+
+.profilePostHeaderUsernameText-box {
+    padding: 0px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: transparent;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profilePostHeaderUserRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.profilePostHeaderUserText-Box {
+    color: #111010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.profilePostTimeText {
+    font-size: 12.5px;
+    color: #8e8e93;
+    font-weight: 400;
+    margin-left: 2px;
+}
+
+.profilePostLocationText {
+    font-size: 11.5px;
+    color: #8e8e93;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.profilePostUsernameVerifyBadgeIcon-Box {
+    fill: #F0186E;
+    color: white;
+    stroke-width: 2;
+}
+
+/* Post Caption */
+.profilePostCaptionMain-Box {
+    height: auto;
+    padding: 8px 16px;
+    padding-top: 2px;
+    background-color: transparent;
+}
+
+.profilePostCaptionText-Box {
+    background-color: transparent;
+    font-weight: 400;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: #1c1c1e;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.captionShowMoreBtn {
+    color: #8e8e8e;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.captionShowMoreBtn:hover {
+    color: #555;
+}
+
+/* Tagged Users in Post */
+.profilePostTaggedUsers-Box {
+    padding: 0px 16px 10px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    background-color: transparent;
+}
+
+.taggedUserLabel {
+    font-size: 13px;
+    color: #8e8e93;
+    font-weight: 500;
+}
+
+.taggedUserPill {
+    font-size: 12.5px;
+    color: #F0186E;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.taggedUserPill:hover {
+    opacity: 0.8;
+}
+
+/* Post Media */
+.profilePostMainContentMedia-Box {
+    height: auto;
+    background-color: transparent;
+    width: 100%;
+    padding: 0px 16px 16px 16px;
+}
+
+.postMainContentMiddleBox {
+    width: 100%;
+    position: relative;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #f1f1f1;
+    overflow: hidden;
+}
+
+.profilePostContentView-Box {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    background-color: transparent;
+    object-fit: cover;
+    object-position: center;
+    border: none;
+    display: block;
+}
+
+/* Post Action Buttons */
+.postActionContentBtn-ToogleBox {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 0px;
+}
+
+.postActionCountText {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1c1c1e;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* No Post Yet */
+.errorCheckNoPost-Box {
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    padding: 10px 5px;
+    justify-content: center;
+}
+
+.errorCheckNoPostWrapper-Box {
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: 40px auto;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.errorCheckIconPost-Box {
+    width: 64px;
+    height: 64px;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.errorCheckIconNoPost {
+    background-color: transparent;
+    height: 100%;
+    stroke-width: 1.5;
+    fill: none;
+    color: #8e8e93;
+    width: 100%;
+}
+
+.errorCheckTextNoPost-Box {
+    background-color: transparent;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 5px;
+    color: #111010;
+    font-family: 'Outfit', sans-serif;
+}
