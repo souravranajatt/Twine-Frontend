@@ -206,7 +206,7 @@ function Profile() {
               </div>
 
               {/* Follow & Like Buttons */}
-              {userProfileDataURL.searchLoggedUser === false && (
+              {(userProfileDataURL.searchLoggedUser === false && userProfileDataURL.blockedStatus === false) && (
                 <div className="profileActionContentBtn-Box">
                   {actionType === "UNFOLLOWBTN" && (
                     <button className="profileUnFollowActionBtns-Box" onClick={handleFollow} disabled={isFollowing}>
@@ -242,9 +242,36 @@ function Profile() {
               )}
             </div>
 
-            {userProfileDataURL.searchPrivateShow === true ? (
+            { /* Profile Middle Tabs Feed, Timeline & Tagged */}
+
+            {userProfileDataURL.blockedStatus === true ? (
+              <div className="AccountPrivateContentMsgBox">
+                <div className="AccountPrivateDilaugeBox">
+                  <div className="LockedAccountIconBox">
+                    <UserLock height="24" width="24" className="LockedAccountIconContentBox" />
+                  </div>
+                  <p className="LockedAccountSpanMsgBox"><span>Blocked Account</span></p>
+                </div>
+                <div className="contextMsgBox">
+                  <p className="contextMsgBoxParagraphText">
+                    <span>You've blocked this account.</span>
+                  </p>
+                </div>
+                {userProfileDataURL.searchLoggedUser === false && (
+                  <div className="profileActionContentBtn-Box">
+                    <button className="profileUnFollowActionBtns-Box" onClick={handleUnblock} disabled={isUnblocking}>
+                      {isUnblocking
+                        ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" />
+                        : <UserRoundCheck size={20} className="profileActionBtnIconDesign" />}
+                      <span>Unblock</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+            ) : userProfileDataURL.searchPrivateShow === true ? (
+              /* 2. Public / Following — Tabs */
               <>
-                {/* Tab Bar */}
                 <div className="profileMiddle-Box">
                   <div className="profileTabBarMidIconDesign-Box">
                     <button type="button" className="profileContenttabBtnIconDesign" onClick={() => handleTabClick("FeedVisibleTab")}>
@@ -263,7 +290,7 @@ function Profile() {
                   </div>
                 </div>
 
-                {/* Tab Content */}
+                {/* Content Feed, Timeline & Tagged */}
                 <div className="profileFooter-Box">
                   {contentVisibleTab === "FeedVisibleTab" && (
                     <FeedPosts
@@ -287,7 +314,9 @@ function Profile() {
                   )}
                 </div>
               </>
+
             ) : (
+              /* 3. Private — Locked Account */
               <div className="AccountPrivateContentMsgBox">
                 <div className="AccountPrivateDilaugeBox">
                   <div className="LockedAccountIconBox">

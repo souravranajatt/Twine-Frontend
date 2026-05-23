@@ -1,0 +1,228 @@
+/* Base Skeleton Animation */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.5s infinite;
+    border-radius: 8px;
+}
+
+@keyframes skeletonShimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* PFP */
+.skeletonPFP-Box {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Name Info */
+.skeletonNameInfo-Box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.skeletonFullName-Box {
+    height: 22px;
+    width: 60%;
+    border-radius: 6px;
+}
+
+.skeletonUsername-Box {
+    height: 16px;
+    width: 40%;
+    border-radius: 6px;
+}
+
+/* Extra Data */
+.skeletonExtraData-Box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.skeletonExtraItem-Box {
+    height: 14px;
+    width: 100px;
+    border-radius: 6px;
+}
+
+/* Bio */
+.skeletonBio-Box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.skeletonBioLine-Box {
+    height: 14px;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.skeletonBioLineShort-Box {
+    height: 14px;
+    width: 65%;
+    border-radius: 6px;
+}
+
+/* Followers */
+.skeletonFollowers-Box {
+    display: flex;
+    gap: 20px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #f4f4f5;
+}
+
+.skeletonFollowerItem-Box {
+    height: 14px;
+    width: 80px;
+    border-radius: 6px;
+}
+
+/* Buttons */
+.skeletonButtons-Box {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.skeletonBtn-Box {
+    height: 42px;
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* Tab Bar */
+.skeletonTabBar-Box {
+    background-color: #fff;
+    border-radius: 12px;
+    margin: 15px auto 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 14px 0;
+}
+
+.skeletonTabIcon-Box {
+    height: 22px;
+    width: 22px;
+    border-radius: 6px;
+}
+
+/* Post Header */
+.skeletonPostHeader-Box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+}
+
+.skeletonPostPFP-Box {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skeletonPostNameWrap-Box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.skeletonPostName-Box {
+    height: 14px;
+    width: 40%;
+    border-radius: 6px;
+}
+
+.skeletonPostTime-Box {
+    height: 12px;
+    width: 25%;
+    border-radius: 6px;
+}
+
+/* Post Caption */
+.skeletonPostCaption-Box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 16px 12px;
+}
+
+.skeletonCaptionLine-Box {
+    height: 13px;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.skeletonCaptionLineShort-Box {
+    height: 13px;
+    width: 55%;
+    border-radius: 6px;
+}
+
+/* Post Media */
+.skeletonPostMedia-Box {
+    width: calc(100% - 32px);
+    aspect-ratio: 4 / 5;
+    margin: 0 16px 12px;
+    border-radius: 8px;
+}
+
+/* Post Actions */
+.skeletonPostActions-Box {
+    display: flex;
+    gap: 16px;
+    padding: 12px 16px;
+}
+
+.skeletonActionIcon-Box {
+    height: 22px;
+    width: 22px;
+    border-radius: 6px;
+}
+
+/* Grid Item */
+.skeletonGridItem-Box {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+}
+
+/* Timeline Header */
+.skeletonTimelineHeader-Box {
+    height: 44px;
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+/* Timeline Post Header */
+.skeletonTimelinePostHeader-Box {
+    padding: 16px 2px 8px;
+    border-bottom: 2px solid #f2f2f6;
+    margin-bottom: 12px;
+}
+
+.skeletonTimelinePostHeaderLine-Box {
+    height: 26px;
+    width: 55%;
+    border-radius: 6px;
+}
