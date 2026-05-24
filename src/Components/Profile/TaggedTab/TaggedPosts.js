@@ -3,6 +3,7 @@ import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserTaggedPostsAPI } from "../../../utils/userProfileAPI.js";
 import { CircleUser, Loader2, Play } from "lucide-react";
 import "./TaggedPosts.css";
+import TaggedSkeleton from "../SkeletonBody/TaggedSkeleton.js";
 
 function TaggedPosts({ username, contentVisibleTab }) {
 
@@ -65,44 +66,51 @@ function TaggedPosts({ username, contentVisibleTab }) {
     });
 
     return (
-        <div className="contentSectionDesignTagged-Box">
-            <div className="connectionTaggedPostListBox">
-                {taggedPosts && taggedPosts.length > 0 ? (
-                    <div className="connectionTaggedPostContainerBox grid-3x3">
-                        {taggedPosts.map((post) => (
-                            <div key={post.fetchPostId} className="grid-item">
-                                {post.postType === "VIDEO" ? (
-                                    <>
-                                        <video src={post.fetchFileName} className="gridImagesList" muted playsInline />
-                                        <div className="gridItemVideoBadge">
-                                            <Play size={12} fill="white" color="white" />
+        <>
+            {taggedPosts.length === 0 && loadingTagged ? (
+                <TaggedSkeleton />
+            ) : (
+                <div className="contentSectionDesignTagged-Box">
+                    <div className="connectionTaggedPostListBox">
+                        {taggedPosts && taggedPosts.length > 0 ? (
+                            <div className="connectionTaggedPostContainerBox grid-3x3">
+                                {taggedPosts.map((post) => (
+                                    <div key={post.fetchPostId} className="grid-item">
+                                        {post.postType === "VIDEO" ? (
+                                            <>
+                                                <video src={post.fetchFileName} className="gridImagesList" muted playsInline />
+                                                <div className="gridItemVideoBadge">
+                                                    <Play size={12} fill="white" color="white" />
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <img src={post.fetchFileName} alt="Tagged Post" className="gridImagesList" />
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            !loadingTagged && (
+                                <div className="errorCheckNoTagged-Box">
+                                    <div className="errorCheckNoTaggedWrapper-Box">
+                                        <div className="errorCheckIconTagged-Box">
+                                            <CircleUser height="24" width="24" className="errorCheckIconNoTagged" />
                                         </div>
-                                    </>
-                                ) : (
-                                    <img src={post.fetchFileName} alt="Tagged Post" className="gridImagesList" />
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    !loadingTagged && (
-                        <div className="errorCheckNoTagged-Box">
-                            <div className="errorCheckNoTaggedWrapper-Box">
-                                <div className="errorCheckIconTagged-Box">
-                                    <CircleUser height="24" width="24" className="errorCheckIconNoTagged" />
+                                        <p className="errorCheckTextTagged-Box">No Tagged Post</p>
+                                    </div>
                                 </div>
-                                <p className="errorCheckTextTagged-Box">No Tagged Post</p>
-                            </div>
+                            )
+                        )}
+                    </div>
+                    {/* Pagination Loader */}
+                    {loadingTagged && taggedPosts.length > 0 && (
+                        <div className="feed-loading-spinner-box">
+                            <Loader2 size={30} className="spinner-icon" />
                         </div>
-                    )
-                )}
-            </div>
-            {loadingTagged && (
-                <div className="feed-loading-spinner-box">
-                    <Loader2 size={30} className="spinner-icon" />
+                    )}
                 </div>
             )}
-        </div>
+        </>
     );
 }
 

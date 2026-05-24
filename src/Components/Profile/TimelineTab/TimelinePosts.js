@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserTimelinePostsAPI } from "../../../utils/userProfileAPI.js";
-import { HeartOff, Loader2, Play } from "lucide-react";
+import { HeartOff, Play, Users, Loader2 } from "lucide-react";
 import "./TimelinePosts.css";
+import TimelineSkeleton from "../SkeletonBody/TimelineSkeleton.js";
 
 function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
 
@@ -68,65 +69,73 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
     });
 
     return (
-        <div className="contentSectionDesignTimeline-Box">
-            {userProfileDataURL.searchUserTimeline ? (
-                <div className="timelineConectionContentMainBox">
-                    <div className="connectionTimelineHeaderBar-Box">
-                        <span className="spanTimelineHeaderBox">
-                            Sharing a connection with{" "}
-                            <span className="usernameTimelineBoxHiighlight">
-                                {userProfileDataURL.searchUserTimeline}
-                            </span>
-                        </span>
-                    </div>
-                    <div>
-                        <div className="connectionTimelinePostHeaderBox">
-                            <span className="spanTimeLinePostHeaderTextBox">Timeline Photos and Videos</span>
-                        </div>
-                        <div className="connectionTimelinePostListBox">
-                            <div className="connectionTimelinePostContainerBox grid-3x3">
-                                {timelinePosts && timelinePosts.length > 0 ? (
-                                    timelinePosts.map((post) => (
-                                        <div key={post.fetchPostId} className="grid-item">
-                                            {post.postType === "VIDEO" ? (
-                                                <>
-                                                    <video src={post.fetchFileName} className="gridImagesList" muted playsInline />
-                                                    <div className="gridItemVideoBadge">
-                                                        <Play size={12} fill="white" color="white" />
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <img src={post.fetchFileName} alt="Timeline Post" className="gridImagesList" />
-                                            )}
-                                        </div>
-                                    ))
-                                ) : (
-                                    !loadingTimeline && (
-                                        <div className="timelineNoPostMsgBox">
-                                            <p className="timelineErrorMsgNoPost"><span>No Uploads</span></p>
-                                        </div>
-                                    )
-                                )}
+        <>
+            {timelinePosts.length === 0 && loadingTimeline ? (
+                <TimelineSkeleton />
+            ) : (
+                <div className="contentSectionDesignTimeline-Box">
+                    {userProfileDataURL.searchUserTimeline ? (
+                        <div className="timelineConectionContentMainBox">
+                            <div className="connectionTimelineHeaderBar-Box">
+                                <Users size={16} className="timelineHeaderIcon" />
+                                <span className="spanTimelineHeaderBox">
+                                    Connected with{" "}
+                                    <span className="usernameTimelineBoxHiighlight">
+                                        {userProfileDataURL.searchUserTimeline}
+                                    </span>
+                                </span>
                             </div>
+                            <div>
+                                <div className="connectionTimelinePostHeaderBox">
+                                    <span className="spanTimeLinePostHeaderTextBox">Timeline Photos and Videos</span>
+                                </div>
+                                <div className="connectionTimelinePostListBox">
+                                    <div className="connectionTimelinePostContainerBox grid-3x3">
+                                        {timelinePosts && timelinePosts.length > 0 ? (
+                                            timelinePosts.map((post) => (
+                                                <div key={post.fetchPostId} className="grid-item">
+                                                    {post.postType === "VIDEO" ? (
+                                                        <>
+                                                            <video src={post.fetchFileName} className="gridImagesList" muted playsInline />
+                                                            <div className="gridItemVideoBadge">
+                                                                <Play size={12} fill="white" color="white" />
+                                                            </div>
+                                                        </>
+                                                    ) : (
+                                                        <img src={post.fetchFileName} alt="Timeline Post" className="gridImagesList" />
+                                                    )}
+                                                </div>
+                                            ))
+                                        ) : (
+                                            !loadingTimeline && (
+                                                <div className="timelineNoPostMsgBox">
+                                                    <p className="timelineErrorMsgNoPost"><span>No Uploads</span></p>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                            {/* Pagination Loader */}
+                            {loadingTimeline && timelinePosts.length > 0 && (
+                                <div className="feed-loading-spinner-box">
+                                    <Loader2 size={30} className="spinner-icon" />
+                                </div>
+                            )}
                         </div>
-                    </div>
-                    {loadingTimeline && (
-                        <div className="feed-loading-spinner-box">
-                            <Loader2 size={30} className="spinner-icon" />
+                    ) : (
+                        <div className="errorCheckNoTimeline-Box">
+                            <div className="errorCheckNoTimelineWrapper-Box">
+                                <div className="errorCheckIconTimeline-Box">
+                                    <HeartOff height="24" width="24" className="errorCheckIconNoTimeline" />
+                                </div>
+                                <p className="errorCheckTextTimeline-Box">No Connection Yet</p>
+                            </div>
                         </div>
                     )}
                 </div>
-            ) : (
-                <div className="errorCheckNoTimeline-Box">
-                    <div className="errorCheckNoTimelineWrapper-Box">
-                        <div className="errorCheckIconTimeline-Box">
-                            <HeartOff height="24" width="24" className="errorCheckIconNoTimeline" />
-                        </div>
-                        <p className="errorCheckTextTimeline-Box">No Connection Yet</p>
-                    </div>
-                </div>
             )}
-        </div>
+        </>
     );
 }
 

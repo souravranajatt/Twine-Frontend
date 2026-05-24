@@ -15,6 +15,7 @@ import FeedPosts from "../Components/Profile/FeedTab/FeedPosts.js";
 import TimelinePosts from "../Components/Profile/TimelineTab/TimelinePosts.js";
 import TaggedPosts from "../Components/Profile/TaggedTab/TaggedPosts.js";
 import PopupModal from "../Components/Profile/PopupModal/PopupModal.js";
+import ProfileCardSkeleton from "../Components/Profile/SkeletonBody/ProfileCardSkeleton.js";
 
 function Profile() {
 
@@ -125,12 +126,7 @@ function Profile() {
 
   // Loading / Error States
   if (userProfileStatusURL === "LoadingUserProfileURL") {
-    return (
-      <div className="fullPageLoader-Box">
-        <Loader2 size={40} className="spinner-icon" />
-        <p className="loading-text-spinner">Loading...</p>
-      </div>
-    );
+    return <ProfileCardSkeleton />;
   }
 
   if (userProfileStatusURL === "NotFoundUserProfileURL") return <div className="error"><NotFoundPage /></div>;

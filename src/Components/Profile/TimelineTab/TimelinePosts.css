@@ -2,7 +2,7 @@
 .contentSectionDesignTimeline-Box {
     background-color: transparent;
     padding-bottom: 10px;
-    padding-top: 10px;
+    padding-top: 20px;
 }
 
 .timelineConectionContentMainBox {
@@ -14,17 +14,20 @@
 
 /* Timeline Header */
 .connectionTimelineHeaderBar-Box {
-    background-color: #f8f9fa;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    border: 1px solid #eaeaea;
-    display: flex;
-    gap: 6px;
+    background-color: #f4f5f7;
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border: none;
+    display: inline-flex;
+    gap: 8px;
     align-items: center;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    white-space: normal;
+    width: fit-content;
+}
+
+.timelineHeaderIcon {
+    color: #F0186E;
 }
 
 .spanTimelineHeaderBox {
@@ -33,18 +36,17 @@
     display: flex;
     gap: 4px;
     font-weight: 500;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', 'Segoe UI', Tahoma, sans-serif;
 }
 
 .usernameTimelineBoxHiighlight {
     font-weight: 700;
-    font-size: 14px;
-    color: #111;
+    color: #1a1a1a;
 }
 
 .connectionTimelinePostHeaderBox {
     background-color: transparent;
-    padding: 16px 2px 8px;
+    padding: 8px 2px 8px;
     border-bottom: 2px solid #f2f2f6;
     margin-bottom: 12px;
 }

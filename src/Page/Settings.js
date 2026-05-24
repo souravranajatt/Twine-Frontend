@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import "../Assets/Bundle/Settings.css";
+import { Loader2 } from "lucide-react";
 import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI, fetchBlockedListAPI } from "../utils/SettingDataAPI.js";
 import { logoutHandleAPI } from "../utils/authAPI.js";
 import { unblockUserAPI } from "../utils/userProfileAPI.js";
@@ -341,7 +342,9 @@ function Settings() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <Loader fullScreen={false} />
+        <div className="feed-loading-spinner-box">
+          <Loader2 size={30} className="spinner-icon" />
+        </div>
       );
     }
 
