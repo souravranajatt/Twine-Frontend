@@ -24,10 +24,30 @@ export const loggedUserDataAPI = async () => {
   }
 };
 
-// Follow User API....
-export const followUserAPI = async (followData) => {
+// Follow User API
+export const followUserAPI = async (targetUserId) => {
   try {
-    const res = await api.post("/v1/user/follow", followData);
+    const res = await api.post(`/v1/user/follow/${targetUserId}`);
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || "Something went wrong!";
+  }
+};
+
+// Unfollow User API
+export const unfollowUserAPI = async (targetUserId) => {
+  try {
+    const res = await api.delete(`/v1/user/unfollow/${targetUserId}`);
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || "Something went wrong!";
+  }
+};
+
+// Cancel Follow Request API
+export const cancelFollowRequestAPI = async (targetUserId) => {
+  try {
+    const res = await api.delete(`/v1/user/follow/cancel/${targetUserId}`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -35,9 +55,9 @@ export const followUserAPI = async (followData) => {
 };
 
 // Block User API....
-export const blockUserAPI = async (blockData) => {
+export const blockUserAPI = async (targetUserId) => {
   try {
-    const res = await api.post("/v1/user/block", blockData);
+    const res = await api.post(`/v1/user/block/${targetUserId}`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -45,9 +65,9 @@ export const blockUserAPI = async (blockData) => {
 };
 
 // UnBlock User API....
-export const unblockUserAPI = async (blockData) => {
+export const unblockUserAPI = async (targetUserId) => {
   try {
-    const res = await api.post("/v1/user/unblock", blockData);
+    const res = await api.delete(`/v1/user/unblock/${targetUserId}`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -88,12 +108,12 @@ export const searchUserTaggedPostsAPI = async (username, page = 0) => {
   }
 };
 
-// Send Like Anonyms API
-export const sendLikeAPI = async () => {
+// Send Secret Crush API
+export const sendSecretCrushAPI = async (targetUserId) => {
   try {
-    const res = await api.post();
+    const res = await api.post(`/v1/user/secret-crush/${targetUserId}`);
     return res.data;
   } catch (err) {
-    // Err
+    throw err.response?.data || "Something went wrong!";
   }
 };

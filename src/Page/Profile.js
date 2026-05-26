@@ -10,12 +10,14 @@ import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import NotFoundPage from "../ErrorHandler/ErrrorDesign/ErrorPageDesign";
 import InternalErrorPage from "../ErrorHandler/ErrrorDesign/InternalErrorPageDesign";
-import { followUserAPI, userProfilePageAPI, blockUserAPI, unblockUserAPI } from "../utils/userProfileAPI.js";
+import { followUserAPI, unfollowUserAPI, cancelFollowRequestAPI, userProfilePageAPI, unblockUserAPI, sendSecretCrushAPI } from "../utils/userProfileAPI.js";
 import FeedPosts from "../Components/Profile/FeedTab/FeedPosts.js";
 import TimelinePosts from "../Components/Profile/TimelineTab/TimelinePosts.js";
 import TaggedPosts from "../Components/Profile/TaggedTab/TaggedPosts.js";
 import PopupModal from "../Components/Profile/PopupModal/PopupModal.js";
 import ProfileCardSkeleton from "../Components/Profile/SkeletonBody/ProfileCardSkeleton.js";
+
+const VALID_TABS = ["posts", "timeline", "tagged"];
 
 function Profile() {
 
@@ -23,6 +25,7 @@ function Profile() {
   const navigate = useNavigate();
 
   // Tab Url State
+
   const [contentVisibleTab, setContentVisibleTab] = useState(() => {
     if (tab === "timeline") return "TimeLineVisibleTab";
     if (tab === "tagged") return "TaggedVisibleTab";
@@ -66,6 +69,7 @@ function Profile() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUnblocking, setIsUnblocking] = useState(false);
+  const [isSecretLikeSend, setIsSecretLikeSend] = useState(false);
 
   useEffect(() => {
     if (userProfileDataURL !== null) {
@@ -84,27 +88,117 @@ function Profile() {
   }
 
 
-  // Handle Follow API
+  // Handle Follow API Call
   const handleFollow = async (e) => {
     e.preventDefault();
     if (!userProfileDataURL) return;
     try {
       setIsFollowing(true);
-      await followUserAPI({ userUid: userProfileDataURL.searchUserId });
-      const freshProfile = await userProfilePageAPI(username);
-      setUserProfileDataURL(freshProfile);
+      await followUserAPI(userProfileDataURL.searchUserId);
+
+      setUserProfileDataURL(prev => {
+        // Private account — request jayegi
+        if (prev.searchPrivate) {
+          return {
+            ...prev,
+            followingStatus: false,      // follow nahi hua
+            followReqStatus: true,        // request gayi
+            searchPrivateShow: false,     // posts nahi dikhenge
+            // count change nahi hoga
+          };
+        }
+        // Public account — direct follow
+        return {
+          ...prev,
+          followingStatus: true,
+          followReqStatus: false,
+          searchPrivateShow: true,
+          followersCount: prev.followersCount + 1
+        };
+      });
+
     } catch (error) {
-      console.log("Error occured!");
+      console.log("Error occurred!");
     } finally {
       setIsFollowing(false);
     }
   };
 
-  // Send Anonymous Like
-  const handleSendLike = async (e) => {
+  // Handle Unfollow API Call
+  const handleUnfollow = async (e) => {
     e.preventDefault();
-    console.log("Hello I am clicked");
+    if (!userProfileDataURL) return;
+    try {
+      setIsFollowing(true);
+      await unfollowUserAPI(userProfileDataURL.searchUserId);
 
+      setUserProfileDataURL(prev => {
+        // Private account unfollow
+        if (prev.searchPrivate) {
+          return {
+            ...prev,
+            followingStatus: false,
+            followReqStatus: false,
+            searchPrivateShow: false,     // posts hide
+            followersCount: prev.followersCount - 1
+          };
+        }
+        // Public account unfollow
+        return {
+          ...prev,
+          followingStatus: false,
+          followReqStatus: false,
+          searchPrivateShow: true,          // public posts dikhte rahenge
+          followersCount: prev.followersCount - 1
+        };
+      });
+
+    } catch (error) {
+      console.log("Error occurred!");
+    } finally {
+      setIsFollowing(false);
+    }
+  };
+
+  // Handle Follow Request Cancel API Call 
+  const handleCancelRequest = async (e) => {
+    e.preventDefault();
+    if (!userProfileDataURL) return;
+    try {
+      setIsFollowing(true);
+      await cancelFollowRequestAPI(userProfileDataURL.searchUserId);
+
+      setUserProfileDataURL(prev => ({
+        ...prev,
+        followReqStatus: false,   // sirf request cancel
+        followingStatus: false,
+        searchPrivateShow: false  // private account — posts hide
+        // count change nahi — follow hua hi nahi tha
+      }));
+
+    } catch (error) {
+      console.log("Error occurred!");
+    } finally {
+      setIsFollowing(false);
+    }
+  };
+
+  // Send Secret Crush API
+  const handleSendSecretLike = async (e) => {
+    e.preventDefault();
+    if (!userProfileDataURL) return;
+    try {
+      setIsSecretLikeSend(true);
+      await sendSecretCrushAPI(userProfileDataURL.searchUserId);
+      const freshProfile = await userProfilePageAPI(username);
+      setUserProfileDataURL(freshProfile);
+    }
+    catch {
+      console.log("Error occured!");
+    }
+    finally {
+      setIsSecretLikeSend(false);
+    }
   };
 
   // Handle Unblock API
@@ -112,7 +206,7 @@ function Profile() {
     if (!userProfileDataURL) return;
     try {
       setIsUnblocking(true);
-      await unblockUserAPI({ userUid: userProfileDataURL.searchUserId });
+      await unblockUserAPI(userProfileDataURL.searchUserId);
       setUserProfileDataURL((prev) => ({
         ...prev,
         blockedStatus: false
@@ -124,7 +218,11 @@ function Profile() {
     }
   };
 
-  // Loading / Error States
+  // Invalid Tab States and Loadin state
+  if (tab && !VALID_TABS.includes(tab)) {
+    return <NotFoundPage />;
+  }
+
   if (userProfileStatusURL === "LoadingUserProfileURL") {
     return <ProfileCardSkeleton />;
   }
@@ -205,7 +303,7 @@ function Profile() {
               {(userProfileDataURL.searchLoggedUser === false && userProfileDataURL.blockedStatus === false) && (
                 <div className="profileActionContentBtn-Box">
                   {actionType === "UNFOLLOWBTN" && (
-                    <button className="profileUnFollowActionBtns-Box" onClick={handleFollow} disabled={isFollowing}>
+                    <button className="profileUnFollowActionBtns-Box" onClick={handleUnfollow} disabled={isFollowing}>
                       {isFollowing
                         ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" />
                         : <UserRoundCheck size={20} className="profileActionBtnIconDesign" />}
@@ -213,7 +311,7 @@ function Profile() {
                     </button>
                   )}
                   {actionType === "REQUESTEDBTN" && (
-                    <button className="profileUnFollowActionBtns-Box" onClick={handleFollow} disabled={isFollowing}>
+                    <button className="profileUnFollowActionBtns-Box" onClick={handleCancelRequest} disabled={isFollowing}>
                       {isFollowing
                         ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" />
                         : <UserRoundCheck size={20} className="profileActionBtnIconDesign" />}
@@ -230,10 +328,12 @@ function Profile() {
                       </span>
                     </button>
                   )}
-                  <button className="profileSendLikeActionBtns-Box" name="action" value="likeSend" onClick={handleSendLike}>
-                    <HeartPlus size={20} className="profileActionBtnIconDesign" />
-                    <span>Send a like</span>
-                  </button>
+                  {!userProfileDataURL.crushStatus && !userProfileDataURL.crushSentStatus && (
+                    <button className="profileSendLikeActionBtns-Box" name="action" value="likeSend" onClick={handleSendSecretLike} disabled={isSecretLikeSend}>
+                      {isSecretLikeSend ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" /> : <HeartPlus size={20} className="profileActionBtnIconDesign" />}
+                      <span>{isSecretLikeSend ? "Sending..." : "Send Crush"}</span>
+                    </button>
+                  )}
                 </div>
               )}
             </div>

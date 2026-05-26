@@ -107,21 +107,34 @@ function Header() {
         </Link>
       </div>
 
-      {/* Header Right */}
-      <div className="header-right">
+      {/* Header Center */}
+      <div className="header-center">
         {/* Search Box Form */}
         <form className="search-box" onSubmit={searchHandle}>
-          <input type="text" placeholder="Search" name="search" value={searchGo} onChange={(e) => setSearch(e.target.value)} className="boxField" autoCorrect="off" autoComplete="off" autoCapitalize="none"></input>
           <div className="search-nav-icons">
-            <Search size={24} className="search-icon" />
+            <Search size={16} className="search-icon" />
           </div>
+          <input
+            type="text"
+            placeholder="Search"
+            name="search"
+            value={searchGo}
+            onChange={(e) => setSearch(e.target.value)}
+            className="boxField"
+            autoCorrect="off"
+            autoComplete="off"
+            autoCapitalize="none"
+          />
         </form>
+      </div>
 
+      {/* Header Right */}
+      <div className="header-right">
         {/* Profile-Notify Nav Bar Icons */}
         <div className="nav-bar-icons">
           {/* Notification DropDown */}
           <div className="icon-left" ref={notifyRef}>
-            <button type="button" className="headerRightIconBtn-ToogleBox" onClick={HandlenotifyTabNavToogleBtn}><Bell size={22} className="iconTabRight" /></button>
+            <button type="button" className="headerRightIconBtn-ToogleBox" onClick={HandlenotifyTabNavToogleBtn}><Bell size={20} className="iconTabRight" /></button>
             {notifyTabNav && (
               <div className="dropdown notify-dropdown">
                 <ul className="dropdown-unorderList">
@@ -135,7 +148,7 @@ function Header() {
 
           {/* Profile DropDown */}
           <div className="icon-left" ref={profileRef}>
-            <button type="button" className="headerRightIconBtn-ToogleBox" onClick={HandleprofileTabNavToogleBtn}><User size={22} className="iconTabRight" /></button>
+            <button type="button" className="headerRightIconBtn-ToogleBox" onClick={HandleprofileTabNavToogleBtn}><User size={20} className="iconTabRight" /></button>
             {profileTabNav && (
               <div className="dropdown profile-dropdown">
                 <ul className="dropdown-unorderList">

@@ -37,7 +37,8 @@
 
 .header-left {
   background-color: transparent;
-  margin-left: 40px;
+  display: flex;
+  align-items: center;
 }
 
 .header-logo-link {
@@ -56,8 +57,8 @@
 }
 
 .header-logo-svg {
-  width: 40px;
-  height: 24px;
+  width: 32px;
+  height: 20px;
   overflow: visible;
   transition: transform 0.25s ease;
 }
@@ -69,7 +70,7 @@
 
 .header-brand-text {
   font-family: 'Outfit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 23px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.5px;
   display: flex;
@@ -96,105 +97,137 @@
   transform: rotate(15deg);
 }
 
-
-
-/* Right Section */
-.header-right {
+/* Center Section (Search) */
+.header-center {
   display: flex;
-  background-color: transparent;
-  gap: 16px;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  flex: 1;
+  max-width: 400px;
+  margin: 0 16px;
 }
 
-/* Search Box */
+/* Search Box - Spotlight Capsule */
 .search-box {
   display: flex;
   align-items: center;
-  background: #f1f1f1;
-  padding: 6px 10px;
+  background: rgba(243, 243, 246, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 4px 10px;
   border-radius: 25px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 200px;
+  /* Smaller starting width */
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.search-box:hover {
+  background: rgba(243, 243, 246, 0.95);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.search-box:focus-within {
+  width: 250px;
+  /* Expands slightly on focus */
+  background: #ffffff;
+  border-color: #8e8e93;
 }
 
 .search-box input.boxField {
   border: none;
   outline: none;
   background: transparent;
-  padding: 6px 8px;
-  font-size: 14px;
+  padding: 4px 6px;
+  font-size: 13px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  width: 180px;
+  color: #111010;
+  width: 100%;
+}
+
+.search-box input.boxField::placeholder {
+  color: #999;
 }
 
 .search-nav-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: transparent;
 }
 
 .search-icon {
-  color: #555;
-  cursor: pointer;
-  stroke-width: 2.5;
-  background-color: transparent;
+  color: #8e8e93;
+  transition: color 0.2s ease;
 }
 
-.search-icon:hover {
-  color: #ff3b6c;
+.search-box:focus-within .search-icon {
+  color: #8e8e93;
+}
+
+/* Right Section */
+.header-right {
+  display: flex;
+  background-color: transparent;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 /* Icons */
 div.nav-bar-icons {
   background-color: transparent;
-  justify-items: center;
   display: flex;
-  border-radius: 0px;
+  align-items: center;
 }
 
 .icon-left {
-  padding: 7px;
+  padding: 8px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0px 6px;
-  height: fit-content;
-  width: fit-content;
+  margin: 0px 4px;
+  height: 36px;
+  width: 36px;
   cursor: pointer;
-  background-color: #f1f1f1;
+  background-color: rgba(243, 243, 246, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.02);
   border-radius: 50%;
-  /* 3D effect */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15),
-    /* shadow below */
-    0 1px 3px rgba(0, 0, 0, 0.1);
-  /* subtle secondary shadow */
+  transition: all 0.2s ease;
 }
+
+.icon-left:hover {
+  background-color: rgba(240, 24, 110, 0.06);
+  border-color: rgba(240, 24, 110, 0.1);
+}
+
+.icon-left:active {}
 
 .headerRightIconBtn-ToogleBox {
   background-color: transparent;
   border: none;
   outline: none;
   padding: 0px;
-  margin: 0px auto;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
 }
 
 .header-right>div.nav-bar-icons .iconTabRight {
-  margin-left: 0px;
   cursor: pointer;
   background-color: transparent;
-  transition: color 0.3s;
-  margin: auto;
-  fill: #f1f1f1;
-  color: #555;
-  stroke-width: 2.5;
+  transition: all 0.2s ease;
+  fill: none;
+  color: #48484a;
+  stroke-width: 2.2;
 }
 
-.header-right>div.nav-bar-icons .iconTabRight:hover {
-  color: #ff3b6c;
-  fill: #ff3b6c;
+.icon-left:hover .iconTabRight {
+  color: #F0186E;
 }
 
 /* ============================= */
@@ -203,50 +236,55 @@ div.nav-bar-icons {
 
 .dropdown {
   position: absolute;
-  top: 55px;
+  top: 48px;
   right: 0;
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   min-width: 180px;
   z-index: 1200;
-  animation: fadeIn 0.25s ease-in-out;
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
 }
 
 .dropdown-unorderList {
   list-style: none;
   margin: 0;
-  padding: 3px 0;
+  padding: 4px;
   background-color: transparent;
 }
 
 .dropdown-listItem {
   cursor: pointer;
   background-color: transparent;
-  transition: background 0.25s;
+  transition: all 0.2s ease;
   font-size: 13px;
   padding: 8px 12px;
+  border-radius: 8px;
+  color: #1c1c1e;
 }
 
 .dropDownBtnDesign-Box {
   background-color: transparent;
-  color: #111;
+  color: inherit;
   cursor: pointer;
   width: 100%;
-  padding: 2px;
-  margin: 0px;
+  padding: 0;
+  margin: 0;
   display: flex;
   align-items: center;
-  gap: 4.5px;
+  gap: 8px;
   outline: none;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
+  font-family: inherit;
+  text-align: left;
 }
 
 .dropdown-listItem:hover {
-  background: #f1f1f1;
-  color: #ff3b6c;
+  background: rgba(240, 24, 110, 0.06);
+  color: #F0186E;
 }
 
 .dropdownIcons {
@@ -262,55 +300,66 @@ div.nav-bar-icons {
 
 /* Specific Dropdown Placement */
 .notify-dropdown {
-  right: -20px;
-  width: 200px;
+  right: -10px;
+  width: 220px;
 }
 
 .profile-dropdown {
   right: 0;
-  width: 160px;
+  width: 180px;
 }
 
-/* Small screen adjustments */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .search-box input.boxField {
-    width: 120px;
-  }
-
-  .dropdown {
-    top: 55px;
-    right: -10px;
-    min-width: 160px;
-  }
-
-  .dropdown-listItem {
-    cursor: pointer;
-    background-color: transparent;
-    transition: background 0.25s;
-    font-size: 13px;
-    padding: 8px 12px;
-  }
-}
-
-@media (max-width: 480px) {
   .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    padding: 8px 16px;
   }
 
-  .header-right {
-    width: 100%;
-    justify-content: space-between;
+  .header-left {
+    margin-left: 0;
+  }
+
+  .header-brand-text {
+    font-size: 18px;
   }
 
   .search-box {
-    flex: 1;
-    width: 100%;
+    width: 110px;
+  }
+
+  .search-box:focus-within {
+    width: 160px;
+  }
+
+  .dropdown {
+    top: 48px;
+    right: -10px;
+    min-width: 160px;
+  }
+}
+
+@media (max-width: 520px) {
+  .header-brand-text .brand-wine {
+    display: none;
+    /* Only show T on very small screens */
+  }
+
+  .header-center {
+    margin: 0 8px;
+  }
+
+  .search-box {
+    width: 90px;
+    padding: 4px 8px;
+  }
+
+  .search-box:focus-within {
+    width: 120px;
   }
 
   .search-box input.boxField {
-    width: 100%;
+    font-size: 12px;
+    padding: 2px 4px;
   }
 }
 

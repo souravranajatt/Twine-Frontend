@@ -285,7 +285,7 @@ function Settings() {
     setUnblockingUsers(prev => new Set(prev).add(userId));
 
     try {
-      await unblockUserAPI({ userUid: userId });
+      await unblockUserAPI(userId);
       setBlockedList(prev => prev.filter(user => user.userId !== userId));
     } catch (err) {
       console.error("Error unblocking user:", err);

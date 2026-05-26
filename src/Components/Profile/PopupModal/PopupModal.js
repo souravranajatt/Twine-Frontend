@@ -14,7 +14,7 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
     const handleBlock = async () => {
         try {
             setIsBlocking(true);
-            await blockUserAPI({ userUid: userProfileDataURL.searchUserId });
+            await blockUserAPI(userProfileDataURL.searchUserId);
 
             // Update Local State 
             onProfileRefresh((prev) => ({
