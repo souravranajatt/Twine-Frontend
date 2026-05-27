@@ -12,7 +12,7 @@ function Main() {
 
   const [loggedUserData, setLoggedUserData] = useState(null);
 
-  // For Fecthing User Logged Data
+  // For Fecthing User Logged Data..
   useEffect(() => {
     const fetchLoggedData = async () => {
       try {
