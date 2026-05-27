@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../utils/instanceAPI"; // axios instance withCredentials:true
+import api from "../Utils/instanceAPI"; // axios instance withCredentials:true
 import Loader from "../Components/Loader/Loader";
 
 const PublicRoute = ({ children }) => {

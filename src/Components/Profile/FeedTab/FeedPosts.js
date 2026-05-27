@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
-import { searchUserPostsAPI } from "../../../utils/userProfileAPI.js";
+import { searchUserPostsAPI } from "../../../Utils/userProfileAPI.js";
 import formatPostTime from "../../../Lib/formatPostTime.js";
 import {
     Heart, Flame, MessageCircleDashed, Link2,

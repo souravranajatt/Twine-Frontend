@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
-import { searchUserTimelinePostsAPI } from "../../../utils/userProfileAPI.js";
+import { searchUserTimelinePostsAPI } from "../../../Utils/userProfileAPI.js";
 import { HeartOff, Play, Users, Loader2 } from "lucide-react";
 import "./TimelinePosts.css";
 import TimelineSkeleton from "../SkeletonBody/TimelineSkeleton.js";

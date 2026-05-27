@@ -10,7 +10,7 @@ import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import NotFoundPage from "../ErrorHandler/ErrrorDesign/ErrorPageDesign";
 import InternalErrorPage from "../ErrorHandler/ErrrorDesign/InternalErrorPageDesign";
-import { followUserAPI, unfollowUserAPI, cancelFollowRequestAPI, userProfilePageAPI, unblockUserAPI, sendSecretCrushAPI } from "../utils/userProfileAPI.js";
+import { followUserAPI, unfollowUserAPI, cancelFollowRequestAPI, userProfilePageAPI, unblockUserAPI, sendSecretCrushAPI } from "../Utils/userProfileAPI.js";
 import FeedPosts from "../Components/Profile/FeedTab/FeedPosts.js";
 import TimelinePosts from "../Components/Profile/TimelineTab/TimelinePosts.js";
 import TaggedPosts from "../Components/Profile/TaggedTab/TaggedPosts.js";

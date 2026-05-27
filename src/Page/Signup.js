@@ -1,7 +1,7 @@
 import '../AuthCSS/AuthPage.css'; // Style File
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signupUserAuthAPI } from "../utils/authAPI.js"; // Import API
+import { signupUserAuthAPI } from "../Utils/authAPI.js"; // Import API
 import { Image, UserRoundPlus, TrendingUp } from "lucide-react";
 import FooterArea from "../Components/Footer/Footer.js";
 
