@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MapPin, BriefcaseBusiness, CalendarDays, Link2, BadgeCheck, Copy, UserX, Flag, Venus, Mars, Loader2 } from "lucide-react";
-import { blockUserAPI, userProfilePageAPI } from "../../../Utils/userProfileAPI.js";
+import { blockUserAPI } from "../../../Utils/userProfileAPI.js";
 import "./PopupModal.css";
 
 function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, username }) {
