@@ -6,7 +6,7 @@ import "../Assets/Bundle/Main.css";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import { uploadPostAPI } from "../Utils/PostUploadAPI.js";
-import { homeFeedFetch, loggedUserDataAPI } from "../Utils/homefeedAPI.js";
+import { homeFeedFetch, loggedUserDataAPI } from "../Utils/homePageAPI.js";
 
 function Main() {
 
