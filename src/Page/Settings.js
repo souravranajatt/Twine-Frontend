@@ -4,7 +4,7 @@ import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import "../Assets/Bundle/Settings.css";
 import { Loader2 } from "lucide-react";
-import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI, fetchBlockedListAPI } from "../Utils/SettingDataAPI.js";
+import { settingDataAPI, updateProfileAPI, updatePrivacyAPI, deactivateAccountAPI, updatePasswordAPI, fetchBlockedListAPI, userPersonalDetailsFetchAPI, userPersonalDetailsUpdateAPI } from "../Utils/SettingDataAPI.js";
 import { logoutHandleAPI } from "../Utils/authAPI.js";
 import { unblockUserAPI } from "../Utils/userProfileAPI.js";
 
@@ -30,6 +30,7 @@ function Settings() {
   const [blockedList, setBlockedList] = useState([]);
   const [unblockingUsers, setUnblockingUsers] = useState(new Set());
   const [isUnblocking, setIsUnblocking] = useState(false);
+  const [personalDetails, setPersonalDetails] = useState(null);
 
   // Fetch initial data
   useEffect(() => {
@@ -65,10 +66,36 @@ function Settings() {
     fetchBlockedList();
   }, []);
 
+  // Fetching User Personal Details
+  useEffect(() => {
+    const fetchUserPersonalDetails = async () => {
+      try {
+        setIsLoading(true);
+        const dataList = await userPersonalDetailsFetchAPI();
+        setPersonalDetails(dataList);
+      } catch (err) {
+        console.error("Error fetching personal details list:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchUserPersonalDetails();
+  }, []);
+
   // Handle Input Changes
   const handleProfileInputChange = (e) => {
     const { name, value } = e.target;
     setProfileData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Handle Personal Detail Changes
+  const handlePersonalDetailsChange = (e) => {
+    const { name, value } = e.target;
+    setPersonalDetails(prev => ({
       ...prev,
       [name]: value
     }));
@@ -280,10 +307,10 @@ function Settings() {
 
   // Handle Unblock User API
   const handleUnBlockUser = async (userId) => {
-    setIsUnblocking(true);
     setUnblockingUsers(prev => new Set(prev).add(userId));
 
     try {
+      setIsUnblocking(true);
       await unblockUserAPI(userId);
       setBlockedList(prev => prev.filter(user => user.userId !== userId));
     } catch (err) {
@@ -295,6 +322,56 @@ function Settings() {
         updated.delete(userId);
         return updated;
       });
+    }
+  };
+
+  // Handle Personal Detail Submit API
+  const handlePersonalDetailSubmit = async (e) => {
+    e.preventDefault();
+    setStatusMessage(null);
+    setIsLoading(true);
+
+    const emailId = personalDetails.emailId?.trim();
+    const mobileNumber = personalDetails.mobileNumber?.trim();
+
+    if (!emailId && !mobileNumber) {
+      setIsLoading(false);
+      setStatusType("error");
+      return setStatusMessage("Please provide email or mobile number!");
+    }
+
+    if (emailId) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(emailId)) {
+        setIsLoading(false);
+        setStatusType("error");
+        return setStatusMessage("Please enter a valid email address!");
+      }
+    }
+
+    if (mobileNumber) {
+      const phoneRegex = /^\+?[1-9]\d{6,14}$/;
+      if (!phoneRegex.test(mobileNumber)) {
+        setIsLoading(false);
+        setStatusType("error");
+        return setStatusMessage("Please enter a valid phone number!");
+      }
+    }
+
+    try {
+      const personalDetailData = {
+        emailId: emailId || null,
+        mobileNumber: mobileNumber || null
+      };
+      await userPersonalDetailsUpdateAPI(personalDetailData);
+      setStatusMessage("Personal details updated successfully!");
+      setStatusType("success");
+    } catch (err) {
+      console.error("Error updating personal details:", err);
+      setStatusMessage(err.message || err.error || (typeof err === 'string' ? err : "Failed to update. Please try again."));
+      setStatusType("error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -535,17 +612,24 @@ function Settings() {
             <h2>Change Details</h2>
             <p className="section-subtitle">Update your email and phone number</p>
 
-            <div className="form-group">
-              <label>Email Address</label>
-              <input type="email" placeholder="your@email.com" />
-            </div>
+            <form onSubmit={handlePersonalDetailSubmit}>
+              <div className="form-group">
+                <label>Email Address</label>
+                <input type="email" name="emailId" value={personalDetails?.emailId} onChange={handlePersonalDetailsChange} placeholder="your@email.com" />
+              </div>
 
-            <div className="form-group">
-              <label>Phone Number</label>
-              <input type="tel" placeholder="+1 (555) 000-0000" />
-            </div>
+              <div className="form-group">
+                <label>Phone Number</label>
+                <input type="tel" name="mobileNumber" value={personalDetails?.mobileNumber} onChange={handlePersonalDetailsChange} placeholder="+1 (555) 000-0000" />
+              </div>
 
-            <button className="save-btn">Save changes</button>
+              <button className="save-btn" type="submit">{isLoading ? 'Saving...' : 'Save changes'}</button>
+              {statusMessage && (
+                <span className={`status-text ${statusType}`}>
+                  {statusMessage}
+                </span>
+              )}
+            </form>
           </div>
         );
 

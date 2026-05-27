@@ -69,3 +69,27 @@ export const fetchBlockedListAPI = async () => {
     }
 };
 
+// User Personal Details Fetch API
+export const userPersonalDetailsFetchAPI = async () => {
+    try {
+        const res = await api.get("/setting/personal/details/fetch");
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
+// User Personal Details Update API
+export const userPersonalDetailsUpdateAPI = async (data) => {
+    try {
+        const res = await api.put("/setting/personal/details/update", data, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
