@@ -97,17 +97,16 @@ function Profile() {
       await followUserAPI(userProfileDataURL.searchUserId);
 
       setUserProfileDataURL(prev => {
-        // Private account — request jayegi
+        // Private account 
         if (prev.searchPrivate) {
           return {
             ...prev,
-            followingStatus: false,      // follow nahi hua
-            followReqStatus: true,        // request gayi
-            searchPrivateShow: false,     // posts nahi dikhenge
-            // count change nahi hoga
+            followingStatus: false,
+            followReqStatus: true,
+            searchPrivateShow: false,
           };
         }
-        // Public account — direct follow
+        // Public account 
         return {
           ...prev,
           followingStatus: true,
@@ -139,7 +138,7 @@ function Profile() {
             ...prev,
             followingStatus: false,
             followReqStatus: false,
-            searchPrivateShow: false,     // posts hide
+            searchPrivateShow: false,
             followersCount: prev.followersCount - 1
           };
         }
@@ -148,7 +147,7 @@ function Profile() {
           ...prev,
           followingStatus: false,
           followReqStatus: false,
-          searchPrivateShow: true,          // public posts dikhte rahenge
+          searchPrivateShow: true,
           followersCount: prev.followersCount - 1
         };
       });
@@ -190,10 +189,12 @@ function Profile() {
     try {
       setIsSecretLikeSend(true);
       await sendSecretCrushAPI(userProfileDataURL.searchUserId);
-      const freshProfile = await userProfilePageAPI(username);
-      setUserProfileDataURL(freshProfile);
+      setUserProfileDataURL(prev => ({
+        ...prev,
+        crushSentStatus: true
+      }));
     }
-    catch {
+    catch (error) {
       console.log("Error occured!");
     }
     finally {

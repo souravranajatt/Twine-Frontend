@@ -1,0 +1,90 @@
+import React, { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
+import { fetchBlockedListAPI } from "../../Utils/SettingDataAPI.js";
+import { unblockUserAPI } from "../../Utils/userProfileAPI.js";
+
+function BlockUserList() {
+  const [blockedList, setBlockedList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [unblockingUsers, setUnblockingUsers] = useState(new Set());
+  const [isUnblocking, setIsUnblocking] = useState(false);
+
+  // Fetching Blocked List on Tab Click / Load
+  useEffect(() => {
+    const fetchBlockedList = async () => {
+      try {
+        setIsLoading(true);
+        const dataList = await fetchBlockedListAPI();
+        setBlockedList(dataList);
+      } catch (err) {
+        console.error("Error fetching blocked list:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlockedList();
+  }, []);
+
+  // Handle Unblock User API
+  const handleUnBlockUser = async (userId) => {
+    setUnblockingUsers(prev => new Set(prev).add(userId));
+
+    try {
+      setIsUnblocking(true);
+      await unblockUserAPI(userId);
+      setBlockedList(prev => prev.filter(user => user.userId !== userId));
+    } catch (err) {
+      console.error("Error unblocking user:", err);
+    } finally {
+      setIsUnblocking(false);
+      setUnblockingUsers(prev => {
+        const updated = new Set(prev);
+        updated.delete(userId);
+        return updated;
+      });
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="feed-loading-spinner-box" style={{ padding: '40px 0', textAlign: 'center' }}>
+        <Loader2 size={30} className="spinner-icon" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="settings-form">
+      <h2>Blocked Users</h2>
+      <p className="section-subtitle">Manage users you've blocked</p>
+      <div className="blocked-list">
+        {blockedList.length === 0 ? (
+          <p className="empty-text">You haven't blocked anyone yet</p>
+        ) : (
+          blockedList.map(user => (
+            <div key={user.userId} className="blocked-user-item">
+              <div className="blocked-user-avatar">
+                <img 
+                  src={user.profilePicture || "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png"} 
+                  alt={user.username} 
+                  className="AvaatarIcon-PFP" 
+                />
+              </div>
+              <span className="blocked-user-name">{user.username}</span>
+              <button 
+                className="unblock-Btn" 
+                onClick={() => handleUnBlockUser(user.userId)} 
+                disabled={isUnblocking}
+              >
+                {unblockingUsers.has(user.userId) ? "Unblocking..." : "Unblock"}
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default BlockUserList;
