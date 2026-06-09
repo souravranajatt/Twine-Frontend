@@ -90,7 +90,7 @@ button {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center top;
     display: block;
 }
 
@@ -270,7 +270,6 @@ button {
 .profileSendLikeActionBtns-Box:hover,
 .profileUnFollowActionBtns-Box:hover {
     background-color: #e4e4e7;
-    transform: translateY(-1px);
 }
 
 .profileFollowActionBtns-Box:active,

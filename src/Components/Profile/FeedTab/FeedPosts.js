@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserPostsAPI } from "../../../Utils/userProfileAPI.js";
+import { likePostAPI, dislikePostAPI } from "../../../Utils/PostActionAPI.js";
 import formatPostTime from "../../../Lib/formatPostTime.js";
+import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
 import {
-    Heart, Flame, MessageCircleDashed, Link2,
+    Heart, Forward, MessageCircle,
     BadgeCheck, Aperture, Loader2, SendHorizontal
 } from "lucide-react";
 import "./FeedPosts.css";
@@ -66,6 +68,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         fetchMore();
     }, [username, postPage]);
 
+    // Infinite Scroll
     useInfiniteScroll({
         loading: loadingPosts,
         hasMore: hasMorePosts,
@@ -73,6 +76,43 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         activeTab: contentVisibleTab,
         tabName: "FeedVisibleTab",
     });
+
+    // Handle Like/Dislike Button 
+    const handleLike = async (postId) => {
+        const post = profilePosts.find(p => p.fetchPostId === postId);
+        const isLiked = post.likedByCurrentUser;
+
+        // update UI first
+        setProfilePosts(prev => prev.map(p =>
+            p.fetchPostId === postId
+                ? {
+                    ...p,
+                    likedByCurrentUser: !isLiked,
+                    likeCount: isLiked ? p.likeCount - 1 : p.likeCount + 1
+                }
+                : p
+        ));
+
+        try {
+            if (isLiked) {
+                await dislikePostAPI(postId);
+            } else {
+                await likePostAPI(postId);
+            }
+        } catch (error) {
+            console.log("Error!", error);
+            // Rollback
+            setProfilePosts(prev => prev.map(p =>
+                p.fetchPostId === postId
+                    ? {
+                        ...p,
+                        likedByCurrentUser: isLiked,
+                        likeCount: post.likeCount
+                    }
+                    : p
+            ));
+        }
+    };
 
     return (
         <>
@@ -108,43 +148,14 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                                 {post.username || userProfileDataURL.searchUsername}
                                             </span>
                                             {post.fetchVerified === true && (
-                                                <BadgeCheck height="16" width="16" className="profilePostUsernameVerifyBadgeIcon-Box" />
+                                                <BadgeCheck height="19" width="19" className="profilePostUsernameVerifyBadgeIcon-Box" />
                                             )}
                                             {post.fetchUploadAt && (
                                                 <span className="profilePostTimeText">• {formatPostTime(post.fetchUploadAt)}</span>
                                             )}
                                         </div>
-                                        {post.fetchPostLocation && (
-                                            <span className="profilePostLocationText">{post.fetchPostLocation}</span>
-                                        )}
                                     </div>
                                 </div>
-
-                                {/* Post Caption */}
-                                {post?.fetchPostCaption && (
-                                    <div className="profilePostCaptionMain-Box">
-                                        <p className="profilePostCaptionText-Box">
-                                            {post.fetchPostCaption.length > 100 && !expandedCaptions[post.fetchPostId]
-                                                ? post.fetchPostCaption.slice(0, 100) + "... "
-                                                : post.fetchPostCaption}
-                                            {post.fetchPostCaption.length > 100 && (
-                                                <span className="captionShowMoreBtn" onClick={() => toggleCaption(post.fetchPostId)}>
-                                                    {expandedCaptions[post.fetchPostId] ? " show less" : "more"}
-                                                </span>
-                                            )}
-                                        </p>
-                                    </div>
-                                )}
-
-                                {/* Tagged Users */}
-                                {post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0 && (
-                                    <div className="profilePostTaggedUsers-Box">
-                                        <span className="taggedUserLabel">With </span>
-                                        {post.fetchTaggedUsers.map((taggedUser) => (
-                                            <span key={taggedUser} className="taggedUserPill">@{taggedUser}</span>
-                                        ))}
-                                    </div>
-                                )}
 
                                 {/* Post Media */}
                                 <div className="profilePostMainContentMedia-Box">
@@ -159,8 +170,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                         {post.postType === "VIDEO" ? (
                                             <video
                                                 src={post.fetchFileName}
-                                                className="profilePostContentView-Box"
-                                                style={{ position: "absolute", top: 0, left: 0 }}
+                                                className="profilePostContentView-Box video-post"
                                                 controls
                                                 playsInline
                                             />
@@ -168,63 +178,105 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                             <img
                                                 src={post.fetchFileName}
                                                 alt="Post Media"
-                                                className="profilePostContentView-Box"
-                                                style={{ position: "absolute", top: 0, left: 0 }}
+                                                className="profilePostContentView-Box image-post"
                                             />
                                         )}
                                     </div>
                                 </div>
 
+                                {/* Post Caption */}
+                                {post?.fetchPostCaption && (
+                                    <div className="profilePostCaptionMain-Box">
+                                        <p className="profilePostCaptionText-Box">
+                                            {renderFormattedCaption(
+                                                post.fetchPostCaption,
+                                                post.fetchPostId,
+                                                expandedCaptions[post.fetchPostId],
+                                                toggleCaption,
+                                                post.fetchPostCaption.length
+                                            )}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {/* Location & Tagged Users metadata at the bottom */}
+                                {(post.fetchPostLocation || (post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0)) && (
+                                    <div className="postMetaInfoRow">
+                                        {post.fetchPostLocation && (
+                                            <span className="postMetaLocation">
+                                                {post.fetchPostLocation}
+                                            </span>
+                                        )}
+                                        {post.fetchPostLocation && post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0 && (
+                                            <span className="metaDivider">•</span>
+                                        )}
+                                        {post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0 && (
+                                            <div className="postMetaTagged-Box">
+                                                <span className="taggedUserLabel">With </span>
+                                                {post.fetchTaggedUsers.map((taggedUser) => (
+                                                    <span key={taggedUser} className="taggedUserPill">@{taggedUser}</span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+
+
                                 {/* Post Actions */}
                                 <div className="postBottomAction">
                                     <div className="action-toogles">
                                         <div className="postAction-Icons">
-                                            <button type="button" className="postActionContentBtn-ToogleBox">
-                                                <Heart size={23} className="bottomAction-icons" />
-                                                {!post.likeHide && post.likeCount && post.likeCount !== "0" && (
-                                                    <span className="postActionCountText">{post.likeCount}</span>
+                                            <button type="button" className="postActionContentBtn-ToogleBox" onClick={() => handleLike(post.fetchPostId)}>
+                                                <Heart size={23} className={`bottomAction-icons ${post.likedByCurrentUser ? "likedActive" : ""}`}
+                                                    fill={post.likedByCurrentUser ? "#ff3b6c" : "none"}
+                                                    color={post.likedByCurrentUser ? "#ff3b6c" : "currentColor"}
+                                                />
+                                                {post.likeHide !== false && (
+                                                    <span className="postActionCountText" style={{ color: "#1c1c1e" }}>
+                                                        {post.likeCount || 0}
+                                                    </span>
                                                 )}
                                             </button>
                                         </div>
-                                        <div className="postAction-Icons">
-                                            <button type="button" className="postActionContentBtn-ToogleBox">
-                                                <Flame size={23} className="bottomAction-icons" />
-                                            </button>
-                                        </div>
+
                                         {post.commentEnable === true && (
                                             <div className="postAction-Icons">
                                                 <button type="button" className="postActionContentBtn-ToogleBox">
-                                                    <MessageCircleDashed size={23} className="bottomAction-icons" />
-                                                    {post.commentCount && post.commentCount !== "0" && (
-                                                        <span className="postActionCountText">{post.commentCount}</span>
-                                                    )}
+                                                    <MessageCircle size={23} className="bottomAction-icons" />
+                                                    <span className="postActionCountText">
+                                                        {post.commentCount || 0}
+                                                    </span>
                                                 </button>
                                             </div>
                                         )}
+
                                         {post.shareEnable === true && (
-                                            <div className="postAction-Icons">
+                                            <div className="postAction-Icons shareIconRight">
                                                 <button type="button" className="postActionContentBtn-ToogleBox" title="Copy Link">
-                                                    <Link2 size={23} className="bottomAction-icons" />
+                                                    <Forward size={23} className="bottomAction-icons" />
                                                 </button>
                                             </div>
                                         )}
                                     </div>
+
+                                    {/* Inline Comment Box */}
                                     {post.commentEnable === true && (
-                                        <div className="action-toogles">
-                                            <div className="commentPost-Box">
+                                        <div className="action-toogles commentFormToggleBox">
+                                            <form className="commentPost-Box">
                                                 <input
                                                     type="text"
                                                     name="commentPost"
                                                     className="commentPost-field"
-                                                    placeholder="Drop a comment"
+                                                    placeholder="Drop a comment..."
                                                     autoCapitalize="none"
                                                     autoComplete="off"
                                                     autoCorrect="off"
                                                 />
-                                                <button type="button" className="commentIcon-box">
-                                                    <SendHorizontal size={23} className="comment-icon" />
+                                                <button type="submit" className="commentIcon-box">
+                                                    <SendHorizontal size={18} className="comment-icon" />
                                                 </button>
-                                            </div>
+                                            </form>
                                         </div>
                                     )}
                                 </div>
@@ -251,6 +303,8 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                     )}
                 </div>
             )}
+
+            {/* Showing Popup for Each Post */}
         </>
     );
 }

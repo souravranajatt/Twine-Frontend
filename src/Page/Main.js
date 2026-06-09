@@ -1,7 +1,7 @@
 // Main.js
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
-import { BadgeCheck, Image, Heart, Tag, MessageCircleDashed, MapPin, SendHorizontal, Flame, Loader2 } from "lucide-react";
+import { BadgeCheck, Image, Heart, Tag, Forward, MapPin, SendHorizontal, Loader2 } from "lucide-react";
 import "../Assets/Bundle/Main.css";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
@@ -162,13 +162,13 @@ function Main() {
       return;
     }
 
-    if (captionPost.length > 250) {
-      setError("Caption size is to long!");
+    if (captionPost.length > 1000) {
+      setError("Caption size is to long! (1000 Characters Limit)");
       return;
     }
 
     if (file.size > MAX_SIZE) {
-      setError("File size is to long!");
+      setError("File size is to long! (500 MB Limit)");
       return;
     }
 
@@ -354,9 +354,26 @@ function Main() {
                 <div className="postBottomAction">
                   {/* Like Buttons */}
                   <div className="action-toogles">
-                    <div className="postAction-Icons"><button type="button" className="postActionContentBtn-ToogleBox" ><Heart size={23} className="bottomAction-icons" /></button></div>
-                    <div className="postAction-Icons"><button type="button" className="postActionContentBtn-ToogleBox" ><Flame size={23} className="bottomAction-icons" /></button></div>
-                    <div className="postAction-Icons"><button type="button" className="postActionContentBtn-ToogleBox" ><MessageCircleDashed size={23} className="bottomAction-icons" /></button></div>
+                    <div className="postAction-Icons">
+                      <button type="button" className="postActionContentBtn-ToogleBox">
+                        <Heart size={23} className="bottomAction-icons"
+                          fill={post.likedByCurrentUser ? "#ff3b6c" : "none"}
+                          color={post.likedByCurrentUser ? "#ff3b6c" : "currentColor"}
+                        />
+                      </button>
+                      {post.likeHide !== false && (
+                        <span className="postActionCountText" style={{ color: "#1c1c1e" }}>
+                          {post.likeCount || 0}
+                        </span>
+                      )}
+                    </div>
+                    {post.shareEnable === true && (
+                      <div className="postAction-Icons">
+                        <button type="button" className="postActionContentBtn-ToogleBox" title="Copy Link">
+                          <Forward size={23} className="bottomAction-icons" />
+                        </button>
+                      </div>
+                    )}
                   </div>
                   {/* Comments Section */}
                   {post.commentEnable === true ? (
