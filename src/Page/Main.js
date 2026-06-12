@@ -1,16 +1,19 @@
 // Main.js
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
-import { BadgeCheck, Image, Heart, Tag, Forward, MapPin, SendHorizontal, Loader2 } from "lucide-react";
+import { BadgeCheck, Image, Heart, Tag, Forward, MapPin, SendHorizontal, Loader2, MessageCircle } from "lucide-react";
 import "../Assets/Bundle/Main.css";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import { uploadPostAPI } from "../Utils/PostUploadAPI.js";
+import formatPostTime from "../Lib/formatPostTime.js";
+import renderFormattedCaption from "../Lib/renderFormattedCaption.js";
 import { homeFeedFetch, loggedUserDataAPI } from "../Utils/homePageAPI.js";
 
 function Main() {
 
   const [loggedUserData, setLoggedUserData] = useState(null);
+  const MAX_SIZE = 500 * 1024 * 1024; // Max File Size
 
   // For Fecthing User Logged Data..
   useEffect(() => {
@@ -30,10 +33,10 @@ function Main() {
   }, []);
 
   // --------------- Feed Pagination / Infinite Scroll State ---------------
-  const [posts, setPosts] = useState([]);      // Feed posts store krne ke liye
-  const [page, setPage] = useState(0);         // Current page number (starts from 0)
-  const [loadingPosts, setLoadingPosts] = useState(false); // API loading staus tracking
-  const [hasMore, setHasMore] = useState(true); // Flag if more posts are available
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(0);
+  const [loadingPosts, setLoadingPosts] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   // Expanded Captions State
   const [expandedCaptions, setExpandedCaptions] = useState({});
@@ -146,7 +149,7 @@ function Main() {
     }
   }
 
-  const MAX_SIZE = 500 * 1024 * 1024;
+
   // Post Live Handler
   const postLive = async (e) => {
     e.preventDefault();
@@ -198,6 +201,11 @@ function Main() {
       setIsUploading(false);
     }
 
+  };
+
+  // Like/Unlike
+  const handleLike = async (postId) => {
+    console.log(postId);
   };
 
   return (
@@ -285,6 +293,7 @@ function Main() {
           <div className="feed-wrapper content-post">
             {posts.map((post) => (
               <div className="feed-post-box" key={post.fetchPostId}>
+
                 {/* Post - Header */}
                 <div className="post-header">
                   <div className="postHeaderImageMainFeed">
@@ -298,96 +307,144 @@ function Main() {
                       alt="user-profile"
                     />
                   </div>
+
                   <div className="post-header-userText">
-                    <span className="username-title"><Link to={`/${post.username}`} className="userLinkTextStyle">{post.username}</Link></span>
-                    {post.fetchVerified === true && (
-                      <span className="profilePostVerifyBadgeIcon-Box"><BadgeCheck height="20" width="20" className="profilePostUsernameVerifyBadgeIcon-Box" /></span>
-                    )}
+                    <div className="post-header-userTextBox">
+                      <span className="username-title">
+                        <Link to={`/${post.username}`} className="userLinkTextStyle">{post.username}</Link>
+                      </span>
+                      {post.fetchVerified === true && (
+                        <BadgeCheck height="19" width="19" className="profilePostUsernameVerifyBadgeIcon-Box" />
+                      )}
+                      {post.fetchUploadAt && (
+                        <span className="profilePostTimeText">• {formatPostTime(post.fetchUploadAt)}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
-                {/* Post - Caption */}
-                {post.fetchPostCaption && (
-                  <div className="post-caption-wrapper">
-                    <p className="caption-paraHead">
-                      {post.fetchPostCaption.length > 100 && !expandedCaptions[post.fetchPostId]
-                        ? post.fetchPostCaption.slice(0, 100) + "... "
-                        : post.fetchPostCaption}
 
-                      {post.fetchPostCaption.length > 100 && (
-                        <span
-                          className="captionShowMoreBtn"
-                          onClick={() => toggleCaption(post.fetchPostId)}
-                        >
-                          {expandedCaptions[post.fetchPostId] ? " show less" : "more"}
-                        </span>
-                      )}
-                    </p>
-                  </div>
-                )}
                 {/* Post - Main Content */}
                 <div className="postFeedMainContent">
                   <div className="postMainFeedContentMiddleBox" style={{
                     paddingBottom: post.width && post.height
                       ? `${(post.height / post.width) * 100}%`
-                      : '100%'   // default square jab width/height null ho
+                      : '100%'
                   }}>
 
                     {post.postType === 'VIDEO' ? (
                       <video
                         src={post.fetchFileName}
-                        className="mainContentMediaVideo"
+                        className="mainContentMediaBox video-post"
                         controls
                         playsInline
-                        style={{ position: 'absolute', top: 0, left: 0 }}
                       />
                     ) : (
                       <img
                         src={post.fetchFileName}
                         alt="post-content"
-                        className="mainContentMediaImage"
-                        style={{ position: 'absolute', top: 0, left: 0 }}
+                        className="mainContentMediaBox image-post"
                       />
                     )}
                   </div>
                 </div>
+
+                {/* Post - Caption */}
+                {post?.fetchPostCaption && (
+                  <div className="post-caption-wrapper">
+                    <p className="caption-paraHead">
+                      {renderFormattedCaption(
+                        post.fetchPostCaption,
+                        post.fetchPostId,
+                        expandedCaptions[post.fetchPostId],
+                        toggleCaption,
+                        post.fetchPostCaption.length
+                      )}
+                    </p>
+                  </div>
+                )}
+
+                {/* Location & Tagged Users metadata at the bottom */}
+                {(post.fetchPostLocation || (post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0)) && (
+                  <div className="postMetaInfoRow">
+                    {post.fetchPostLocation && (
+                      <span className="postMetaLocation">
+                        {post.fetchPostLocation}
+                      </span>
+                    )}
+                    {post.fetchPostLocation && post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0 && (
+                      <span className="metaDivider">•</span>
+                    )}
+                    {post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0 && (
+                      <div className="postMetaTagged-Box">
+                        <span className="taggedUserLabel">With </span>
+                        {post.fetchTaggedUsers.map((taggedUser) => (
+                          <span key={taggedUser} className="taggedUserPill">@{taggedUser}</span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+
                 {/* Post Action Buttons */}
                 <div className="postBottomAction">
-                  {/* Like Buttons */}
                   <div className="action-toogles">
+
                     <div className="postAction-Icons">
-                      <button type="button" className="postActionContentBtn-ToogleBox">
+                      <button type="button" className="postActionContentBtn-ToogleBox" onClick={() => handleLike(post.fetchPostId)}>
                         <Heart size={23} className="bottomAction-icons"
                           fill={post.likedByCurrentUser ? "#ff3b6c" : "none"}
                           color={post.likedByCurrentUser ? "#ff3b6c" : "currentColor"}
                         />
+                        {post.likeHide !== false && (
+                          <span className="postActionCountText" style={{ color: "#1c1c1e" }}>
+                            {post.likeCount || 0}
+                          </span>
+                        )}
                       </button>
-                      {post.likeHide !== false && (
-                        <span className="postActionCountText" style={{ color: "#1c1c1e" }}>
-                          {post.likeCount || 0}
-                        </span>
-                      )}
                     </div>
-                    {post.shareEnable === true && (
+
+                    {post.commentEnable === true && (
                       <div className="postAction-Icons">
-                        <button type="button" className="postActionContentBtn-ToogleBox" title="Copy Link">
+                        <button type="button" className="postActionContentBtn-ToogleBox">
+                          <MessageCircle size={23} className="bottomAction-icons" />
+                          <span className="postActionCountText">
+                            {post.commentCount || 0}
+                          </span>
+                        </button>
+                      </div>
+                    )}
+
+                    {post.shareEnable === true && (
+                      <div className="postAction-Icons shareIconRight">
+                        <button type="button" className="postActionContentBtn-ToogleBox">
                           <Forward size={23} className="bottomAction-icons" />
                         </button>
                       </div>
                     )}
                   </div>
+
                   {/* Comments Section */}
-                  {post.commentEnable === true ? (
-                    <div className="action-toogles">
-                      {/* Comment-Box */}
-                      <div className="commentPost-Box">
-                        <input type="text" name="commentPost" className="commentPost-field" placeholder="Drop a comment" autoCapitalize="none" autoComplete="off" autoCorrect="off" />
-                        <button type="button" className="commentIcon-box">
-                          <SendHorizontal size={23} className="comment-icon" />
+                  {post.commentEnable === true && (
+                    <div className="action-toogles commentFormToggleBox">
+                      <form className="commentPost-Box">
+                        <input
+                          type="text"
+                          name="commentPost"
+                          className="commentPost-field"
+                          placeholder="Drop a comment..."
+                          autoCapitalize="none"
+                          autoComplete="off"
+                          autoCorrect="off"
+                        />
+                        <button type="submit" className="commentIcon-box">
+                          <SendHorizontal size={18} className="comment-icon" />
                         </button>
-                      </div>
+                      </form>
                     </div>
-                  ) : (<></>)}
+                  )}
                 </div>
+
               </div>
             ))}
             {loadingPosts && (

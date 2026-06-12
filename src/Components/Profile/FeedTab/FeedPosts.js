@@ -253,7 +253,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
 
                                         {post.shareEnable === true && (
                                             <div className="postAction-Icons shareIconRight">
-                                                <button type="button" className="postActionContentBtn-ToogleBox" title="Copy Link">
+                                                <button type="button" className="postActionContentBtn-ToogleBox">
                                                     <Forward size={23} className="bottomAction-icons" />
                                                 </button>
                                             </div>

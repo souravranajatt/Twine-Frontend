@@ -91,7 +91,7 @@
 /* Post Caption */
 .profilePostCaptionMain-Box {
     height: auto;
-    padding: 8px 16px 4px 16px;
+    padding: 8px 20px 4px 20px;
     background-color: transparent;
 }
 
@@ -148,7 +148,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    padding: 4px 16px 8px 16px;
+    padding: 4px 20px 8px 20px;
     background-color: transparent;
 }
 
@@ -191,6 +191,7 @@
 .taggedUserPill:hover {
     opacity: 0.8;
 }
+
 
 /* Post Media */
 .profilePostMainContentMedia-Box {
@@ -252,8 +253,17 @@
     gap: 8px;
 }
 
-.commentFormToggleBox {
-    width: 100%;
+.postAction-Icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    background-color: transparent;
+    margin: 0px 3px;
+}
+
+.postAction-Icons:first-child {
+    margin-left: -2px;
 }
 
 .postActionContentBtn-ToogleBox {
@@ -284,6 +294,20 @@
     transform: scale(1.08);
 }
 
+.bottomAction-icons {
+    stroke-width: 2.5;
+    color: black;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.bottomAction-icons:hover {
+    stroke-width: 2.5;
+    color: #ff3b6c;
+    cursor: pointer;
+    background-color: transparent;
+}
+
 .postActionCountText {
     font-size: 14px;
     font-weight: 600;
@@ -301,9 +325,15 @@
     background-color: #f3f4f6;
     border: 1px solid #e5e7eb;
     border-radius: 9999px;
-    padding: 3px 4px 3px 14px;
+    padding: 6px 4px 6px 14px;
     transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
     width: 100%;
+}
+
+.commentFormToggleBox {
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 5px;
 }
 
 .commentPost-Box:focus-within {
