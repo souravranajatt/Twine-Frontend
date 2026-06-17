@@ -4,10 +4,13 @@ import { searchUserTimelinePostsAPI } from "../../../Utils/userProfileAPI.js";
 import { HeartOff, Play, Users, Loader2 } from "lucide-react";
 import "./TimelinePosts.css";
 import TimelineSkeleton from "../SkeletonBody/TimelineSkeleton.js";
+import PostBoxModal from "../../PostModal/PostBoxModal.js";
 
 function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
 
     const [timelinePosts, setTimelinePosts] = useState([]);
+    const [activePostForModal, setActivePostForModal] = useState(null);
+
     const [timelinePage, setTimelinePage] = useState(0);
     const [loadingTimeline, setLoadingTimeline] = useState(false);
     const [hasMoreTimeline, setHasMoreTimeline] = useState(true);
@@ -93,7 +96,7 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
                                     <div className="connectionTimelinePostContainerBox grid-3x3">
                                         {timelinePosts && timelinePosts.length > 0 ? (
                                             timelinePosts.map((post) => (
-                                                <div key={post.fetchPostId} className="grid-item">
+                                                <div key={post.fetchPostId} className="grid-item" onClick={() => setActivePostForModal(post)} style={{ cursor: "pointer" }}>
                                                     {post.postType === "VIDEO" ? (
                                                         <>
                                                             <video src={post.fetchFileName} className="gridImagesList" muted playsInline />
@@ -135,6 +138,18 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
                     )}
                 </div>
             )}
+            {/* Post Box Modal */}
+            <PostBoxModal
+                isOpen={activePostForModal !== null}
+                onClose={() => setActivePostForModal(null)}
+                post={activePostForModal}
+                onPostUpdate={(updatedPost) => {
+                    setTimelinePosts((prev) =>
+                        prev.map((p) => (p.fetchPostId === updatedPost.fetchPostId ? updatedPost : p))
+                    );
+                    setActivePostForModal(updatedPost);
+                }}
+            />
         </>
     );
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserPostsAPI } from "../../../Utils/userProfileAPI.js";
-import { likePostAPI, dislikePostAPI } from "../../../Utils/PostActionAPI.js";
+import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../../Utils/PostActionAPI.js";
 import formatPostTime from "../../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
 import {
@@ -10,14 +10,21 @@ import {
 } from "lucide-react";
 import "./FeedPosts.css";
 import PostsSkeleton from "../SkeletonBody/PostsSkeleton.js";
+import PostBoxModal from "../../PostModal/PostBoxModal.js";
 
 function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
 
     const [profilePosts, setProfilePosts] = useState([]);
+    const [activePostForModal, setActivePostForModal] = useState(null);
+
     const [postPage, setPostPage] = useState(0);
     const [loadingPosts, setLoadingPosts] = useState(false);
     const [hasMorePosts, setHasMorePosts] = useState(true);
     const [expandedCaptions, setExpandedCaptions] = useState({});
+
+    // post comment state
+    const [commentTexts, setCommentTexts] = useState({});
+    const [submittingComments, setSubmittingComments] = useState({});
 
     const toggleCaption = (postId) => {
         setExpandedCaptions((prev) => ({ ...prev, [postId]: !prev[postId] }));
@@ -111,6 +118,39 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                     }
                     : p
             ));
+        }
+    };
+
+    // Handle Comment Submit
+    const handleCommentSubmit = async (e, postId) => {
+        e.preventDefault();
+
+        const text = (commentTexts[postId] || "").trim();
+        if (!text || submittingComments[postId]) return;
+
+        setSubmittingComments(prev => ({ ...prev, [postId]: true }));
+        setCommentTexts(prev => ({ ...prev, [postId]: "" }));
+
+        // Change Comment Count
+        setProfilePosts(prev => prev.map(p =>
+            p.fetchPostId === postId
+                ? { ...p, commentCount: (p.commentCount || 0) + 1 }
+                : p
+        ));
+
+        try {
+            await postCommentAPI(postId, { commentText: text, parentId: null });
+        } catch (error) {
+            console.error("Comment failed!", error);
+            // Revert on Failure API
+            setProfilePosts(prev => prev.map(p =>
+                p.fetchPostId === postId
+                    ? { ...p, commentCount: Math.max(0, (p.commentCount || 1) - 1) }
+                    : p
+            ));
+            setCommentTexts(prev => ({ ...prev, [postId]: text }));
+        } finally {
+            setSubmittingComments(prev => ({ ...prev, [postId]: false }));
         }
     };
 
@@ -232,8 +272,8 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                                     fill={post.likedByCurrentUser ? "#ff3b6c" : "none"}
                                                     color={post.likedByCurrentUser ? "#ff3b6c" : "currentColor"}
                                                 />
-                                                {post.likeHide !== false && (
-                                                    <span className="postActionCountText" style={{ color: "#1c1c1e" }}>
+                                                {post.likeVisible === true && (
+                                                    <span className="postActionCountText">
                                                         {post.likeCount || 0}
                                                     </span>
                                                 )}
@@ -242,7 +282,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
 
                                         {post.commentEnable === true && (
                                             <div className="postAction-Icons">
-                                                <button type="button" className="postActionContentBtn-ToogleBox">
+                                                <button type="button" className="postActionContentBtn-ToogleBox" onClick={() => setActivePostForModal(post)}>
                                                     <MessageCircle size={23} className="bottomAction-icons" />
                                                     <span className="postActionCountText">
                                                         {post.commentCount || 0}
@@ -263,18 +303,37 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                     {/* Inline Comment Box */}
                                     {post.commentEnable === true && (
                                         <div className="action-toogles commentFormToggleBox">
-                                            <form className="commentPost-Box">
+                                            <form
+                                                onSubmit={(e) => handleCommentSubmit(e, post.fetchPostId)}
+                                                className="commentPost-Box"
+                                            >
                                                 <input
                                                     type="text"
-                                                    name="commentPost"
                                                     className="commentPost-field"
                                                     placeholder="Drop a comment..."
                                                     autoCapitalize="none"
                                                     autoComplete="off"
                                                     autoCorrect="off"
+                                                    value={commentTexts[post.fetchPostId] || ""}
+                                                    onChange={(e) =>
+                                                        setCommentTexts(prev => ({
+                                                            ...prev,
+                                                            [post.fetchPostId]: e.target.value
+                                                        }))
+                                                    }
+                                                    disabled={submittingComments[post.fetchPostId]}
                                                 />
-                                                <button type="submit" className="commentIcon-box">
-                                                    <SendHorizontal size={18} className="comment-icon" />
+                                                <button
+                                                    type="submit"
+                                                    className="commentIcon-box"
+                                                    disabled={
+                                                        submittingComments[post.fetchPostId] ||
+                                                        !(commentTexts[post.fetchPostId] || "").trim()
+                                                    }
+                                                >
+                                                    {submittingComments[post.fetchPostId]
+                                                        ? <Loader2 size={18} className="comment-icon spinner-icon" />
+                                                        : <SendHorizontal size={18} className="comment-icon" />}
                                                 </button>
                                             </form>
                                         </div>
@@ -305,6 +364,17 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
             )}
 
             {/* Showing Popup for Each Post */}
+            <PostBoxModal
+                isOpen={activePostForModal !== null}
+                onClose={() => setActivePostForModal(null)}
+                post={activePostForModal}
+                onPostUpdate={(updatedPost) => {
+                    setProfilePosts((prev) =>
+                        prev.map((p) => (p.fetchPostId === updatedPost.fetchPostId ? updatedPost : p))
+                    );
+                    setActivePostForModal(updatedPost);
+                }}
+            />
         </>
     );
 }

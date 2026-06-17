@@ -5,6 +5,7 @@ import Signup from './Page/Signup'; // Signup Page
 import Main from './Page/Main'; // Main Page 
 import Profile from './Page/Profile'; // Profile Page 
 import Settings from './Page/Settings'; // Settings Page
+import Post from './Page/Post'; // Post Page
 import ProtectedRoute from "./AuthChecker/ProtectedRoute"; // To Protect Pages 
 import PublicRoute from "./AuthChecker/PublicRoute"; // To Protect Pages 
 import NotFoundPage from "./ErrorHandler/ErrrorDesign/ErrorPageDesign";
@@ -51,8 +52,14 @@ function App() {
           </ProtectedRoute>
         } />
 
+        <Route path='/:username/posts/:postId' element={
+          <ProtectedRoute>
+            <Post />
+          </ProtectedRoute>
+        } />
 
-        {/* BEST PRACTICE: Catch-All */}
+
+        {/* Catch-All */}
         <Route path="*" element={<NotFoundPage />} />
 
       </Routes>

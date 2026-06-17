@@ -4,10 +4,13 @@ import { searchUserTaggedPostsAPI } from "../../../Utils/userProfileAPI.js";
 import { CircleUser, Loader2, Play } from "lucide-react";
 import "./TaggedPosts.css";
 import TaggedSkeleton from "../SkeletonBody/TaggedSkeleton.js";
+import PostBoxModal from "../../PostModal/PostBoxModal.js";
 
 function TaggedPosts({ username, contentVisibleTab }) {
 
     const [taggedPosts, setTaggedPosts] = useState([]);
+    const [activePostForModal, setActivePostForModal] = useState(null);
+
     const [taggedPage, setTaggedPage] = useState(0);
     const [loadingTagged, setLoadingTagged] = useState(false);
     const [hasMoreTagged, setHasMoreTagged] = useState(true);
@@ -75,7 +78,7 @@ function TaggedPosts({ username, contentVisibleTab }) {
                         {taggedPosts && taggedPosts.length > 0 ? (
                             <div className="connectionTaggedPostContainerBox grid-3x3">
                                 {taggedPosts.map((post) => (
-                                    <div key={post.fetchPostId} className="grid-item">
+                                    <div key={post.fetchPostId} className="grid-item" onClick={() => setActivePostForModal(post)} style={{ cursor: "pointer" }}>
                                         {post.postType === "VIDEO" ? (
                                             <>
                                                 <video src={post.fetchFileName} className="gridImagesList" muted playsInline />
@@ -110,6 +113,18 @@ function TaggedPosts({ username, contentVisibleTab }) {
                     )}
                 </div>
             )}
+            {/* Post Box Modal */}
+            <PostBoxModal
+                isOpen={activePostForModal !== null}
+                onClose={() => setActivePostForModal(null)}
+                post={activePostForModal}
+                onPostUpdate={(updatedPost) => {
+                    setTaggedPosts((prev) =>
+                        prev.map((p) => (p.fetchPostId === updatedPost.fetchPostId ? updatedPost : p))
+                    );
+                    setActivePostForModal(updatedPost);
+                }}
+            />
         </>
     );
 }

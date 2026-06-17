@@ -198,6 +198,16 @@ button {
     margin: 0;
 }
 
+.clickable-followers {
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+}
+
+.clickable-followers:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
 /* Follow & Action Buttons */
 .profileActionContentBtn-Box {
     background-color: transparent;

@@ -86,7 +86,7 @@ export const searchUserTimelinePostsAPI = async (username, page = 0) => {
   }
 };
 
-// Tagged Posts (Paginated Grid)
+// Tagged Posts
 export const searchUserTaggedPostsAPI = async (username, page = 0) => {
   try {
     const response = await api.get(
@@ -105,5 +105,15 @@ export const sendSecretCrushAPI = async (targetUserId) => {
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
+  }
+};
+
+// Fetch followers list (paginated)
+export const fetchFollowersAPI = async (targetUserId, page = 0) => {
+  try {
+    const response = await api.get(`/profile/${targetUserId}/follower?page=${page}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Something went wrong!";
   }
 };

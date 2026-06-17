@@ -15,6 +15,7 @@ import FeedPosts from "../Components/Profile/FeedTab/FeedPosts.js";
 import TimelinePosts from "../Components/Profile/TimelineTab/TimelinePosts.js";
 import TaggedPosts from "../Components/Profile/TaggedTab/TaggedPosts.js";
 import PopupModal from "../Components/Profile/PopupModal/PopupModal.js";
+import FollowerList from "../Components/Profile/PopupModal/FollowerList.js";
 import ProfileCardSkeleton from "../Components/Profile/SkeletonBody/ProfileCardSkeleton.js";
 
 const VALID_TABS = ["posts", "timeline", "tagged"];
@@ -68,6 +69,7 @@ function Profile() {
   const [accountPrivateCheckStatus, setAccountPrivateCheckStatus] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFollowersModalOpen, setIsFollowersModalOpen] = useState(false);
   const [isUnblocking, setIsUnblocking] = useState(false);
   const [isSecretLikeSend, setIsSecretLikeSend] = useState(false);
 
@@ -169,10 +171,9 @@ function Profile() {
 
       setUserProfileDataURL(prev => ({
         ...prev,
-        followReqStatus: false,   // sirf request cancel
+        followReqStatus: false,
         followingStatus: false,
-        searchPrivateShow: false  // private account — posts hide
-        // count change nahi — follow hua hi nahi tha
+        searchPrivateShow: false
       }));
 
     } catch (error) {
@@ -296,7 +297,19 @@ function Profile() {
               )}
 
               <div className="userFollowDataInfoPack">
-                <p className="userFollowDataContentBox">{userProfileDataURL.followersCount} Followers</p>
+                <p
+                  className={`userFollowDataContentBox ${(userProfileDataURL.searchPrivateShow || userProfileDataURL.searchLoggedUser)
+                    ? "clickable-followers"
+                    : ""
+                    }`}
+                  onClick={() => {
+                    if (userProfileDataURL.searchPrivateShow || userProfileDataURL.searchLoggedUser) {
+                      setIsFollowersModalOpen(true);
+                    }
+                  }}
+                >
+                  {userProfileDataURL.followersCount} Followers
+                </p>
                 <p className="userFollowDataContentBox">{userProfileDataURL.postCount} Posts</p>
               </div>
 
@@ -442,6 +455,13 @@ function Profile() {
         userProfileDataURL={userProfileDataURL}
         username={username}
         onProfileRefresh={(freshProfile) => setUserProfileDataURL(freshProfile)}
+      />
+
+      {/* Follower List Modal */}
+      <FollowerList
+        isOpen={isFollowersModalOpen}
+        onClose={() => setIsFollowersModalOpen(false)}
+        targetUserId={userProfileDataURL?.searchUserId}
       />
     </>
   );

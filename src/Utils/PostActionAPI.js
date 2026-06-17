@@ -40,6 +40,25 @@ export const unsavePostAPI = async (postId) => {
     }
 };
 
+// Post a Comment
+export const postCommentAPI = async (postId, data) => {
+    try {
+        const response = await api.post(`/v2/posts/${postId}/comment`, data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Fetch Comments of a post
+export const fetchCommentsAPI = async (postId, page = 0) => {
+    try {
+        const response = await api.get(`/v2/posts/${postId}/comments?page=${page}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
 
 

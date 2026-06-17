@@ -1,0 +1,224 @@
+/* Backdrop overlay */
+.follower-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 999;
+  animation: followerBackdropFade 0.2s ease;
+}
+
+@keyframes followerBackdropFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal Box */
+.follower-modal-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: #ffffff;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.15), 0px 4px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: followerModalSlide 0.25s ease;
+}
+
+@keyframes followerModalSlide {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Header */
+.follower-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f2f2f6;
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.follower-modal-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111010;
+  margin: 0;
+}
+
+.follower-modal-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #8e8e93;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.follower-modal-close:hover {
+  background-color: #e4e4e7;
+  color: #1c1c1e;
+}
+
+/* Body and lists */
+.follower-modal-body {
+  padding: 12px 20px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.no-followers-text {
+  text-align: center;
+  font-size: 14px;
+  color: #8e8e93;
+  margin: 20px 0;
+}
+
+.follower-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.follower-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.follower-info-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.follower-box-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e4e4e7;
+  user-select: none;
+  overflow: hidden;
+}
+
+.follower-row-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  flex-shrink: 0;
+}
+
+.follower-row-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.follower-row-username-grp {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.follower-row-username {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c1c1e;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.follower-row-badge {
+  fill: #F0186E;
+  color: #ffffff;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Follow status badge (read-only) */
+.follower-row-btn {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  min-width: 82px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.follow-style {
+  background-color: rgba(240, 24, 110, 0.10);
+  color: #F0186E;
+}
+
+.following-style {
+  background-color: #f4f4f5;
+  color: #8e8e93;
+  border: 1px solid #e4e4e7;
+}
+
+/* Load More / Loading States */
+.follower-modal-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.follower-load-more-btn {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #F0186E;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px 0;
+  text-align: center;
+  width: 100%;
+  transition: opacity 0.15s ease;
+}
+
+.follower-load-more-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
