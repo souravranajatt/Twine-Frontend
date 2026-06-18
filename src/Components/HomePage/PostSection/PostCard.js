@@ -18,12 +18,11 @@ function PostCard({ loggedUserData }) {
     const MAX_SIZE = 500 * 1024 * 1024;
     const fileInputRef = useRef(null);
 
-    if (!loggedUserData) return <PostCardSkeleton />;
-
     useEffect(() => {
         return () => preview && URL.revokeObjectURL(preview);
     }, [preview]);
 
+    if (!loggedUserData) return <PostCardSkeleton />;
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
