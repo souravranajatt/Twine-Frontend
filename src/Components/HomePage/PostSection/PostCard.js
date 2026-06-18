@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Image, Heart, Tag, MapPin } from "lucide-react";
 import "./PostCard.css";
-import { uploadPostAPI } from "../../../Utils/PostUploadAPI.js";
+import { uploadPostAPI } from "../../../Utils/PostFeaturesAPI.js";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 

@@ -9,3 +9,13 @@ export const uploadPostAPI = async (formData) => {
         throw error.response?.data || "Something went wrong!";
     }
 };
+
+// Specific Post Fetch API...
+export const postFetchAPI = async (postId) => {
+    try {
+        const response = await api.get(`/post/${postId}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || "Something went wrong!";
+    }
+};

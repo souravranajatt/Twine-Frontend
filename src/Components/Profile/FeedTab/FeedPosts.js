@@ -37,12 +37,15 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         setHasMorePosts(true);
 
         const fetchInitial = async () => {
+            setLoadingPosts(true);
             try {
                 const data = await searchUserPostsAPI(username, 0);
                 if (!data || data.length === 0) setHasMorePosts(false);
                 else setProfilePosts(data);
             } catch (err) {
                 console.log("Error loading profile posts!", err);
+            } finally {
+                setLoadingPosts(false);
             }
         };
 

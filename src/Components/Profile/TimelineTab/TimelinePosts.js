@@ -15,10 +15,13 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
     const [loadingTimeline, setLoadingTimeline] = useState(false);
     const [hasMoreTimeline, setHasMoreTimeline] = useState(true);
 
-    // Initial Load — lazy, sirf jab tab khule
+    // Initial Load
     useEffect(() => {
+        setTimelinePosts([]);
+        setTimelinePage(0);
+        setHasMoreTimeline(true);
+
         if (contentVisibleTab !== "TimeLineVisibleTab") return;
-        if (timelinePosts.length > 0 || !hasMoreTimeline) return;
         if (!userProfileDataURL?.searchPrivateShow || !userProfileDataURL?.searchUserTimeline) return;
 
         const fetchInitial = async () => {

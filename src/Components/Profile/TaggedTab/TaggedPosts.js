@@ -22,12 +22,15 @@ function TaggedPosts({ username, contentVisibleTab }) {
         setHasMoreTagged(true);
 
         const fetchInitial = async () => {
+            setLoadingTagged(true);
             try {
                 const data = await searchUserTaggedPostsAPI(username, 0);
                 if (!data || data.length === 0) setHasMoreTagged(false);
                 else setTaggedPosts(data);
             } catch (err) {
                 console.log("Error loading tagged posts!", err);
+            } finally {
+                setLoadingTagged(false);
             }
         };
 

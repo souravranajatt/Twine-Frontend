@@ -164,9 +164,8 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
             await postCommentAPI(localPost.fetchPostId, { commentText: text, parentId: null });
         } catch (err) {
             console.error("Comment submit failed", err);
-            // Rollback comment list
-            setComments((prev) => prev.filter((c) => c.id !== newCommentObj.id));
-            // Rollback comment count
+            // Rollback comment 
+            setComments((prev) => prev.filter((c) => c.commentId !== newCommentObj.commentId));
             const rolledBackPost = {
                 ...localPost,
                 commentCount: Math.max(0, (localPost.commentCount || 1) - 1)

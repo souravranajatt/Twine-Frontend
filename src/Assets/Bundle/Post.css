@@ -1,36 +1,539 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Disable user select */
-img,
-button {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-/* Main Wrapper */
-.main-wrapper-post {
+/* ===== POST PAGE WRAPPER ===== */
+.post-page-wrapper {
     background-color: #fafafa;
-    width: 100%;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.middle-main-container-post {
+.post-page-main {
     margin-top: 71px;
-    display: flex;
     flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+}
+
+/* ===== POST CARD ===== */
+.post-page-card {
     width: 100%;
-    min-height: calc(100vh - 71px);
+    max-width: 520px;
+    background-color: #fff;
+    border: 1px solid #f2f2f6;
+    border-radius: 16px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.04), 0px 1px 2px rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+    height: fit-content;
+}
+
+/* ===== LOADER ===== */
+.post-page-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 0;
+}
+
+.post-page-spinner {
+    animation: post-spin 1s linear infinite;
+    color: #ff3b6c;
+}
+
+@keyframes post-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== ERROR ===== */
+.post-page-error-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 0;
+}
+
+.post-page-error-text {
+    font-size: 16px;
+    color: #8e8e93;
+    font-weight: 500;
+}
+
+/* ===== PRIVATE ACCOUNT ===== */
+.post-page-private-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 10px;
+}
+
+.post-page-private-avatar-wrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #dbdbdb;
+    background-color: #f3f3f3;
+    position: relative;
+}
+
+.post-page-private-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+.post-page-private-lock {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #f2f2f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.post-page-lock-icon {
+    color: #8e8e93;
+}
+
+.post-page-private-username {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1c1c1e;
+    margin-top: 4px;
+}
+
+.post-page-private-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1c1c1e;
+}
+
+.post-page-private-subtext {
+    font-size: 13px;
+    color: #8e8e93;
+}
+
+/* ===== POST HEADER ===== */
+.post-page-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    gap: 10px;
+}
+
+.post-page-avatar-wrapper {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1.5px solid #dbdbdb;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-page-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+.post-page-header-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.post-page-header-row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.post-page-username-link {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111010;
+    text-decoration: none;
+}
+
+.post-page-username-link:hover {
+    text-decoration: underline;
+}
+
+.post-page-verify-badge {
+    fill: #F0186E;
+    color: #ffffff;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+.post-page-verify-badge.inline {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 3px;
+    margin-right: 4px;
+}
+
+.post-page-time {
+    font-size: 12.5px;
+    color: #8e8e93;
+    font-weight: 400;
+    margin-left: 2px;
+}
+
+/* ===== POST MEDIA ===== */
+.post-page-media-wrapper {
+    width: 100%;
+    padding: 0 16px;
+}
+
+.post-page-media-box {
+    width: 100%;
+    position: relative;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #f1f1f1;
+    overflow: hidden;
+    max-height: 600px;
+}
+
+.post-page-media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 8px;
+}
+
+.post-page-media.image-post {
+    object-fit: cover;
+    object-position: center top;
+}
+
+.post-page-media.video-post {
+    object-fit: contain;
+    background-color: #000;
+}
+
+/* ===== CAPTION ===== */
+.post-page-caption-box {
+    padding: 10px 20px 4px 20px;
+}
+
+.post-page-caption-text {
+    font-size: 14.5px;
+    font-weight: 400;
+    color: #1c1c1e;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== META ROW ===== */
+.post-page-meta-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 4px 20px 6px 20px;
+}
+
+.post-page-location {
+    font-size: 12px;
+    color: #8e8e93;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.post-page-meta-divider {
+    font-size: 11px;
+    color: #8e8e93;
+}
+
+.post-page-tagged-box {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.post-page-tagged-label {
+    font-size: 12px;
+    color: #8e8e93;
+    font-weight: 500;
+}
+
+.post-page-tagged-pill {
+    font-size: 12px;
+    color: #F0186E;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.post-page-tagged-pill:hover {
+    opacity: 0.8;
+}
+
+/* ===== ACTIONS ===== */
+.post-page-actions {
+    padding: 6px 16px 10px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.post-page-action-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.post-page-action-btn {
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 4px;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.post-page-action-btn:hover {
+    opacity: 0.8;
+}
+
+.post-page-action-btn:active {
+    transform: scale(0.95);
+}
+
+.post-page-action-icon {
+    stroke-width: 2.5;
+    color: #1c1c1e;
+    transition: transform 0.2s ease;
+}
+
+.post-page-action-btn:hover .post-page-action-icon {
+    transform: scale(1.08);
+}
+
+.post-page-action-count {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1c1c1e;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.post-page-share-btn {
+    margin-left: auto;
+}
+
+/* ===== COMMENT FORM ===== */
+.post-page-comment-form {
+    display: flex;
+    align-items: center;
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 9999px;
+    padding: 6px 4px 6px 14px;
+    transition: all 0.25s ease;
+    width: 100%;
+}
+
+.post-page-comment-form:focus-within {
+    background-color: #ffffff;
+    border-color: #dbdbdb;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.post-page-comment-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 13.5px;
+    color: #1a202c;
+    padding: 5px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.post-page-comment-input::placeholder {
+    color: #9ca3af;
+}
+
+.post-page-comment-submit {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.post-page-comment-submit:hover:not(:disabled) {
+    color: #F0186E;
+    transform: scale(1.1);
+}
+
+.post-page-comment-submit:disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ===== COMMENTS SECTION ===== */
+.post-page-comments-section {
+    border-top: 1px solid #f2f2f6;
+    padding: 16px;
+}
+
+.post-page-comments-loader {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+}
+
+.post-page-no-comments {
+    text-align: center;
+    color: #8e8e93;
+    font-size: 13px;
+    padding: 20px 0;
+}
+
+.post-page-comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.post-page-comment-row {
+    display: flex;
+    gap: 10px;
     align-items: flex-start;
-    background-color: transparent;
+}
+
+.post-page-comment-avatar-wrapper {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid #e4e4e7;
+    background-color: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.post-page-comment-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.post-page-comment-body {
+    flex: 1;
+    min-width: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.post-page-comment-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 2px;
+}
+
+.post-page-comment-username {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1c1c1e;
+    margin-right: 4px;
+}
+
+.post-page-comment-time {
+    font-size: 11px;
+    color: #8e8e93;
+    margin-left: 6px;
+}
+
+.post-page-comment-text {
+    font-size: 13.5px;
+    color: #3a3a3c;
+    line-height: 1.45;
+    margin: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Mobile */
+@media (max-width: 480px) {
+    .post-page-main {
+        padding: 0;
+        align-items: flex-start;
+    }
+
+    .post-page-card {
+        max-width: 100%;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+        margin-top: 10px;
+    }
+
+    .post-page-private-box {
+        padding: 40px 20px;
+    }
+}
+
+/* Small Tablet */
+@media (min-width: 480px) and (max-width: 767px) {
+    .post-page-main {
+        padding: 16px;
+    }
+
+    .post-page-card {
+        max-width: 100%;
+    }
+}
+
+/* Tablet to Desktop */
+@media (min-width: 768px) {
+    .post-page-main {
+        padding: 30px 16px;
+    }
 }
