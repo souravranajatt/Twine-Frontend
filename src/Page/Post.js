@@ -184,7 +184,9 @@ function Post() {
                         <div className="post-page-private-lock">
                             <Lock size={20} className="post-page-lock-icon" />
                         </div>
-                        <p className="post-page-private-username">@{post.username}</p>
+                        <p className="post-page-private-username">@{post.username} {post.fetchVerified && (
+                            <BadgeCheck size={17} className="post-page-verify-badge" />
+                        )}</p>
                         <p className="post-page-private-text">This account is private</p>
                         <p className="post-page-private-subtext">Follow to see their posts</p>
                     </div>

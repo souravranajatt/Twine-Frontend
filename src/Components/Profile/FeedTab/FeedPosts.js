@@ -16,7 +16,6 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
 
     const [profilePosts, setProfilePosts] = useState([]);
     const [activePostForModal, setActivePostForModal] = useState(null);
-
     const [postPage, setPostPage] = useState(0);
     const [loadingPosts, setLoadingPosts] = useState(false);
     const [hasMorePosts, setHasMorePosts] = useState(true);

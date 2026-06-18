@@ -7,11 +7,13 @@ import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../../Utils/Post
 import formatPostTime from "../../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
 import PostsSkeleton from "../../Profile/SkeletonBody/PostsSkeleton.js";
+import PostBoxModal from "../../PostModal/PostBoxModal.js";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
 function HomeFeed() {
 
+    const [activePostForModal, setActivePostForModal] = useState(null);
     const [posts, setPosts] = useState([]);
     const [page, setPage] = useState(0);
     const [loadingPosts, setLoadingPosts] = useState(false);
@@ -258,7 +260,7 @@ function HomeFeed() {
 
                                     {post.commentEnable && (
                                         <div className="postAction-Icons">
-                                            <button type="button" className="postActionContentBtn-ToogleBox">
+                                            <button type="button" className="postActionContentBtn-ToogleBox" onClick={() => setActivePostForModal(post)}>
                                                 <MessageCircle size={23} className="bottomAction-icons" />
                                                 <span className="postActionCountText">
                                                     {post.commentCount || 0}
@@ -326,6 +328,19 @@ function HomeFeed() {
                     )}
                 </div>
             )}
+
+            {/* Showing Popup for Each Post */}
+            <PostBoxModal
+                isOpen={activePostForModal !== null}
+                onClose={() => setActivePostForModal(null)}
+                post={activePostForModal}
+                onPostUpdate={(updatedPost) => {
+                    setPosts((prev) =>
+                        prev.map((p) => (p.fetchPostId === updatedPost.fetchPostId ? updatedPost : p))
+                    );
+                    setActivePostForModal(updatedPost);
+                }}
+            />
         </>
     );
 }

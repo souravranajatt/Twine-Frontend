@@ -480,8 +480,6 @@
 /* Input form container at bottom */
 .post-modal-input-container {
     padding: 12px 20px;
-    border-top: 1px solid #f2f2f6;
-    background-color: #fafafa;
 }
 
 .post-modal-comment-form {
