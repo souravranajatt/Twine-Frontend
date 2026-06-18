@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Left Ring -->
+  <circle cx="24" cy="32" r="14" stroke="#111010" stroke-width="4" fill="none"/>
+  <!-- Right Ring -->
+  <circle cx="40" cy="32" r="14" stroke="#F0186E" stroke-width="4" fill="none"/>
+  <!-- Overlap Arc -->
+  <path d="M 34 22 A 14 14 0 0 0 22 18" stroke="#111010" stroke-width="4" stroke-linecap="round" fill="none"/>
+</svg>
