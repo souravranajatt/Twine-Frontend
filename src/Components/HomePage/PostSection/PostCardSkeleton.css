@@ -1,0 +1,86 @@
+@keyframes shimmer {
+    0% {
+        background-position: -400px 0;
+    }
+
+    100% {
+        background-position: 400px 0;
+    }
+}
+
+.skel-avatar,
+.skel-line,
+.skel-icon,
+.skel-textarea,
+.skel-button {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.4s infinite linear;
+    border-radius: 4px;
+}
+
+/* Avatar circle */
+.skel-avatar {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    border-radius: 50%;
+}
+
+/* Info lines next to avatar */
+.skel-info {
+    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 80%;
+}
+
+.skel-line {
+    height: 14px;
+}
+
+.skel-name {
+    width: 60%;
+    height: 16px;
+}
+
+.skel-username {
+    width: 40%;
+}
+
+/* Create post header */
+.skel-header {
+    width: 35%;
+    height: 18px;
+    margin-bottom: 14px;
+}
+
+/* Icon row */
+.skel-icon-row {
+    display: flex;
+    gap: 6px;
+    margin: 10px 0;
+}
+
+.skel-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+/* Caption area */
+.skel-textarea {
+    width: 100%;
+    height: 45px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+/* Button */
+.skel-button {
+    width: 100px;
+    height: 32px;
+    border-radius: 3px;
+    margin: 10px 0;
+}

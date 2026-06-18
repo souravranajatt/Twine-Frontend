@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Image, Heart, Tag, MapPin } from "lucide-react";
 import "./PostCard.css";
 import { uploadPostAPI } from "../../../Utils/PostFeaturesAPI.js";
+import PostCardSkeleton from "./PostCardSkeleton.js";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
@@ -17,9 +18,12 @@ function PostCard({ loggedUserData }) {
     const MAX_SIZE = 500 * 1024 * 1024;
     const fileInputRef = useRef(null);
 
+    if (!loggedUserData) return <PostCardSkeleton />;
+
     useEffect(() => {
         return () => preview && URL.revokeObjectURL(preview);
     }, [preview]);
+
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
