@@ -21,6 +21,7 @@ function TaggedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         setTaggedPage(0);
         setHasMoreTagged(true);
 
+        if (contentVisibleTab !== "TaggedVisibleTab") return;
         if (!userProfileDataURL?.searchPrivateShow) return;
 
         const fetchInitial = async () => {
@@ -37,12 +38,13 @@ function TaggedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         };
 
         fetchInitial();
-    }, [username, userProfileDataURL]);
+    }, [username, userProfileDataURL, contentVisibleTab]);
 
     // Pagination
     useEffect(() => {
 
         if (taggedPage === 0) return;
+        if (contentVisibleTab !== "TaggedVisibleTab") return;
         if (!userProfileDataURL?.searchPrivateShow) return;
 
         const fetchMore = async () => {
@@ -66,7 +68,7 @@ function TaggedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         };
 
         fetchMore();
-    }, [username, taggedPage, hasMoreTagged, userProfileDataURL]);
+    }, [username, taggedPage, hasMoreTagged, contentVisibleTab, userProfileDataURL]);
 
     useInfiniteScroll({
         loading: loadingTagged,

@@ -66,7 +66,7 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
         };
 
         fetchMore();
-    }, [username, timelinePage, contentVisibleTab, userProfileDataURL]);
+    }, [username, timelinePage, hasMoreTimeline, contentVisibleTab, userProfileDataURL]);
 
     useInfiniteScroll({
         loading: loadingTimeline,
