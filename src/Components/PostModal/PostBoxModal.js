@@ -13,6 +13,8 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
     const [localPost, setLocalPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [loadingComments, setLoadingComments] = useState(false);
+    const [hasMoreComments, setHasMoreComments] = useState(true);
+    const [commentPage, setCommentPage] = useState(0);
     const [commentText, setCommentText] = useState("");
     const [submittingComment, setSubmittingComment] = useState(false);
     const [isLiking, setIsLiking] = useState(false);
@@ -21,6 +23,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
 
     const originalUrlRef = useRef("");
     const commentsEndRef = useRef(null);
+    const isFetchingRef = useRef(false);
 
     // Fetch logged user data
     useEffect(() => {
@@ -57,36 +60,77 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
         };
     }, [isOpen, post]);
 
-    // Fetch comments on Initial
+
+
+    // Fetch comments on Initial/Reset
     useEffect(() => {
-        if (isOpen && post) {
+        if (isOpen && post?.fetchPostId) {
+            // Reset pagination states
+            setComments([]);
+            setCommentPage(0);
+            setHasMoreComments(true);
+            isFetchingRef.current = true;
+            setLoadingComments(true);
+
             const getComments = async () => {
-                setLoadingComments(true);
                 try {
                     const data = await fetchCommentsAPI(post.fetchPostId, 0);
-                    setComments(data);
+                    setComments(data || []);
+                    if (!data || data.length < 15) {
+                        setHasMoreComments(false);
+                    }
                 } catch (err) {
                     console.error("Failed to load comments", err);
                     setComments([]);
+                    setHasMoreComments(false);
                 } finally {
                     setLoadingComments(false);
+                    isFetchingRef.current = false;
                 }
             };
             getComments();
-        }
-
-        // Set null on close modal
-        if (!isOpen) {
+        } else {
             setComments([]);
+            setCommentPage(0);
+            setHasMoreComments(false);
+            isFetchingRef.current = false;
         }
-    }, [isOpen, post]);
+    }, [isOpen, post?.fetchPostId]);
 
-    // Scroll to bottom on new comments
-    useEffect(() => {
-        if (comments.length > 0 && commentsEndRef.current) {
-            commentsEndRef.current.scrollIntoView({ behavior: "smooth" });
+    // Scroll handler to fetch next page of comments
+    const handleScroll = async (e) => {
+        if (!hasMoreComments || isFetchingRef.current || loadingComments || !post?.fetchPostId) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+        // Check if user has scrolled near bottom
+        if (scrollHeight - scrollTop - clientHeight <= 30) {
+            isFetchingRef.current = true;
+            setLoadingComments(true);
+            const nextPage = commentPage + 1;
+
+            try {
+                const data = await fetchCommentsAPI(post.fetchPostId, nextPage);
+                if (!data || data.length === 0) {
+                    setHasMoreComments(false);
+                } else {
+                    setCommentPage(nextPage);
+                    setComments((prev) => {
+                        const existingIds = new Set(prev.map(c => c.commentId));
+                        const newComments = data.filter(c => !existingIds.has(c.commentId));
+                        return [...prev, ...newComments];
+                    });
+                    if (data.length < 15) {
+                        setHasMoreComments(false);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch paginated comments", err);
+            } finally {
+                setLoadingComments(false);
+                isFetchingRef.current = false;
+            }
         }
-    }, [comments]);
+    };
 
     if (!isOpen || !localPost) return null;
 
@@ -151,6 +195,12 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
 
         // Optimistic Update
         setComments((prev) => [...prev, newCommentObj]);
+
+        // Scroll to the bottom to show user's comment
+        setTimeout(() => {
+            commentsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 80);
+
         const updatedPost = {
             ...localPost,
             commentCount: (localPost.commentCount || 0) + 1
@@ -283,12 +333,20 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                     </div>
 
                     {/* Scrollable comments panel */}
-                    <div className="post-modal-comments-scrollview">
+                    <div className="post-modal-comments-scrollview" onScroll={handleScroll}>
 
                         {/* Comments List */}
-                        {loadingComments ? (
-                            <div className="post-modal-spinner-container">
-                                <Loader2 size={24} className="spinner-icon" />
+                        {loadingComments && comments.length === 0 ? (
+                            <div className="post-modal-comments-list">
+                                {[...Array(4)].map((_, idx) => (
+                                    <div key={idx} className="post-modal-comment-skeleton">
+                                        <div className="comment-skeleton-avatar" />
+                                        <div className="comment-skeleton-info">
+                                            <div className="comment-skeleton-name" />
+                                            <div className="comment-skeleton-text" />
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         ) : comments.length === 0 ? (
                             <div className="post-modal-empty-comments">
@@ -325,6 +383,13 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                                         </div>
                                     </div>
                                 ))}
+
+                                {/* Pagination Loader */}
+                                {loadingComments && comments.length > 0 && (
+                                    <div className="post-modal-spinner-container" style={{ padding: "10px 0" }}>
+                                        <Loader2 size={20} className="spinner-icon" />
+                                    </div>
+                                )}
                                 <div ref={commentsEndRef} />
                             </div>
                         )}

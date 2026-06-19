@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, Loader2, MapPin, Lock } from 'lucide-react';
 import HeaderArea from "../Components/Header/Header.js";
@@ -29,6 +29,11 @@ function Post() {
     const [expandedCaption, setExpandedCaption] = useState(false);
     const [loggedUser, setLoggedUser] = useState(null);
 
+    const [commentPage, setCommentPage] = useState(0);
+    const [hasMoreComments, setHasMoreComments] = useState(true);
+    const isFetchingCommentsRef = useRef(false);
+    const commentsEndRef = useRef(null);
+
     // Fetch logged user
     useEffect(() => {
         const getLoggedUser = async () => {
@@ -50,7 +55,7 @@ function Post() {
             try {
                 const data = await postFetchAPI(postId);
 
-                // Username URL mein galat hai toh silently correct karo
+                // change username silently if incorrect
                 if (data.username && data.username !== username) {
                     navigate(`/${data.username}/posts/${postId}`, { replace: true });
                 }
@@ -69,20 +74,72 @@ function Post() {
     useEffect(() => {
         if (!post || post.privateAccount) return;
 
+        setComments([]);
+        setCommentPage(0);
+        setHasMoreComments(true);
+        isFetchingCommentsRef.current = true;
+        setLoadingComments(true);
+
         const getComments = async () => {
-            setLoadingComments(true);
             try {
                 const data = await fetchCommentsAPI(postId, 0);
-                setComments(data);
+                setComments(data || []);
+                if (!data || data.length < 15) {
+                    setHasMoreComments(false);
+                }
             } catch (err) {
                 console.error("Failed to load comments", err);
                 setComments([]);
+                setHasMoreComments(false);
             } finally {
                 setLoadingComments(false);
+                isFetchingCommentsRef.current = false;
             }
         };
         getComments();
-    }, [post]);
+    }, [post?.fetchPostId]);
+
+    // Infinite scroll listener for comments on post page
+    useEffect(() => {
+        const handleScroll = async () => {
+            if (!hasMoreComments || isFetchingCommentsRef.current || loadingComments || !post || post.privateAccount) return;
+
+            // Check if scroll is near bottom
+            if (
+                window.innerHeight + document.documentElement.scrollTop + 100 >=
+                document.documentElement.scrollHeight
+            ) {
+                isFetchingCommentsRef.current = true;
+                setLoadingComments(true);
+                const nextPage = commentPage + 1;
+
+                try {
+                    const data = await fetchCommentsAPI(postId, nextPage);
+                    if (!data || data.length === 0) {
+                        setHasMoreComments(false);
+                    } else {
+                        setCommentPage(nextPage);
+                        setComments((prev) => {
+                            const existingIds = new Set(prev.map(c => c.commentId));
+                            const newComments = data.filter(c => !existingIds.has(c.commentId));
+                            return [...prev, ...newComments];
+                        });
+                        if (data.length < 15) {
+                            setHasMoreComments(false);
+                        }
+                    }
+                } catch (err) {
+                    console.error("Failed to load page comments", err);
+                } finally {
+                    setLoadingComments(false);
+                    isFetchingCommentsRef.current = false;
+                }
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [hasMoreComments, commentPage, loadingComments, post, postId]);
 
     // Like handler
     const handleLike = async () => {
@@ -136,6 +193,12 @@ function Post() {
         };
 
         setComments(prev => [...prev, newComment]);
+
+        // Scroll to bottom to show user's comment
+        setTimeout(() => {
+            commentsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 80);
+
         setPost(prev => ({ ...prev, commentCount: (prev.commentCount || 0) + 1 }));
 
         try {
@@ -358,9 +421,17 @@ function Post() {
                         {post.commentEnable && (
                             <div className="post-page-comments-section">
 
-                                {loadingComments ? (
-                                    <div className="post-page-comments-loader">
-                                        <Loader2 size={24} className="post-page-spinner" />
+                                {loadingComments && comments.length === 0 ? (
+                                    <div className="post-page-comments-list">
+                                        {[...Array(4)].map((_, idx) => (
+                                            <div key={idx} className="post-page-comment-skeleton">
+                                                <div className="comment-skeleton-avatar" />
+                                                <div className="comment-skeleton-info">
+                                                    <div className="comment-skeleton-name" />
+                                                    <div className="comment-skeleton-text" />
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 ) : comments.length === 0 ? (
                                     <div className="post-page-no-comments">
@@ -396,6 +467,14 @@ function Post() {
                                                 </div>
                                             </div>
                                         ))}
+
+                                        {/* Pagination Loader */}
+                                        {loadingComments && comments.length > 0 && (
+                                            <div className="post-page-comments-loader" style={{ padding: "10px 0" }}>
+                                                <Loader2 size={20} className="post-page-spinner" />
+                                            </div>
+                                        )}
+                                        <div ref={commentsEndRef} />
                                     </div>
                                 )}
                             </div>

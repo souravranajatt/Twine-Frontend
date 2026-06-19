@@ -537,3 +537,57 @@
         padding: 30px 16px;
     }
 }
+
+/* Shimmering placeholder skeletons when initial comments are loading */
+.post-page-comment-skeleton {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 2px 0;
+}
+
+.comment-skeleton-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: postShimmer 1.5s infinite linear;
+    flex-shrink: 0;
+}
+
+.comment-skeleton-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 4px;
+}
+
+.comment-skeleton-name {
+    width: 30%;
+    height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: postShimmer 1.5s infinite linear;
+}
+
+.comment-skeleton-text {
+    width: 85%;
+    height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: postShimmer 1.5s infinite linear;
+}
+
+@keyframes postShimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}

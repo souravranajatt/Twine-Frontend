@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserPostsAPI } from "../../../Utils/userProfileAPI.js";
 import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../../Utils/PostActionAPI.js";
@@ -19,6 +19,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
     const [postPage, setPostPage] = useState(0);
     const [loadingPosts, setLoadingPosts] = useState(false);
     const [hasMorePosts, setHasMorePosts] = useState(true);
+    const hasFetchedInitialRef = useRef(false);
     const [expandedCaptions, setExpandedCaptions] = useState({});
 
     // post comment state
@@ -29,14 +30,22 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         setExpandedCaptions((prev) => ({ ...prev, [postId]: !prev[postId] }));
     };
 
-    // Initial Load
+    // Reset on User Change 
     useEffect(() => {
         setProfilePosts([]);
         setPostPage(0);
         setHasMorePosts(true);
+        hasFetchedInitialRef.current = false;
+    }, [username]);
+
+    // Initial Load
+    useEffect(() => {
 
         if (contentVisibleTab !== "FeedVisibleTab") return;
         if (!userProfileDataURL?.searchPrivateShow) return;
+
+        if (hasFetchedInitialRef.current) return;
+        hasFetchedInitialRef.current = true;
 
         const fetchInitial = async () => {
             setLoadingPosts(true);
@@ -46,6 +55,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                 else setProfilePosts(data);
             } catch (err) {
                 console.log("Error loading profile posts!", err);
+                hasFetchedInitialRef.current = false;
             } finally {
                 setLoadingPosts(false);
             }
@@ -57,7 +67,6 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
     // Pagination
     useEffect(() => {
         if (postPage === 0) return;
-        if (contentVisibleTab !== "FeedVisibleTab") return;
         if (!userProfileDataURL?.searchPrivateShow) return;
 
         const fetchMore = async () => {
@@ -75,13 +84,14 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                 }
             } catch (err) {
                 console.log("Error loading more posts!", err);
+                setPostPage((prev) => prev - 1);
             } finally {
                 setLoadingPosts(false);
             }
         };
 
         fetchMore();
-    }, [username, postPage, hasMorePosts, contentVisibleTab, userProfileDataURL]);
+    }, [username, postPage, hasMorePosts, userProfileDataURL]);
 
     // Infinite Scroll
     useInfiniteScroll({

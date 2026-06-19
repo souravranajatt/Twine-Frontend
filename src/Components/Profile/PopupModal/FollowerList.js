@@ -18,7 +18,6 @@ function FollowerList({ isOpen, onClose, targetUserId }) {
       setHasMore(true);
       loadFollowers(0, true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, targetUserId]);
 
   // Load followers from API

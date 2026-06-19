@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserTimelinePostsAPI } from "../../../Utils/userProfileAPI.js";
 import { HeartOff, Play, Users, Loader2 } from "lucide-react";
@@ -13,15 +13,24 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
     const [timelinePage, setTimelinePage] = useState(0);
     const [loadingTimeline, setLoadingTimeline] = useState(false);
     const [hasMoreTimeline, setHasMoreTimeline] = useState(true);
+    const hasFetchedInitialRef = useRef(false);
 
-    // Initial Load
+    // Reset on user Change
     useEffect(() => {
         setTimelinePosts([]);
         setTimelinePage(0);
         setHasMoreTimeline(true);
+        hasFetchedInitialRef.current = false;
+    }, [username]);
+
+    // Initial Load
+    useEffect(() => {
 
         if (contentVisibleTab !== "TimeLineVisibleTab") return;
         if (!userProfileDataURL?.searchPrivateShow || !userProfileDataURL?.searchUserTimeline) return;
+
+        if (hasFetchedInitialRef.current) return;
+        hasFetchedInitialRef.current = true;
 
         const fetchInitial = async () => {
             setLoadingTimeline(true);
@@ -31,6 +40,7 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
                 else setTimelinePosts(data);
             } catch (err) {
                 console.log("Error loading timeline posts!", err);
+                hasFetchedInitialRef.current = false;
             } finally {
                 setLoadingTimeline(false);
             }
@@ -42,7 +52,6 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
     // Pagination
     useEffect(() => {
         if (timelinePage === 0) return;
-        if (contentVisibleTab !== "TimeLineVisibleTab") return;
         if (!userProfileDataURL?.searchPrivateShow || !userProfileDataURL?.searchUserTimeline) return;
 
         const fetchMore = async () => {
@@ -60,13 +69,14 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
                 }
             } catch (err) {
                 console.log("Error loading more timeline posts!", err);
+                setTimelinePage((prev) => prev - 1);
             } finally {
                 setLoadingTimeline(false);
             }
         };
 
         fetchMore();
-    }, [username, timelinePage, hasMoreTimeline, contentVisibleTab, userProfileDataURL]);
+    }, [username, timelinePage, hasMoreTimeline, userProfileDataURL]);
 
     useInfiniteScroll({
         loading: loadingTimeline,

@@ -431,14 +431,17 @@ function Profile() {
               <div className="AccountPrivateContentMsgBox">
                 <div className="AccountPrivateDilaugeBox">
                   <div className="LockedAccountIconBox">
-                    <UserLock height="24" width="24" className="LockedAccountIconContentBox" />
+                    <UserLock height="16" width="16" className="LockedAccountIconContentBox" />
                   </div>
-                  <p className="LockedAccountSpanMsgBox"><span>Locked Account</span></p>
-                </div>
-                <div className="contextMsgBox">
-                  <p className="contextMsgBoxParagraphText">
-                    <span>You can't see posts and stories unless you follow them.</span>
-                  </p>
+
+                  <div className="contextMsgBox">
+                    <p className="LockedAccountSpanMsgBox">
+                      <span>This profile is locked</span>
+                    </p>
+                    <p className="contextMsgBoxParagraphText">
+                      <span>Follow to see their posts and timelines.</span>
+                    </p>
+                  </div>
                 </div>
               </div>
             )}

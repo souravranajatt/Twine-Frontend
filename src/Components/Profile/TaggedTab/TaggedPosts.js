@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserTaggedPostsAPI } from "../../../Utils/userProfileAPI.js";
 import { CircleUser, Loader2, Play } from "lucide-react";
@@ -10,19 +10,27 @@ function TaggedPosts({ username, userProfileDataURL, contentVisibleTab }) {
 
     const [taggedPosts, setTaggedPosts] = useState([]);
     const [activePostForModal, setActivePostForModal] = useState(null);
-
     const [taggedPage, setTaggedPage] = useState(0);
     const [loadingTagged, setLoadingTagged] = useState(false);
     const [hasMoreTagged, setHasMoreTagged] = useState(true);
+    const hasFetchedInitialRef = useRef(false);
 
-    // Initial Load
+    // Reset on user Change
     useEffect(() => {
         setTaggedPosts([]);
         setTaggedPage(0);
         setHasMoreTagged(true);
+        hasFetchedInitialRef.current = false;
+    }, [username]);
+
+    // Initial Load
+    useEffect(() => {
 
         if (contentVisibleTab !== "TaggedVisibleTab") return;
         if (!userProfileDataURL?.searchPrivateShow) return;
+
+        if (hasFetchedInitialRef.current) return;
+        hasFetchedInitialRef.current = true;
 
         const fetchInitial = async () => {
             setLoadingTagged(true);
@@ -32,6 +40,7 @@ function TaggedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                 else setTaggedPosts(data);
             } catch (err) {
                 console.log("Error loading tagged posts!", err);
+                hasFetchedInitialRef.current = false;
             } finally {
                 setLoadingTagged(false);
             }
@@ -44,7 +53,6 @@ function TaggedPosts({ username, userProfileDataURL, contentVisibleTab }) {
     useEffect(() => {
 
         if (taggedPage === 0) return;
-        if (contentVisibleTab !== "TaggedVisibleTab") return;
         if (!userProfileDataURL?.searchPrivateShow) return;
 
         const fetchMore = async () => {
@@ -62,13 +70,14 @@ function TaggedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                 }
             } catch (err) {
                 console.log("Error loading more tagged posts!", err);
+                setTaggedPage((prev) => prev - 1);
             } finally {
                 setLoadingTagged(false);
             }
         };
 
         fetchMore();
-    }, [username, taggedPage, hasMoreTagged, contentVisibleTab, userProfileDataURL]);
+    }, [username, taggedPage, hasMoreTagged, userProfileDataURL]);
 
     useInfiniteScroll({
         loading: loadingTagged,
