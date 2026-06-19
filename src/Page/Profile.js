@@ -419,6 +419,7 @@ function Profile() {
                   {contentVisibleTab === "TaggedVisibleTab" && (
                     <TaggedPosts
                       username={username}
+                      userProfileDataURL={userProfileDataURL}
                       contentVisibleTab={contentVisibleTab}
                     />
                   )}

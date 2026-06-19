@@ -35,6 +35,8 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         setPostPage(0);
         setHasMorePosts(true);
 
+        if (!userProfileDataURL?.searchPrivateShow) return;
+
         const fetchInitial = async () => {
             setLoadingPosts(true);
             try {
@@ -49,13 +51,15 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         };
 
         fetchInitial();
-    }, [username]);
+    }, [username, userProfileDataURL]);
 
     // Pagination
     useEffect(() => {
         if (postPage === 0) return;
+        if (!userProfileDataURL?.searchPrivateShow) return;
 
         const fetchMore = async () => {
+            if (!hasMorePosts) return;
             setLoadingPosts(true);
             try {
                 const data = await searchUserPostsAPI(username, postPage);
@@ -75,7 +79,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         };
 
         fetchMore();
-    }, [username, postPage]);
+    }, [username, postPage, hasMorePosts, userProfileDataURL]);
 
     // Infinite Scroll
     useInfiniteScroll({

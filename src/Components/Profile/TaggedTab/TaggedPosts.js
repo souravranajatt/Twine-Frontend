@@ -6,7 +6,7 @@ import "./TaggedPosts.css";
 import TaggedSkeleton from "../SkeletonBody/TaggedSkeleton.js";
 import PostBoxModal from "../../PostModal/PostBoxModal.js";
 
-function TaggedPosts({ username, contentVisibleTab }) {
+function TaggedPosts({ username, userProfileDataURL, contentVisibleTab }) {
 
     const [taggedPosts, setTaggedPosts] = useState([]);
     const [activePostForModal, setActivePostForModal] = useState(null);
@@ -20,6 +20,8 @@ function TaggedPosts({ username, contentVisibleTab }) {
         setTaggedPosts([]);
         setTaggedPage(0);
         setHasMoreTagged(true);
+
+        if (!userProfileDataURL?.searchPrivateShow) return;
 
         const fetchInitial = async () => {
             setLoadingTagged(true);
@@ -35,13 +37,16 @@ function TaggedPosts({ username, contentVisibleTab }) {
         };
 
         fetchInitial();
-    }, [username]);
+    }, [username, userProfileDataURL]);
 
     // Pagination
     useEffect(() => {
+
         if (taggedPage === 0) return;
+        if (!userProfileDataURL?.searchPrivateShow) return;
 
         const fetchMore = async () => {
+            if (!hasMoreTagged) return;
             setLoadingTagged(true);
             try {
                 const data = await searchUserTaggedPostsAPI(username, taggedPage);
@@ -61,7 +66,7 @@ function TaggedPosts({ username, contentVisibleTab }) {
         };
 
         fetchMore();
-    }, [username, taggedPage]);
+    }, [username, taggedPage, hasMoreTagged, userProfileDataURL]);
 
     useInfiniteScroll({
         loading: loadingTagged,

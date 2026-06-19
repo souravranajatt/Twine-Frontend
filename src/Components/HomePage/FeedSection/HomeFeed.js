@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Loader2, BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import "./HomeFeed.css";
@@ -18,6 +18,7 @@ function HomeFeed() {
     const [page, setPage] = useState(0);
     const [loadingPosts, setLoadingPosts] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const isFetchingRef = useRef(false);
     const [expandedCaptions, setExpandedCaptions] = useState({});
 
     // post comment state
@@ -48,10 +49,11 @@ function HomeFeed() {
                 console.log("Error loading feed!", err);
             } finally {
                 setLoadingPosts(false);
+                isFetchingRef.current = false;
             }
         };
         fetchFeed();
-    }, [page]);
+    }, [page, hasMore]);
 
     // Infinite Scroll
     useEffect(() => {
@@ -60,14 +62,15 @@ function HomeFeed() {
                 window.innerHeight + document.documentElement.scrollTop + 100 >=
                 document.documentElement.scrollHeight
             ) {
-                if (!loadingPosts && hasMore) {
+                if (!isFetchingRef.current && hasMore) {
+                    isFetchingRef.current = true;
                     setPage(prev => prev + 1);
                 }
             }
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [loadingPosts, hasMore]);
+    }, [hasMore]);
 
     // Handle Like/Unlike Button
     const handleLike = async (postId) => {

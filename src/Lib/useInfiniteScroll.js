@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 /**
  * useInfiniteScroll — Reusable infinite scroll hook.
@@ -13,6 +13,13 @@ import { useEffect } from "react";
  * @param {string}   tabName    - Tab this scroll belongs to
  */
 function useInfiniteScroll({ loading, hasMore, onLoadMore, activeTab, tabName }) {
+
+  const isFetchingRef = useRef(false);
+
+  useEffect(() => {
+    isFetchingRef.current = loading;
+  }, [loading]);
+
   useEffect(() => {
     if (activeTab !== tabName) return;
 
@@ -21,7 +28,8 @@ function useInfiniteScroll({ loading, hasMore, onLoadMore, activeTab, tabName })
         window.innerHeight + document.documentElement.scrollTop + 100 >=
         document.documentElement.scrollHeight
       ) {
-        if (!loading && hasMore) {
+        if (!isFetchingRef.current && hasMore) {
+          isFetchingRef.current = true;
           onLoadMore();
         }
       }
@@ -29,7 +37,7 @@ function useInfiniteScroll({ loading, hasMore, onLoadMore, activeTab, tabName })
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, hasMore, activeTab, tabName, onLoadMore]);
+  }, [hasMore, activeTab, tabName, onLoadMore]);
 }
 
 export default useInfiniteScroll;

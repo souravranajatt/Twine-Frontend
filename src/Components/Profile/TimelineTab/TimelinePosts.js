@@ -10,7 +10,6 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
 
     const [timelinePosts, setTimelinePosts] = useState([]);
     const [activePostForModal, setActivePostForModal] = useState(null);
-
     const [timelinePage, setTimelinePage] = useState(0);
     const [loadingTimeline, setLoadingTimeline] = useState(false);
     const [hasMoreTimeline, setHasMoreTimeline] = useState(true);
@@ -43,8 +42,11 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
     // Pagination
     useEffect(() => {
         if (timelinePage === 0) return;
+        if (contentVisibleTab !== "TimeLineVisibleTab") return;
+        if (!userProfileDataURL?.searchPrivateShow || !userProfileDataURL?.searchUserTimeline) return;
 
         const fetchMore = async () => {
+            if (hasMoreTimeline === false) return;
             setLoadingTimeline(true);
             try {
                 const data = await searchUserTimelinePostsAPI(username, timelinePage);
@@ -64,7 +66,7 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
         };
 
         fetchMore();
-    }, [username, timelinePage]);
+    }, [username, timelinePage, contentVisibleTab, userProfileDataURL]);
 
     useInfiniteScroll({
         loading: loadingTimeline,
