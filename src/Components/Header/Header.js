@@ -9,7 +9,6 @@ function Header() {
   const [searchGo, setSearch] = useState("");
   const [profileTabNav, setProfileTabNav] = useState(false);
   const [notifyTabNav, setNotifyTabNav] = useState(false);
-  const isText = searchGo.length > 0;
   const navigate = useNavigate();
 
   // Refs to detect outside click

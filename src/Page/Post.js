@@ -219,10 +219,28 @@ function Post() {
 
             <main className="post-page-main">
 
-                {/* Loading */}
+                {/* Loading Skeleton */}
                 {loading && (
-                    <div className="post-page-loader">
-                        <Loader2 size={30} className="post-page-spinner" />
+                    <div className="post-page-card">
+                        <div className="post-page-header">
+                            <div className="post-page-avatar-wrapper skeleton-shimmer" style={{ border: 'none' }} />
+                            <div className="post-page-header-info" style={{ width: '100%', gap: '6px', paddingTop: '2px' }}>
+                                <div className="skeleton-shimmer" style={{ width: '120px', height: '14px', borderRadius: '4px' }} />
+                                <div className="skeleton-shimmer" style={{ width: '80px', height: '12px', borderRadius: '4px' }} />
+                            </div>
+                        </div>
+                        <div className="post-page-media-wrapper">
+                            <div className="post-page-media-box skeleton-shimmer" style={{ paddingBottom: '100%', borderRadius: '8px', border: 'none' }} />
+                        </div>
+                        <div className="post-page-actions" style={{ padding: '14px 16px', gap: '12px' }}>
+                            <div className="post-page-action-row" style={{ gap: '16px' }}>
+                                <div className="skeleton-shimmer" style={{ width: '26px', height: '26px', borderRadius: '50%' }} />
+                                <div className="skeleton-shimmer" style={{ width: '26px', height: '26px', borderRadius: '50%' }} />
+                                <div className="skeleton-shimmer" style={{ width: '26px', height: '26px', borderRadius: '50%', marginLeft: 'auto' }} />
+                            </div>
+                            <div className="skeleton-shimmer" style={{ width: '60%', height: '14px', borderRadius: '4px', marginTop: '6px' }} />
+                            <div className="skeleton-shimmer" style={{ width: '85%', height: '14px', borderRadius: '4px' }} />
+                        </div>
                     </div>
                 )}
 
@@ -425,10 +443,10 @@ function Post() {
                                     <div className="post-page-comments-list">
                                         {[...Array(4)].map((_, idx) => (
                                             <div key={idx} className="post-page-comment-skeleton">
-                                                <div className="comment-skeleton-avatar" />
+                                                <div className="comment-skeleton-avatar skeleton-shimmer" />
                                                 <div className="comment-skeleton-info">
-                                                    <div className="comment-skeleton-name" />
-                                                    <div className="comment-skeleton-text" />
+                                                    <div className="comment-skeleton-name skeleton-shimmer" />
+                                                    <div className="comment-skeleton-text skeleton-shimmer" />
                                                 </div>
                                             </div>
                                         ))}

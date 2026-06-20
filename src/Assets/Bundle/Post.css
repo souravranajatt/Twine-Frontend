@@ -550,9 +550,6 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-    background-size: 200% 100%;
-    animation: postShimmer 1.5s infinite linear;
     flex-shrink: 0;
 }
 
@@ -568,15 +565,15 @@
     width: 30%;
     height: 12px;
     border-radius: 4px;
-    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-    background-size: 200% 100%;
-    animation: postShimmer 1.5s infinite linear;
 }
 
 .comment-skeleton-text {
     width: 85%;
     height: 12px;
     border-radius: 4px;
+}
+
+.skeleton-shimmer {
     background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
     background-size: 200% 100%;
     animation: postShimmer 1.5s infinite linear;
