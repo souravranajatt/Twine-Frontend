@@ -1,0 +1,93 @@
+@keyframes iosMenuAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.post-dropdown-main {
+    position: absolute;
+    top: 35px;
+    right: 0px;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 14px;
+    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    animation: iosMenuAppear 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    transform-origin: top right;
+    overflow: hidden;
+}
+
+.post-dropdown-action {
+    display: block;
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+    text-align: left;
+    background-color: transparent;
+    transition: background-color 0.1s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1c1c1e;
+    font-weight: 500;
+}
+
+.post-dropdown-action:last-child {
+    border-bottom: none;
+}
+
+.post-dropdown-action:active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+@media (hover: hover) {
+    .post-dropdown-action:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+}
+
+@keyframes iosCenterAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .post-dropdown-main {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        right: auto;
+        bottom: auto;
+        width: 85vw;
+        max-width: 320px;
+        z-index: 1000;
+        animation: iosCenterAppear 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        transform-origin: center center;
+        box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.25), 0 0 0 100vw rgba(0, 0, 0, 0.4);
+    }
+
+    .post-dropdown-action {
+        padding: 16px 20px;
+        text-align: center;
+    }
+}

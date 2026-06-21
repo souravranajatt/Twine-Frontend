@@ -6,29 +6,54 @@ import formatPostTime from "../../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
 import {
     Heart, Forward, MessageCircle,
-    BadgeCheck, Aperture, Loader2, SendHorizontal
+    BadgeCheck, Aperture, Loader2, SendHorizontal, MoreHorizontal
 } from "lucide-react";
 import "./FeedPosts.css";
 import PostsSkeleton from "../SkeletonBody/PostsSkeleton.js";
 import PostBoxModal from "../../PostModal/PostBoxModal.js";
+import PostDropDown from "../../PostModal/PostDropDown.js";
 
 function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
 
     const [profilePosts, setProfilePosts] = useState([]);
-    const [activePostForModal, setActivePostForModal] = useState(null);
     const [postPage, setPostPage] = useState(0);
     const [loadingPosts, setLoadingPosts] = useState(false);
     const [hasMorePosts, setHasMorePosts] = useState(true);
     const hasFetchedInitialRef = useRef(false);
+
+    // For Post Modal
+    const [activePostForModal, setActivePostForModal] = useState(null);
+
+    // caption state
     const [expandedCaptions, setExpandedCaptions] = useState({});
 
     // post comment state
     const [commentTexts, setCommentTexts] = useState({});
     const [submittingComments, setSubmittingComments] = useState({});
 
+    // Dropdown state
+    const [openDropdownId, setOpenDropdownId] = useState(null);
+
     const toggleCaption = (postId) => {
         setExpandedCaptions((prev) => ({ ...prev, [postId]: !prev[postId] }));
     };
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.postDropdownWrapper')) {
+                setOpenDropdownId(null);
+            }
+        };
+
+        if (openDropdownId) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [openDropdownId]);
 
     // Reset on User Change 
     useEffect(() => {
@@ -36,6 +61,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         setPostPage(0);
         setHasMorePosts(true);
         hasFetchedInitialRef.current = false;
+        setOpenDropdownId(null);
     }, [username]);
 
     // Initial Load
@@ -212,6 +238,26 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                                 <span className="profilePostTimeText">• {formatPostTime(post.fetchUploadAt)}</span>
                                             )}
                                         </div>
+                                    </div>
+
+                                    {/* Dropdown Menu */}
+                                    <div className="postDropdownWrapper" style={{ position: "relative", marginLeft: "auto", display: "flex", alignItems: "center" }}>
+                                        <button
+                                            type="button"
+                                            onClick={() => setOpenDropdownId(prev => prev === post.fetchPostId ? null : post.fetchPostId)}
+                                            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '5px', display: 'flex' }}
+                                        >
+                                            <MoreHorizontal size={20} color="#111010" />
+                                        </button>
+
+                                        {openDropdownId === post.fetchPostId && (
+                                            <PostDropDown
+                                                isOpen={openDropdownId === post.fetchPostId}
+                                                onClose={() => setOpenDropdownId(null)}
+                                                isOwnPost={post.ownPost}
+                                                Post={post}
+                                            />
+                                        )}
                                     </div>
                                 </div>
 
