@@ -22,8 +22,10 @@ function HomeFeed() {
     const [expandedCaptions, setExpandedCaptions] = useState({});
 
     // post comment state
-    const [commentTexts, setCommentTexts] = useState({});       // { postId: "text" }
-    const [submittingComments, setSubmittingComments] = useState({}); // { postId: true/false }
+    const [commentTexts, setCommentTexts] = useState({});
+    const [submittingComments, setSubmittingComments] = useState({});  // UI ke liye (spinner/disabled)
+    const submittingCommentsRef = useRef({});                          // synchronous guard (double submit rokne ke liye)
+    const likingPostsRef = useRef({});
 
     const toggleCaption = (postId) => {
         setExpandedCaptions(prev => ({ ...prev, [postId]: !prev[postId] }));
@@ -74,11 +76,13 @@ function HomeFeed() {
 
     // Handle Like/Unlike Button
     const handleLike = async (postId) => {
+        if (likingPostsRef.current[postId]) return;
+        likingPostsRef.current[postId] = true;
 
         const post = posts.find(p => p.fetchPostId === postId);
         const isLiked = post.likedByCurrentUser;
 
-        // Update UI first
+        // Optimistic UI update
         setPosts(prev => prev.map(p =>
             p.fetchPostId === postId
                 ? {
@@ -88,7 +92,6 @@ function HomeFeed() {
                 }
                 : p
         ));
-
         try {
             if (isLiked) {
                 await dislikePostAPI(postId);
@@ -96,8 +99,8 @@ function HomeFeed() {
                 await likePostAPI(postId);
             }
         } catch (error) {
-            console.log("Error!", error);
-            // Revert on API error 
+            console.log("Like error:", error);
+            // Rollback on failure
             setPosts(prev => prev.map(p =>
                 p.fetchPostId === postId
                     ? {
@@ -107,6 +110,8 @@ function HomeFeed() {
                     }
                     : p
             ));
+        } finally {
+            likingPostsRef.current[postId] = false;
         }
     };
 
@@ -115,7 +120,8 @@ function HomeFeed() {
         e.preventDefault();
 
         const text = (commentTexts[postId] || "").trim();
-        if (!text || submittingComments[postId]) return;
+        if (!text || submittingCommentsRef.current[postId]) return;
+        submittingCommentsRef.current[postId] = true;
 
         setSubmittingComments(prev => ({ ...prev, [postId]: true }));
         setCommentTexts(prev => ({ ...prev, [postId]: "" }));
@@ -139,6 +145,7 @@ function HomeFeed() {
             ));
             setCommentTexts(prev => ({ ...prev, [postId]: text }));
         } finally {
+            submittingCommentsRef.current[postId] = false;
             setSubmittingComments(prev => ({ ...prev, [postId]: false }));
         }
     };

@@ -25,7 +25,6 @@ function Post() {
     const [loadingComments, setLoadingComments] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [submittingComment, setSubmittingComment] = useState(false);
-    const [isLiking, setIsLiking] = useState(false);
     const [expandedCaption, setExpandedCaption] = useState(false);
     const [loggedUser, setLoggedUser] = useState(null);
 
@@ -33,6 +32,8 @@ function Post() {
     const [hasMoreComments, setHasMoreComments] = useState(true);
     const isFetchingCommentsRef = useRef(false);
     const commentsEndRef = useRef(null);
+    const likingRef = useRef(false);
+    const commentingRef = useRef(false);
 
     // Fetch logged user
     useEffect(() => {
@@ -143,7 +144,7 @@ function Post() {
 
     // Like handler
     const handleLike = async () => {
-        if (isLiking || !post) return;
+        if (!post || likingRef.current) return;
 
         const isCurrentlyLiked = post.likedByCurrentUser;
         setPost(prev => ({
@@ -154,7 +155,7 @@ function Post() {
                 : prev.likeCount + 1
         }));
 
-        setIsLiking(true);
+        likingRef.current = true;
         try {
             if (isCurrentlyLiked) {
                 await dislikePostAPI(postId);
@@ -170,7 +171,7 @@ function Post() {
                 likeCount: post.likeCount
             }));
         } finally {
-            setIsLiking(false);
+            likingRef.current = false;
         }
     };
 
@@ -178,8 +179,9 @@ function Post() {
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         const text = commentText.trim();
-        if (!text || submittingComment) return;
+        if (!text || commentingRef.current) return;
 
+        commentingRef.current = true;
         setSubmittingComment(true);
         setCommentText("");
 
@@ -210,6 +212,7 @@ function Post() {
             setCommentText(text);
         } finally {
             setSubmittingComment(false);
+            commentingRef.current = false;
         }
     };
 
@@ -378,7 +381,6 @@ function Post() {
                                     type="button"
                                     className="post-page-action-btn"
                                     onClick={handleLike}
-                                    disabled={isLiking}
                                 >
                                     <Heart
                                         size={23}
@@ -436,7 +438,7 @@ function Post() {
                         </div>
 
                         {/* Comments Section */}
-                        {post.commentEnable && (
+                        {post.commentEnable ? (
                             <div className="post-page-comments-section">
 
                                 {loadingComments && comments.length === 0 ? (
@@ -496,7 +498,11 @@ function Post() {
                                     </div>
                                 )}
                             </div>
-                        )}
+                        ) : (<>
+                            <div style={{ padding: "20px", textAlign: "center" }}>
+                                <p style={{ color: "#888", fontSize: "13px" }}><i>Comments are disabled for this post</i></p>
+                            </div>
+                        </>)}
 
                     </div>
                 )}

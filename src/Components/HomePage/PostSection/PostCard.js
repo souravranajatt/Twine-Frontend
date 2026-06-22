@@ -15,6 +15,8 @@ function PostCard({ loggedUserData }) {
     const [success, setSuccess] = useState("");
     const [timeLineUserPost, setTimeLineUserPost] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState("idle"); // "idle" | "uploading" | "done" | "error"
+    const uploadingRef = useRef(false);   // synchronous guard (double submit rokne ke liye)
     const MAX_SIZE = 500 * 1024 * 1024;
     const fileInputRef = useRef(null);
 
@@ -40,25 +42,54 @@ function PostCard({ loggedUserData }) {
 
     const postLive = async (e) => {
         e.preventDefault();
+
+        // 1. Guard: double submit prevent
+        if (uploadingRef.current) return;
+
+        // 2. Validations
         if (!file) { setError("Please select an image or video!"); return; }
         if (captionPost.length > 1000) { setError("Caption too long! (1000 limit)"); return; }
         if (file.size > MAX_SIZE) { setError("File too large! (500 MB limit)"); return; }
 
+        // 3. Lock + Reset UI state
+        uploadingRef.current = true;
+        setIsUploading(true);
+        setUploadStatus("uploading");
+        setError("");
+        setSuccess("");
+
+        // 4. Build FormData
         const formData = new FormData();
         formData.append("postCaption", captionPost);
         formData.append("file", file);
         if (timeLineUserPost === 1) formData.append("postTimelineUser", timeLineUserPost);
 
+        // 5. API Call
         try {
-            setIsUploading(true); setError(""); setSuccess("");
             await uploadPostAPI(formData);
-            setFile(null); setPreview(null); setCaption("");
-            setSuccess("Post Uploaded!");
+
+            // 6. Success: reset form + show success
+            setFile(null);
+            setPreview(null);
+            setCaption("");
             setTimeLineUserPost(0);
-            setTimeout(() => setSuccess(""), 5000);
+            setUploadStatus("done");
+            setSuccess("Post Uploaded!");
+            setTimeout(() => {
+                setSuccess("");
+                setUploadStatus("idle");
+            }, 4000);
         } catch (err) {
-            setError(err.message || err);
+            // 7. Error: extract message safely
+            const msg =
+                typeof err === "string" ? err :
+                    err?.message || err?.error || "Upload failed! Try again.";
+            setError(msg);
+            setUploadStatus("error");
+            setTimeout(() => setUploadStatus("idle"), 3000);
         } finally {
+            // 8. Unlock
+            uploadingRef.current = false;
             setIsUploading(false);
         }
     };
@@ -101,7 +132,7 @@ function PostCard({ loggedUserData }) {
                                     <Image size={21} className="iconPost" />
                                 </button>
                             </div>
-                            {loggedUserData?.uTimeline && (
+                            {loggedUserData.uTimeline && (
                                 <div className="postIconBtn-Design">
                                     <button type="button" className="postBtnAsIconToogle-Box"
                                         onClick={() => setTimeLineUserPost(p => p === 0 ? 1 : 0)}>
@@ -135,6 +166,14 @@ function PostCard({ loggedUserData }) {
 
                         {error && <p className="errorPost">{error}</p>}
                         {success && <p className="successPost">{success}</p>}
+
+                        {uploadStatus !== "idle" && (
+                            <div className="uploadProgressBar-wrapper">
+                                <div className={`uploadProgressBar-shimmer ${uploadStatus === "done" ? "uploadProgressBar--done" :
+                                    uploadStatus === "error" ? "uploadProgressBar--error" : ""
+                                    }`} />
+                            </div>
+                        )}
 
                         <div className="createPost-fields">
                             <textarea className="captionPost" value={captionPost}

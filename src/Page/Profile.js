@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   HeartPlus, UserLock, UserRoundPlus, UserRoundCheck,
   LayoutGrid, History, SquareUser, MapPin, BadgeCheck,
@@ -73,6 +73,10 @@ function Profile() {
   const [isUnblocking, setIsUnblocking] = useState(false);
   const [isSecretLikeSend, setIsSecretLikeSend] = useState(false);
 
+  const followActionPendingRef = useRef(false);
+  const secretActionPendingRef = useRef(false);
+  const unblockActionPendingRef = useRef(false);
+
   useEffect(() => {
     if (userProfileDataURL !== null) {
       setAccountPrivateCheckStatus(userProfileDataURL.searchPrivate);
@@ -93,9 +97,12 @@ function Profile() {
   // Handle Follow API Call
   const handleFollow = async (e) => {
     e.preventDefault();
-    if (!userProfileDataURL) return;
+    if (!userProfileDataURL || followActionPendingRef.current) return;
+
+    followActionPendingRef.current = true;
+    setIsFollowing(true);
+
     try {
-      setIsFollowing(true);
       await followUserAPI(userProfileDataURL.searchUserId);
 
       setUserProfileDataURL(prev => {
@@ -122,15 +129,19 @@ function Profile() {
       console.log("Error occurred!");
     } finally {
       setIsFollowing(false);
+      followActionPendingRef.current = false;
     }
   };
 
   // Handle Unfollow API Call
   const handleUnfollow = async (e) => {
     e.preventDefault();
-    if (!userProfileDataURL) return;
+    if (!userProfileDataURL || followActionPendingRef.current) return;
+
+    followActionPendingRef.current = true;
+    setIsFollowing(true);
+
     try {
-      setIsFollowing(true);
       await unfollowUserAPI(userProfileDataURL.searchUserId);
 
       setUserProfileDataURL(prev => {
@@ -158,15 +169,19 @@ function Profile() {
       console.log("Error occurred!");
     } finally {
       setIsFollowing(false);
+      followActionPendingRef.current = false;
     }
   };
 
   // Handle Follow Request Cancel API Call 
   const handleCancelRequest = async (e) => {
     e.preventDefault();
-    if (!userProfileDataURL) return;
+    if (!userProfileDataURL || followActionPendingRef.current) return;
+
+    followActionPendingRef.current = true;
+    setIsFollowing(true);
+
     try {
-      setIsFollowing(true);
       await cancelFollowRequestAPI(userProfileDataURL.searchUserId);
 
       setUserProfileDataURL(prev => ({
@@ -180,15 +195,19 @@ function Profile() {
       console.log("Error occurred!");
     } finally {
       setIsFollowing(false);
+      followActionPendingRef.current = false;
     }
   };
 
   // Send Secret Crush API
   const handleSendSecretLike = async (e) => {
     e.preventDefault();
-    if (!userProfileDataURL) return;
+    if (!userProfileDataURL || secretActionPendingRef.current) return;
+
+    secretActionPendingRef.current = true;
+    setIsSecretLikeSend(true);
+
     try {
-      setIsSecretLikeSend(true);
       await sendSecretCrushAPI(userProfileDataURL.searchUserId);
       setUserProfileDataURL(prev => ({
         ...prev,
@@ -200,14 +219,18 @@ function Profile() {
     }
     finally {
       setIsSecretLikeSend(false);
+      secretActionPendingRef.current = false;
     }
   };
 
   // Handle Unblock API
   const handleUnblock = async () => {
-    if (!userProfileDataURL) return;
+    if (!userProfileDataURL || unblockActionPendingRef.current) return;
+
+    unblockActionPendingRef.current = true;
+    setIsUnblocking(true);
+
     try {
-      setIsUnblocking(true);
       await unblockUserAPI(userProfileDataURL.searchUserId);
       setUserProfileDataURL((prev) => ({
         ...prev,
@@ -217,6 +240,7 @@ function Profile() {
       console.log("Error occured!");
     } finally {
       setIsUnblocking(false);
+      unblockActionPendingRef.current = false;
     }
   };
 

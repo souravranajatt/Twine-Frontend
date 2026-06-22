@@ -174,6 +174,51 @@
     cursor: not-allowed;
 }
 
+/* Upload Progress Bar */
+.uploadProgressBar-wrapper {
+    width: 100%;
+    height: 4px;
+    background-color: #fce4ec;
+    border-radius: 99px;
+    overflow: hidden;
+    margin: 6px 0;
+}
+
+.uploadProgressBar-shimmer {
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #ff3b6c, transparent);
+    border-radius: 99px;
+    animation: shimmerSlide 1.2s ease-in-out infinite;
+}
+
+@keyframes shimmerSlide {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(320%);
+    }
+}
+
+/* Progress bar: success state (full green) */
+.uploadProgressBar--done {
+    width: 100%;
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+    animation: none;
+    transition: width 0.4s ease;
+}
+
+/* Progress bar: error state (full red) */
+.uploadProgressBar--error {
+    width: 100%;
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+    animation: none;
+    transition: width 0.4s ease;
+}
+
+
 /* Responsive */
 @media (max-width: 480px) {
     .slide-bar-wrapper {

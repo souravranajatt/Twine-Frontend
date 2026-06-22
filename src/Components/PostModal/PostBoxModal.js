@@ -17,13 +17,14 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
     const [commentPage, setCommentPage] = useState(0);
     const [commentText, setCommentText] = useState("");
     const [submittingComment, setSubmittingComment] = useState(false);
-    const [isLiking, setIsLiking] = useState(false);
     const [loggedUser, setLoggedUser] = useState(null);
     const [expandedCaption, setExpandedCaption] = useState(false);
 
     const originalUrlRef = useRef("");
     const commentsEndRef = useRef(null);
     const isFetchingRef = useRef(false);
+    const likingRef = useRef(false);
+    const commentingRef = useRef(false);
 
     // Fetch logged user data
     useEffect(() => {
@@ -136,7 +137,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
 
     // Like/Dislike action inside Modal
     const handleLikeClick = async () => {
-        if (isLiking) return;
+        if (likingRef.current) return;
 
         const isCurrentlyLiked = localPost.likedByCurrentUser;
         const updatedPost = {
@@ -151,7 +152,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
             onPostUpdate(updatedPost);
         }
 
-        setIsLiking(true);
+        likingRef.current = true;
         try {
             if (isCurrentlyLiked) {
                 await dislikePostAPI(localPost.fetchPostId);
@@ -171,7 +172,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                 onPostUpdate(rolledBackPost);
             }
         } finally {
-            setIsLiking(false);
+            likingRef.current = false;
         }
     };
 
@@ -179,8 +180,9 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         const text = commentText.trim();
-        if (!text || submittingComment) return;
+        if (!text || commentingRef.current) return;
 
+        commentingRef.current = true;
         setSubmittingComment(true);
         setCommentText("");
 
@@ -227,6 +229,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
             setCommentText(text); // Restore typed text
         } finally {
             setSubmittingComment(false);
+            commentingRef.current = false;
         }
     };
 
@@ -333,67 +336,73 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                     </div>
 
                     {/* Scrollable comments panel */}
-                    <div className="post-modal-comments-scrollview" onScroll={handleScroll}>
+                    {localPost.commentEnable ? (
+                        <div className="post-modal-comments-scrollview" onScroll={handleScroll}>
 
-                        {/* Comments List */}
-                        {loadingComments && comments.length === 0 ? (
-                            <div className="post-modal-comments-list">
-                                {[...Array(4)].map((_, idx) => (
-                                    <div key={idx} className="post-modal-comment-skeleton">
-                                        <div className="comment-skeleton-avatar" />
-                                        <div className="comment-skeleton-info">
-                                            <div className="comment-skeleton-name" />
-                                            <div className="comment-skeleton-text" />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : comments.length === 0 ? (
-                            <div className="post-modal-empty-comments">
-                                <p>No comments yet. Start the conversation!</p>
-                            </div>
-                        ) : (
-                            <div className="post-modal-comments-list">
-                                {comments.map((comment) => (
-                                    <div key={comment.commentId} className="post-modal-comment-row">
-                                        <div className="post-modal-comment-avatar-div">
-                                            <img
-                                                src={comment.profileImage && comment.profileImage !== "null"
-                                                    ? comment.profileImage
-                                                    : DEFAULT_IMAGE}
-                                                className="post-modal-comment-avatar-img"
-                                                alt={comment.username}
-                                            />
-                                        </div>
-                                        <div className="post-modal-comment-body">
-                                            <div className="post-modal-comment-meta">
-                                                <span className="post-modal-comment-username">
-                                                    {comment.username}
-                                                </span>
-                                                {comment.fetchVerified && (
-                                                    <BadgeCheck size={14} className="post-modal-verify-badge inline-badge" />
-                                                )}
-                                                <span className="post-modal-comment-time">
-                                                    {formatPostTime(comment.createdAt)}
-                                                </span>
+                            {/* Comments List */}
+                            {loadingComments && comments.length === 0 ? (
+                                <div className="post-modal-comments-list">
+                                    {[...Array(4)].map((_, idx) => (
+                                        <div key={idx} className="post-modal-comment-skeleton">
+                                            <div className="comment-skeleton-avatar" />
+                                            <div className="comment-skeleton-info">
+                                                <div className="comment-skeleton-name" />
+                                                <div className="comment-skeleton-text" />
                                             </div>
-                                            <p className="post-modal-comment-text">
-                                                {comment.commentText}
-                                            </p>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
+                            ) : comments.length === 0 ? (
+                                <div className="post-modal-empty-comments">
+                                    <p>No comments yet. Start the conversation!</p>
+                                </div>
+                            ) : (
+                                <div className="post-modal-comments-list">
+                                    {comments.map((comment) => (
+                                        <div key={comment.commentId} className="post-modal-comment-row">
+                                            <div className="post-modal-comment-avatar-div">
+                                                <img
+                                                    src={comment.profileImage && comment.profileImage !== "null"
+                                                        ? comment.profileImage
+                                                        : DEFAULT_IMAGE}
+                                                    className="post-modal-comment-avatar-img"
+                                                    alt={comment.username}
+                                                />
+                                            </div>
+                                            <div className="post-modal-comment-body">
+                                                <div className="post-modal-comment-meta">
+                                                    <span className="post-modal-comment-username">
+                                                        {comment.username}
+                                                    </span>
+                                                    {comment.fetchVerified && (
+                                                        <BadgeCheck size={14} className="post-modal-verify-badge inline-badge" />
+                                                    )}
+                                                    <span className="post-modal-comment-time">
+                                                        {formatPostTime(comment.createdAt)}
+                                                    </span>
+                                                </div>
+                                                <p className="post-modal-comment-text">
+                                                    {comment.commentText}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ))}
 
-                                {/* Pagination Loader */}
-                                {loadingComments && comments.length > 0 && (
-                                    <div className="post-modal-spinner-container" style={{ padding: "10px 0" }}>
-                                        <Loader2 size={20} className="spinner-icon" />
-                                    </div>
-                                )}
-                                <div ref={commentsEndRef} />
-                            </div>
-                        )}
-                    </div>
+                                    {/* Pagination Loader */}
+                                    {loadingComments && comments.length > 0 && (
+                                        <div className="post-modal-spinner-container" style={{ padding: "10px 0" }}>
+                                            <Loader2 size={20} className="spinner-icon" />
+                                        </div>
+                                    )}
+                                    <div ref={commentsEndRef} />
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div style={{ padding: "20px", textAlign: "center" }}>
+                            <p style={{ color: "#888", fontSize: "13px" }}><i>Comments are disabled for this post</i></p>
+                        </div>
+                    )}
 
                     {/* Action indicators (Like, comment count, share, save) */}
                     <div className="post-modal-actions-container">
@@ -402,7 +411,6 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                                 type="button"
                                 className={`post-modal-action-btn ${localPost.likedByCurrentUser ? "liked" : ""}`}
                                 onClick={handleLikeClick}
-                                disabled={isLiking}
                             >
                                 <Heart
                                     size={22}

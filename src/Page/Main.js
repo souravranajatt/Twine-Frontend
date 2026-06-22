@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../Assets/Bundle/Main.css";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
@@ -9,8 +9,12 @@ import { loggedUserDataAPI } from "../Utils/homePageAPI.js";
 function Main() {
 
   const [loggedUserData, setLoggedUserData] = useState(null);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     const fetchLoggedData = async () => {
       try {
         const res = await loggedUserDataAPI();

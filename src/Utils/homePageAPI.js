@@ -18,6 +18,6 @@ export const loggedUserDataAPI = async () => {
         const response = await api.get("/profile/data/loggeduser");
         return response.data;
     } catch (error) {
-        throw error.response.data || "Something went wrong!";
+        throw error.response?.data || "Something went wrong!";
     }
 };

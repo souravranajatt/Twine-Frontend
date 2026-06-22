@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { MapPin, BriefcaseBusiness, CalendarDays, Link2, BadgeCheck, Copy, UserX, Flag, Venus, Mars, Loader2 } from "lucide-react";
 import { blockUserAPI } from "../../../Utils/userProfileAPI.js";
 import "./PopupModal.css";
@@ -6,14 +6,19 @@ import "./PopupModal.css";
 function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, username }) {
 
     const [isBlocking, setIsBlocking] = useState(false);
+    const blockActionPendingRef = useRef(false);
 
     if (!isOpen) return null;
 
 
     // Handle Block API
     const handleBlock = async () => {
+        if (blockActionPendingRef.current) return;
+
+        blockActionPendingRef.current = true;
+        setIsBlocking(true);
+
         try {
-            setIsBlocking(true);
             await blockUserAPI(userProfileDataURL.searchUserId);
 
             // Update Local State 
@@ -22,12 +27,14 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
                 blockedStatus: true
             }));
 
-            onClose();
+
         } catch (error) {
             console.log("Error occured!");
         } finally {
             setIsBlocking(false);
+            blockActionPendingRef.current = false;
         }
+        onClose();
     };
 
     // Handle Copy Link API

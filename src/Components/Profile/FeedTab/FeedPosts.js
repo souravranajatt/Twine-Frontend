@@ -31,6 +31,10 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
     const [commentTexts, setCommentTexts] = useState({});
     const [submittingComments, setSubmittingComments] = useState({});
 
+    // Prevent double like API calls per post
+    const likingPostsRef = useRef({});
+    const submittingCommentsRef = useRef({});
+
     // Dropdown state
     const [openDropdownId, setOpenDropdownId] = useState(null);
 
@@ -128,12 +132,14 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         tabName: "FeedVisibleTab",
     });
 
-    // Handle Like/Dislike Button 
+    // Handle Like/Dislike Button
     const handleLike = async (postId) => {
+        if (likingPostsRef.current[postId]) return;
+
         const post = profilePosts.find(p => p.fetchPostId === postId);
         const isLiked = post.likedByCurrentUser;
 
-        // update UI first
+        // Optimistic UI update
         setProfilePosts(prev => prev.map(p =>
             p.fetchPostId === postId
                 ? {
@@ -144,6 +150,8 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                 : p
         ));
 
+        likingPostsRef.current[postId] = true;
+
         try {
             if (isLiked) {
                 await dislikePostAPI(postId);
@@ -151,8 +159,8 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                 await likePostAPI(postId);
             }
         } catch (error) {
-            console.log("Error!", error);
-            // Rollback
+            console.log("Like error:", error);
+            // Rollback on failure
             setProfilePosts(prev => prev.map(p =>
                 p.fetchPostId === postId
                     ? {
@@ -162,6 +170,8 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                     }
                     : p
             ));
+        } finally {
+            likingPostsRef.current[postId] = false;
         }
     };
 
@@ -170,8 +180,9 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         e.preventDefault();
 
         const text = (commentTexts[postId] || "").trim();
-        if (!text || submittingComments[postId]) return;
+        if (!text || submittingCommentsRef.current[postId]) return;
 
+        submittingCommentsRef.current[postId] = true;
         setSubmittingComments(prev => ({ ...prev, [postId]: true }));
         setCommentTexts(prev => ({ ...prev, [postId]: "" }));
 
@@ -194,6 +205,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
             ));
             setCommentTexts(prev => ({ ...prev, [postId]: text }));
         } finally {
+            submittingCommentsRef.current[postId] = false;
             setSubmittingComments(prev => ({ ...prev, [postId]: false }));
         }
     };
@@ -254,8 +266,10 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                             <PostDropDown
                                                 isOpen={openDropdownId === post.fetchPostId}
                                                 onClose={() => setOpenDropdownId(null)}
-                                                isOwnPost={post.ownPost}
                                                 Post={post}
+                                                onPostUpdate={(updatePost) => {
+                                                    setProfilePosts(prev => prev.map(p => (p.fetchPostId === post.fetchPostId) ? updatePost : p));
+                                                }}
                                             />
                                         )}
                                     </div>
