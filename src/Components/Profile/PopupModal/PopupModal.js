@@ -26,7 +26,7 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
                 ...prev,
                 blockedStatus: true
             }));
-
+            onClose();
 
         } catch (error) {
             console.log("Error occured!");
@@ -34,7 +34,6 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
             setIsBlocking(false);
             blockActionPendingRef.current = false;
         }
-        onClose();
     };
 
     // Handle Copy Link API

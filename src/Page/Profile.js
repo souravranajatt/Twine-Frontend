@@ -126,7 +126,7 @@ function Profile() {
       });
 
     } catch (error) {
-      console.log("Error occurred!");
+      console.log("Error occurred!", error);
     } finally {
       setIsFollowing(false);
       followActionPendingRef.current = false;
@@ -166,7 +166,7 @@ function Profile() {
       });
 
     } catch (error) {
-      console.log("Error occurred!");
+      console.log("Error occurred!", error);
     } finally {
       setIsFollowing(false);
       followActionPendingRef.current = false;
@@ -192,7 +192,7 @@ function Profile() {
       }));
 
     } catch (error) {
-      console.log("Error occurred!");
+      console.log("Error occurred!", error);
     } finally {
       setIsFollowing(false);
       followActionPendingRef.current = false;
@@ -237,7 +237,7 @@ function Profile() {
         blockedStatus: false
       }));
     } catch (error) {
-      console.log("Error occured!");
+      console.log("Error occured!", error);
     } finally {
       setIsUnblocking(false);
       unblockActionPendingRef.current = false;

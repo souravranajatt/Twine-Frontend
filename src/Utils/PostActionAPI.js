@@ -50,15 +50,13 @@ export const postCommentAPI = async (postId, data) => {
     }
 };
 
-// Fetch Comments of a post
-export const fetchCommentsAPI = async (postId, page = 0) => {
+// Archive a post
+export const archivePostAPI = async (postId) => {
     try {
-        const response = await api.get(`/v2/posts/${postId}/comments?page=${page}`);
+        const response = await api.put(`/v2/posts/${postId}/archive`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
-
-
 

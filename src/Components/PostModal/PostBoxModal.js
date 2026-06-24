@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { X, Heart, MessageCircle, Forward, SendHorizontal, Loader2, BadgeCheck, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import { likePostAPI, dislikePostAPI, postCommentAPI, fetchCommentsAPI } from "../../Utils/PostActionAPI.js";
+import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../Utils/PostActionAPI.js";
+import { fetchCommentsAPI } from "../../Utils/PostFeaturesAPI.js";
 import { loggedUserDataAPI } from "../../Utils/homePageAPI.js";
 import formatPostTime from "../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../Lib/renderFormattedCaption.js";
