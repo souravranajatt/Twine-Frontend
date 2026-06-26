@@ -1,8 +1,8 @@
 import '../AuthCSS/AuthPage.css'; // Style File
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUserAuthAPI } from "../Utils/authAPI.js"; // Import API 
-import { Image, UserRoundPlus, TrendingUp } from "lucide-react";
+import { Image, UserRoundPlus, TrendingUp, User } from "lucide-react";
 import FooterArea from "../Components/Footer/Footer.js";
 
 function Login() {
@@ -13,11 +13,14 @@ function Login() {
   const [message, setMessage] = useState(""); // for message handling 
   const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate(); // for navigation 
+  const isLoginRef = useRef(false);
 
   // When User click OnSubmit button / Form Handling
   const handleSubmit = async (e) => {
 
-    e.preventDefault(); // Off Default Event
+    e.preventDefault();
+
+    if (isLoginRef.current || isLogin) return;
 
     // Input Validation
     if (!UserId.trim()) return setMessage("Username is required!");
@@ -28,15 +31,17 @@ function Login() {
       username: UserId.trim(),
       password: UserPwd
     }
-    // Create API
+
+    setIsLogin(true);
+    isLoginRef.current = true;
     try {
-      setIsLogin(true);
       await loginUserAuthAPI(userData);
       navigate("/");
     } catch (err) {
       setMessage(err.message || err);
     } finally {
       setIsLogin(false);
+      isLoginRef.current = false;
     }
 
   }

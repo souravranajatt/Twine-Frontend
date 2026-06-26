@@ -16,14 +16,14 @@ function PostsSkeleton() {
                         </div>
                     </div>
 
+                    {/* Post Media */}
+                    <div className="skeleton skeletonPostMedia-Box" />
+
                     {/* Post Caption */}
                     <div className="skeletonPostCaption-Box">
                         <div className="skeleton skeletonCaptionLine-Box" />
                         <div className="skeleton skeletonCaptionLineShort-Box" />
                     </div>
-
-                    {/* Post Media */}
-                    <div className="skeleton skeletonPostMedia-Box" />
 
                     {/* Post Actions */}
                     <div className="skeletonPostActions-Box">

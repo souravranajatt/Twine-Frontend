@@ -115,3 +115,126 @@
         transform: rotate(360deg);
     }
 }
+
+
+
+
+/* ── Delete Confirmation Modal ── */
+@keyframes deleteModalAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -48%) scale(0.92);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.delete-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-confirm-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 0 0 0.5px rgba(0, 0, 0, 0.08);
+    width: 88vw;
+    max-width: 320px;
+    overflow: hidden;
+    animation: deleteModalAppear 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.delete-confirm-header {
+    padding: 22px 22px 16px;
+    text-align: center;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.delete-confirm-title {
+    margin: 0 0 6px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1c1c1e;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.delete-confirm-subtitle {
+    margin: 0;
+    font-size: 13px;
+    color: #6e6e73;
+    line-height: 1.5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.delete-confirm-actions {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 14px 14px;
+    gap: 6px;
+}
+
+
+/* ── Delete / Cancel Action Buttons ── */
+.pd-delete-action-btn,
+.pd-cancel-action-btn {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+}
+
+.pd-delete-action-btn {
+    background: linear-gradient(135deg, #ff5f57 0%, #ff3b30 100%);
+    color: #fff;
+}
+
+.pd-delete-action-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #e8504a 0%, #c9221a 100%);
+}
+
+.pd-delete-action-btn:active:not(:disabled) {
+    background: linear-gradient(135deg, #d44540 0%, #b51c15 100%);
+}
+
+.pd-cancel-action-btn {
+    background: rgba(0, 0, 0, 0.05);
+    color: #3a3a3c;
+}
+
+.pd-cancel-action-btn:hover:not(:disabled) {
+    background: #bbbbbb;
+}
+
+.pd-cancel-action-btn:active:not(:disabled) {
+    background: rgba(0, 0, 0, 0.13);
+}
+
+.pd-delete-action-btn:disabled,
+.pd-cancel-action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}

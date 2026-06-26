@@ -20,10 +20,10 @@ export const updateProfileAPI = async (data) => {
     }
 };
 
-// Privacy Status Update API (Partial Update)
+// Privacy Status Update API (Private Account)
 export const updatePrivacyAPI = async (isPrivate) => {
     try {
-        const res = await api.put("/setting/privacy/private/update", isPrivate, {
+        const res = await api.patch("/setting/privacy/private/update", isPrivate, {
             headers: { 'Content-Type': 'application/json' }
         });
         return res.data;
@@ -35,7 +35,7 @@ export const updatePrivacyAPI = async (isPrivate) => {
 // Account Deactivate API
 export const deactivateAccountAPI = async (deactivationData) => {
     try {
-        const res = await api.put("/setting/account/deactivate", deactivationData, {
+        const res = await api.patch("/setting/account/deactivate", deactivationData, {
             headers: { 'Content-Type': 'application/json' }
         });
         return res.data;

@@ -101,23 +101,23 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
       <form onSubmit={handlePersonalDetailSubmit}>
         <div className="form-group">
           <label>Email Address</label>
-          <input 
-            type="email" 
-            name="emailId" 
-            value={formData.emailId} 
-            onChange={handleInputChange} 
-            placeholder="your@email.com" 
+          <input
+            type="email"
+            name="emailId"
+            value={formData.emailId}
+            onChange={handleInputChange}
+            placeholder="your@email.com"
           />
         </div>
 
         <div className="form-group">
           <label>Phone Number</label>
-          <input 
-            type="tel" 
-            name="mobileNumber" 
-            value={formData.mobileNumber} 
-            onChange={handleInputChange} 
-            placeholder="+1 (555) 000-0000" 
+          <input
+            type="tel"
+            name="mobileNumber"
+            value={formData.mobileNumber}
+            onChange={handleInputChange}
+            placeholder="+1 (555) 000-0000"
           />
         </div>
 

@@ -1,5 +1,5 @@
 import '../AuthCSS/AuthPage.css'; // Style File
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUserAuthAPI } from "../Utils/authAPI.js"; // Import API
 import { Image, UserRoundPlus, TrendingUp } from "lucide-react";
@@ -14,12 +14,15 @@ function Signup() {
   const [userPass, setUserPass] = useState("");
   const [message, setMessage] = useState("");
   const [isSignup, setIsSignup] = useState(false);
+  const isSignupRef = useRef(false);
   const navigate = useNavigate();
 
   // Final submit validation
   const handleSignup = async (e) => { // we can also write , const handleSignup (e){ }
 
     e.preventDefault();
+
+    if (isSignupRef.current || isSignup) return;
 
     // Trim inputs and Validate
     const trimmedFullName = fullName.trim();
@@ -46,14 +49,17 @@ function Signup() {
       password: userPass // backend expects "passwordHash" as in Java
     }
 
+    setIsSignup(true);
+    isSignupRef.current = true;
+
     try {
-      setIsSignup(true);
       await signupUserAuthAPI(userData);
       navigate("/");
     } catch (err) {
       setMessage(err.message || err);
     } finally {
       setIsSignup(false);
+      isSignupRef.current = false;
     }
 
   }

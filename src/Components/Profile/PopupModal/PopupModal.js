@@ -1,35 +1,50 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { MapPin, BriefcaseBusiness, CalendarDays, Link2, BadgeCheck, Copy, UserX, Flag, Venus, Mars, Loader2 } from "lucide-react";
-import { blockUserAPI } from "../../../Utils/userProfileAPI.js";
+import { blockUserAPI, unblockUserAPI } from "../../../Utils/userProfileAPI.js";
 import "./PopupModal.css";
 
 function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, username }) {
 
+    const [localData, setLocalData] = useState(null);
     const [isBlocking, setIsBlocking] = useState(false);
     const blockActionPendingRef = useRef(false);
 
-    if (!isOpen) return null;
+    // Keep localPost 
+    useEffect(() => {
+        if (isOpen && userProfileDataURL) {
+            setLocalData(userProfileDataURL);
+        }
+    }, [isOpen, userProfileDataURL]);
 
 
-    // Handle Block API
+    // Handle Block/Unblock user
     const handleBlock = async () => {
-        if (blockActionPendingRef.current) return;
+        if (blockActionPendingRef.current || isBlocking || !localData) return;
+
+        const previousStatus = localData.blockedStatus;
+        const newStatus = !previousStatus;
+
+        // Optimistic update
+        const optimisticData = { ...localData, blockedStatus: newStatus };
+        setLocalData(optimisticData);
+        onProfileRefresh((prev) => ({ ...prev, blockedStatus: newStatus }));
 
         blockActionPendingRef.current = true;
         setIsBlocking(true);
 
         try {
-            await blockUserAPI(userProfileDataURL.searchUserId);
-
-            // Update Local State 
-            onProfileRefresh((prev) => ({
-                ...prev,
-                blockedStatus: true
-            }));
+            if (previousStatus) {
+                await unblockUserAPI(userProfileDataURL.searchUserId);
+            } else {
+                await blockUserAPI(userProfileDataURL.searchUserId);
+            }
             onClose();
-
         } catch (error) {
-            console.log("Error occured!");
+            // Revert optimistic update on failure
+            const revertedData = { ...localData, blockedStatus: previousStatus };
+            setLocalData(revertedData);
+            onProfileRefresh((prev) => ({ ...prev, blockedStatus: previousStatus }));
+            console.error("Block/unblock failed:", error);
         } finally {
             setIsBlocking(false);
             blockActionPendingRef.current = false;
@@ -41,6 +56,8 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
         navigator.clipboard.writeText(`${window.location.origin}/${username}/posts`);
         onClose();
     };
+
+    if (!isOpen || !localData) return null;
 
     return (
         <>
@@ -119,7 +136,7 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
                             {isBlocking
                                 ? <Loader2 size={16} className="popupActionIcon-Box spinner-icon" />
                                 : <UserX height="16" width="16" className="popupActionIcon-Box" />}
-                            <span>Block</span>
+                            <span>{localData.blockedStatus ? "Unblock" : "Block"}</span>
                         </button>
                         <div className="popupActionDivider-Box" />
                         <button className="popupActionBtn-Box popupActionDanger-Box">
