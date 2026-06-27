@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
@@ -32,8 +32,13 @@ function Settings() {
   const [showExpiredPopup, setShowExpiredPopup] = useState(false);
   const [personalDetails, setPersonalDetails] = useState(null);
 
+  const hasFetched = useRef(false);
+
   // Fetch initial profile & personal data concurrently
   useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     const fetchInitialSettings = async () => {
       try {
         setIsLoading(true);
@@ -95,8 +100,8 @@ function Settings() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="feed-loading-spinner-box">
-          <Loader2 size={30} className="spinner-icon" />
+        <div className="st-loading-spinner-box">
+          <Loader2 size={40} className="spin-icon" />
         </div>
       );
     }

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { Loader2 } from "lucide-react";
 import { updatePasswordAPI } from "../../Utils/SettingDataAPI.js";
 
 function ChangePassword() {
@@ -6,6 +7,7 @@ function ChangePassword() {
   const [statusMessage, setStatusMessage] = useState(null);
   const [statusType, setStatusType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isSubmitting = useRef(false);
 
   // Handle Input Changes
   const handleInputChange = (e) => {
@@ -19,6 +21,8 @@ function ChangePassword() {
   // Submit Password Change
   const handleUpdatePassword = async (e) => {
     e.preventDefault();
+
+    if (isSubmitting.current || isLoading) return;
     setStatusMessage(null);
 
     // ====== Frontend Validation ======
@@ -43,15 +47,17 @@ function ChangePassword() {
       return setStatusMessage("New password must be different from current password!");
     }
 
+    isSubmitting.current = true;
+    setIsLoading(true);
+
     try {
-      setIsLoading(true);
 
       const passwordData = {
         oldPassword: password.oldPassword,
         newPassword: password.newPassword
       };
       await updatePasswordAPI(passwordData);
-      
+
       setStatusMessage("Password updated successfully!");
       setStatusType("success");
 
@@ -68,6 +74,7 @@ function ChangePassword() {
       setStatusType("error");
     } finally {
       setIsLoading(false);
+      isSubmitting.current = false;
     }
   };
 
@@ -117,8 +124,8 @@ function ChangePassword() {
         </div>
 
         <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
-          <button type="submit" className="save-btn" disabled={isLoading}>
-            {isLoading ? "Updating..." : "Update Password"}
+          <button type="submit" className="save-btn" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '170px' }}>
+            {isLoading ? <Loader2 size={20} className="spin-icon" style={{ color: '#ffffff' }} /> : "Update Password"}
           </button>
           {statusMessage && (
             <span className={`status-text ${statusType}`}>{statusMessage}</span>

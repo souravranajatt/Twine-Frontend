@@ -7,6 +7,7 @@ function EditProfile({ profileData, setProfileData }) {
   const [statusType, setStatusType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const isSubmitting = useRef(false);
 
   // Local state to manage form changes before submitting
   const [formData, setFormData] = useState({
@@ -120,6 +121,9 @@ function EditProfile({ profileData, setProfileData }) {
       return setStatusMessage("Bio can't exceed 101 characters!");
     }
 
+    if (isSubmitting.current) return;
+    isSubmitting.current = true;
+
     try {
       setIsLoading(true);
       await updateProfileAPI(formData);
@@ -143,6 +147,7 @@ function EditProfile({ profileData, setProfileData }) {
       setStatusType("error");
     } finally {
       setIsLoading(false);
+      isSubmitting.current = false;
     }
   };
 
@@ -305,8 +310,8 @@ function EditProfile({ profileData, setProfileData }) {
         </div>
 
         <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <button type="submit" className="save-btn" disabled={isLoading}>
-            {isLoading ? 'Saving...' : 'Save changes'}
+          <button type="submit" className="save-btn" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '130px' }}>
+            {isLoading ? <Loader2 size={20} className="spin-icon" /> : 'Save changes'}
           </button>
           {statusMessage && (
             <span className={`status-text ${statusType}`}>

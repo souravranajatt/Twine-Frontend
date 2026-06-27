@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Loader2 } from "lucide-react";
 import { userPersonalDetailsUpdateAPI } from "../../Utils/SettingDataAPI.js";
 
 function ChangeDetails({ personalDetails, setPersonalDetails }) {
   const [statusMessage, setStatusMessage] = useState(null);
   const [statusType, setStatusType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isSubmitting = useRef(false);
 
   // Local state for personal details fields
   const [formData, setFormData] = useState({
@@ -34,14 +36,14 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
   // Submit Updated Personal Details
   const handlePersonalDetailSubmit = async (e) => {
     e.preventDefault();
+
+    if (isSubmitting.current || isLoading) return;
     setStatusMessage(null);
-    setIsLoading(true);
 
     const emailId = formData.emailId?.trim();
     const mobileNumber = formData.mobileNumber?.trim();
 
     if (!emailId && !mobileNumber) {
-      setIsLoading(false);
       setStatusType("error");
       return setStatusMessage("Please provide email or mobile number!");
     }
@@ -49,7 +51,6 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
     if (emailId) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(emailId)) {
-        setIsLoading(false);
         setStatusType("error");
         return setStatusMessage("Please enter a valid email address!");
       }
@@ -58,11 +59,13 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
     if (mobileNumber) {
       const phoneRegex = /^\+?[1-9]\d{6,14}$/;
       if (!phoneRegex.test(mobileNumber)) {
-        setIsLoading(false);
         setStatusType("error");
         return setStatusMessage("Please enter a valid phone number!");
       }
     }
+
+    isSubmitting.current = true;
+    setIsLoading(true);
 
     try {
       const personalDetailData = {
@@ -90,6 +93,7 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
       setStatusType("error");
     } finally {
       setIsLoading(false);
+      isSubmitting.current = false;
     }
   };
 
@@ -121,14 +125,16 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
           />
         </div>
 
-        <button className="save-btn" type="submit" disabled={isLoading}>
-          {isLoading ? 'Saving...' : 'Save changes'}
-        </button>
-        {statusMessage && (
-          <span className={`status-text ${statusType}`} style={{ marginLeft: '16px' }}>
-            {statusMessage}
-          </span>
-        )}
+        <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <button className="save-btn" type="submit" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '130px' }}>
+            {isLoading ? <Loader2 size={20} className="spin-icon" /> : 'Save changes'}
+          </button>
+          {statusMessage && (
+            <span className={`status-text ${statusType}`}>
+              {statusMessage}
+            </span>
+          )}
+        </div>
       </form>
     </div>
   );

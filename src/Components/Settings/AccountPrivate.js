@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { updatePrivacyAPI } from "../../Utils/SettingDataAPI.js";
 
 function AccountPrivate({ profileData, setProfileData }) {
   const [statusMessage, setStatusMessage] = useState(null);
   const [statusType, setStatusType] = useState("");
+  const isSubmitting = useRef(false);
 
   // Handle Private Account Privacy API
   const handlePrivacyToggle = async () => {
-    if (!profileData) return;
+    if (!profileData || isSubmitting.current) return;
+    isSubmitting.current = true;
+
     const newPrivacyStatus = !profileData.privateAccount;
 
     // Optimistic Update
@@ -27,6 +30,8 @@ function AccountPrivate({ profileData, setProfileData }) {
       setStatusMessage("Error Occurred");
       setStatusType("error");
       setTimeout(() => setStatusMessage(null), 3000);
+    } finally {
+      isSubmitting.current = false;
     }
   };
 

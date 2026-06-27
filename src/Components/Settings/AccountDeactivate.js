@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 import { deactivateAccountAPI } from "../../Utils/SettingDataAPI.js";
 import { logoutHandleAPI } from "../../Utils/authAPI.js";
 
@@ -10,10 +11,13 @@ function AccountDeactivate({ setShowExpiredPopup }) {
   const [statusMessage, setStatusMessage] = useState(null);
   const [statusType, setStatusType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isSubmitting = useRef(false);
 
   // Handle Account Deactivation
   const handleDeactivateAccount = async (e) => {
     e.preventDefault();
+
+    if (isSubmitting.current || isLoading) return;
     setStatusMessage(null);
 
     if (!deactivatePassword) {
@@ -22,33 +26,28 @@ function AccountDeactivate({ setShowExpiredPopup }) {
       return;
     }
 
-    try {
-      setIsLoading(true);
+    isSubmitting.current = true;
+    setIsLoading(true);
 
+    try {
       const deactivationData = {
         password: deactivatePassword,
         reason: deactivateReason
       };
 
-      // 1. Deactivate Account
       await deactivateAccountAPI(deactivationData);
 
-      // 2. Call Logout API
+      setShowExpiredPopup(true);
       await logoutHandleAPI();
 
-      // 3. Show "Session Expired" Msg
-      setShowExpiredPopup(true);
-
-      // 4. Wait for 5 seconds then redirect
-      setTimeout(() => {
-        navigate("/login", { replace: true });
-      }, 5000);
+      navigate("/login", { replace: true });
 
     } catch (err) {
       setStatusMessage(err.message || err.error || "Failed to deactivate account.");
       setStatusType("error");
     } finally {
       setIsLoading(false);
+      isSubmitting.current = false;
     }
   };
 
@@ -85,8 +84,8 @@ function AccountDeactivate({ setShowExpiredPopup }) {
         </div>
 
         <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
-          <button type="submit" className="deactivate-btn" disabled={isLoading}>
-            {isLoading ? 'Deactivating...' : 'Deactivate Account'}
+          <button type="submit" className="deactivate-btn" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '180px' }}>
+            {isLoading ? <Loader2 size={20} className="spin-icon" style={{ color: '#ffffff' }} /> : 'Deactivate Account'}
           </button>
           {statusMessage && (
             <span className={`status-text ${statusType}`}>

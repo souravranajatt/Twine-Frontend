@@ -381,15 +381,13 @@ datalist option {
 }
 
 .save-btn {
-  background-color: #6366f1;
+  background-color: #F0186E;
   color: #ffffff;
   margin-top: 12px;
 }
 
 .save-btn:hover {
-  background-color: #4f46e5;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  background-color: #d61562;
 }
 
 .deactivate-btn {
@@ -400,8 +398,6 @@ datalist option {
 
 .deactivate-btn:hover {
   background-color: #d97706;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
 
 .delete-btn {
@@ -412,7 +408,6 @@ datalist option {
 
 .delete-btn:hover {
   background-color: #dc2626;
-  transform: translateY(-2px);
 }
 
 .logout-btn {
@@ -510,8 +505,35 @@ datalist option {
 
 .unblock-Btn:hover {
   background-color: #d32f2f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+  color: #F0186E;
+}
+
+.save-btn .spin-icon {
+  color: #ffffff;
+}
+
+/* Settings Loading Spinner Container */
+.st-loading-spinner-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  width: 100%;
 }
 
 /* Sessions List */
