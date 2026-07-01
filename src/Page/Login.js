@@ -25,6 +25,8 @@ function Login() {
     // Input Validation
     if (!UserId.trim()) return setMessage("Username is required!");
     if (!UserPwd) return setMessage("Password is required!");
+    if (UserPwd.length > 72) return setMessage("Password cannot exceed 72 characters!");
+    if (UserPwd.length < 8) return setMessage("Password must be at least 8 characters long!");
 
     // Send Data as JSON Object
     const userData = {

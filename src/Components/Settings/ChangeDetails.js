@@ -99,7 +99,7 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
 
   return (
     <div className="settings-form">
-      <h2>Change Details</h2>
+      <h2 className="sf-section-title">Change Details</h2>
       <p className="section-subtitle">Update your email and phone number</p>
 
       <form onSubmit={handlePersonalDetailSubmit}>

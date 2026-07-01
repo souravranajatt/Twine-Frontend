@@ -53,7 +53,7 @@ function AccountDeactivate({ setShowExpiredPopup }) {
 
   return (
     <div className="settings-form">
-      <h2>Deactivate Account</h2>
+      <h2 className="sf-section-title">Deactivate Account</h2>
       <p className="section-subtitle">Temporarily deactivate your account</p>
       <p className="warning-text">Your account will be hidden from public view. You can reactivate it anytime by logging back in.</p>
 

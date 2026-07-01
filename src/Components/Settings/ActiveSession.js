@@ -3,7 +3,7 @@ import React from "react";
 function ActiveSession() {
   return (
     <div className="settings-form">
-      <h2>Active Sessions</h2>
+      <h2 className="sf-section-title">Active Sessions</h2>
       <p className="section-subtitle">Manage your active login sessions</p>
       <div className="sessions-list">
         <div className="session-item">

@@ -80,7 +80,7 @@ function ChangePassword() {
 
   return (
     <div className="settings-form">
-      <h2>Change Password</h2>
+      <h2 className="sf-section-title">Change Password</h2>
       <p className="section-subtitle">Update your password to keep your account secure</p>
 
       <form onSubmit={handleUpdatePassword}>

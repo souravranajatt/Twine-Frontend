@@ -16,6 +16,9 @@ import BlockUserList from "../Components/Settings/BlockUserList.js";
 import AcccountDeletion from "../Components/Settings/AcccountDeletion.js";
 import TwoFactorAuthentication from "../Components/Settings/2FactorAuthentication.js";
 import ActiveSession from "../Components/Settings/ActiveSession.js";
+import SavedPosts from "../Components/Settings/SavedPosts.js";
+import InteractionPreferences from "../Components/Settings/InteractionPreferences.js";
+import ArchivePosts from "../Components/Settings/ArchivePosts.js";
 
 function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -161,6 +164,15 @@ function Settings() {
       case "blocked-users":
         return <BlockUserList />;
 
+      case "saved-posts":
+        return <SavedPosts />;
+
+      case "archive-posts":
+        return <ArchivePosts />;
+
+      case "interaction-preferences":
+        return <InteractionPreferences />;
+
       default:
         return (
           <div className="settings-form empty-state">
@@ -228,6 +240,32 @@ function Settings() {
               </div>
 
               <div className="settings-category">
+                <h3 className="category-title">Your Activity</h3>
+                <nav className="sidebar-nav">
+                  <button
+                    className={`nav-item ${activeSection === "saved-posts" ? "active" : ""}`}
+                    onClick={() => setActiveSection("saved-posts")}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                    </svg>
+                    Saved Posts
+                  </button>
+                  <button
+                    className={`nav-item ${activeSection === "archive-posts" ? "active" : ""}`}
+                    onClick={() => setActiveSection("archive-posts")}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                      <rect x="1" y="3" width="22" height="5"></rect>
+                      <line x1="10" y1="12" x2="14" y2="12"></line>
+                    </svg>
+                    Archive
+                  </button>
+                </nav>
+              </div>
+
+              <div className="settings-category">
                 <h3 className="category-title">Security</h3>
                 <nav className="sidebar-nav">
                   <button
@@ -284,6 +322,16 @@ function Settings() {
                       <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
                     </svg>
                     Blocked Users
+                  </button>
+                  <button
+                    className={`nav-item ${activeSection === "interaction-preferences" ? "active" : ""}`}
+                    onClick={() => setActiveSection("interaction-preferences")}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="3" />
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                    Interaction Preferences
                   </button>
                 </nav>
               </div>

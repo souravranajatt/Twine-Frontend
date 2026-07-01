@@ -150,12 +150,9 @@
   width: 100%;
   padding: 10px 14px;
   font-size: 13.5px;
-  margin-bottom: 20px;
-  background-color: #fff2f4;
-  border: 1px solid #ffccd3;
-  border-radius: 8px;
+  margin-bottom: 10px;
   color: #e02424;
-  text-align: left;
+  text-align: center;
   line-height: 1.4;
 }
 

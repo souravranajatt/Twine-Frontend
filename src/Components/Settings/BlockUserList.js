@@ -65,7 +65,7 @@ function BlockUserList() {
 
   return (
     <div className="settings-form">
-      <h2>Blocked Users</h2>
+      <h2 className="sf-section-title">Blocked Users</h2>
       <p className="section-subtitle">Manage users you've blocked</p>
       <div className="blocked-list">
         {blockedList.length === 0 ? (

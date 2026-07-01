@@ -3,7 +3,7 @@ import api from "./instanceAPI";
 // Setting Data API
 export const settingDataAPI = async () => {
     try {
-        const res = await api.get("/setting/profile/fetch");
+        const res = await api.get("/setting/account/profile-fetch");
         return res.data;
     } catch (err) {
         throw err.response?.data || err;
@@ -13,7 +13,7 @@ export const settingDataAPI = async () => {
 // Setting Profile Data Update API
 export const updateProfileAPI = async (data) => {
     try {
-        const res = await api.put("/setting/profile/update", data);
+        const res = await api.put("/setting/account/profile-update", data);
         return res.data;
     } catch (err) {
         throw err.response?.data || err;
@@ -23,7 +23,7 @@ export const updateProfileAPI = async (data) => {
 // Privacy Status Update API (Private Account)
 export const updatePrivacyAPI = async (isPrivate) => {
     try {
-        const res = await api.patch("/setting/privacy/private/update", isPrivate, {
+        const res = await api.patch("/setting/privacy/private-account", isPrivate, {
             headers: { 'Content-Type': 'application/json' }
         });
         return res.data;
@@ -48,7 +48,7 @@ export const deactivateAccountAPI = async (deactivationData) => {
 // Password Update API
 export const updatePasswordAPI = async (passwordData) => {
     try {
-        const res = await api.put("/setting/password/update", passwordData, {
+        const res = await api.put("/setting/security/password-change", passwordData, {
             headers: { 'Content-Type': 'application/json' }
         });
         return res.data;
@@ -61,7 +61,7 @@ export const updatePasswordAPI = async (passwordData) => {
 // Fetch Blocked List API
 export const fetchBlockedListAPI = async () => {
     try {
-        const res = await api.get("/setting/block/list/fetch");
+        const res = await api.get("/setting/privacy/block-list");
         return res.data;
     } catch (err) {
         const errorData = err.response?.data || err;
@@ -72,7 +72,7 @@ export const fetchBlockedListAPI = async () => {
 // User Personal Details Fetch API
 export const userPersonalDetailsFetchAPI = async () => {
     try {
-        const res = await api.get("/setting/personal/details/fetch");
+        const res = await api.get("/setting/account/personal-details-fetch");
         return res.data;
     } catch (err) {
         const errorData = err.response?.data || err;
@@ -83,9 +83,20 @@ export const userPersonalDetailsFetchAPI = async () => {
 // User Personal Details Update API
 export const userPersonalDetailsUpdateAPI = async (data) => {
     try {
-        const res = await api.put("/setting/personal/details/update", data, {
+        const res = await api.put("/setting/account/personal-details-update", data, {
             headers: { 'Content-Type': 'application/json' }
         });
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
+// Fetch Saved Posts API
+export const fetchSavedPostsAPI = async (page = 0) => {
+    try {
+        const res = await api.get(`/setting/activity/saved-posts?page=${page}`);
         return res.data;
     } catch (err) {
         const errorData = err.response?.data || err;

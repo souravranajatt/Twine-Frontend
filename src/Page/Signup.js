@@ -37,6 +37,7 @@ function Signup() {
     if (!trimmedEmail) return setMessage("Email is required!");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) return setMessage("Enter a valid email address!");
     if (!userPass) return setMessage("Password is required!");
+    if (userPass.length > 72) return setMessage("Password cannot exceed 72 characters!");
     if (userPass.length < 8) return setMessage("Password must be at least 8 characters long!");
 
 

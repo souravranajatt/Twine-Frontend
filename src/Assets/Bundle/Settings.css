@@ -148,9 +148,10 @@
   max-width: 600px;
 }
 
-.settings-form h2 {
+/* Common h2 title for all settings pages */
+.sf-section-title {
   color: #1a1a1a;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 600;
   margin-bottom: 12px;
 }
@@ -718,7 +719,7 @@ input:checked+.toggle-slider:before {
     overflow-y: visible;
   }
 
-  .settings-form h2 {
+  .sf-section-title {
     font-size: 26px;
   }
 
@@ -772,7 +773,7 @@ input:checked+.toggle-slider:before {
     padding: 20px 16px;
   }
 
-  .settings-form h2 {
+  .sf-section-title {
     font-size: 22px;
     margin-bottom: 8px;
   }
@@ -919,4 +920,363 @@ input:checked+.toggle-slider:before {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* =========================================
+   SAVED POSTS UI STYLING
+========================================= */
+.sp-main-container {
+  max-width: 800px;
+  width: 100%;
+}
+
+.sp-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+  font-family: 'Outfit', sans-serif;
+}
+
+.sp-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.sp-grid-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #f4f4f5;
+  border: 1px solid #f2f2f6;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.sp-grid-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.sp-grid-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.sp-grid-item:hover .sp-grid-media {
+  transform: scale(1.05);
+}
+
+.sp-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 2;
+}
+
+.sp-grid-item:hover .sp-grid-overlay {
+  opacity: 1;
+}
+
+.sp-overlay-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 16px;
+  font-family: 'Outfit', sans-serif;
+}
+
+.sp-grid-video-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(17, 16, 16, 0.75);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: opacity 0.2s ease;
+}
+
+.sp-grid-item:hover .sp-grid-video-badge {
+  opacity: 0;
+}
+
+.sp-skeleton-card {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: spSkeletonShimmer 1.6s infinite ease-in-out;
+}
+
+@keyframes spSkeletonShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.sp-loadmore-skeleton {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.sp-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background-color: #fafafa;
+  border-radius: 16px;
+  border: 1px dashed #e5e7eb;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.sp-empty-icon-box {
+  width: 64px;
+  height: 64px;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  margin-bottom: 16px;
+}
+
+.sp-empty-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+  font-family: 'Outfit', sans-serif;
+}
+
+.sp-empty-text {
+  color: #6b7280;
+  font-size: 14px;
+  max-width: 320px;
+  line-height: 1.5;
+  font-family: 'Outfit', sans-serif;
+}
+
+
+/* =========================================
+   INTERACTION PREFERENCES UI STYLING
+========================================= */
+.ip-main-container {
+  max-width: 600px;
+  width: 100%;
+}
+
+
+
+.ip-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 32px;
+}
+
+.ip-group-box {
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.ip-subtitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ip-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.ip-item-row:not(:last-child) {
+  border-bottom: 1px solid #f9f9f9;
+}
+
+.ip-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 20px;
+}
+
+.ip-item-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.ip-item-desc {
+  font-size: 13px;
+  color: #777;
+  line-height: 1.4;
+}
+
+/* Custom Select Dropdown */
+.ip-select-input {
+  padding: 8px 30px 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  color: #333;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px top 50%;
+  background-size: 10px auto;
+  transition: all 0.2s ease;
+  min-width: 150px;
+}
+
+.ip-select-input:hover {
+  border-color: #ccc;
+}
+
+.ip-select-input:focus {
+  border-color: #F0186E;
+  box-shadow: 0 0 0 2px rgba(240, 24, 110, 0.1);
+}
+
+/* iOS Style Toggle Switch */
+.ip-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.ip-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ip-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e4e4e4;
+  transition: .3s;
+}
+
+.ip-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ip-toggle-switch input:checked+.ip-slider {
+  background-color: #F0186E;
+}
+
+.ip-toggle-switch input:focus+.ip-slider {
+  box-shadow: 0 0 1px #F0186E;
+}
+
+.ip-toggle-switch input:checked+.ip-slider:before {
+  transform: translateX(20px);
+}
+
+.ip-slider.round {
+  border-radius: 24px;
+}
+
+.ip-slider.round:before {
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   Archive Posts specific styles
+   ========================================================================== */
+
+.archive-main-container {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.archive-header-container {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+}
+
+
+
+.archive-section-subtitle {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.archive-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  border: 1px dashed #ddd;
+}
+
+.archive-empty-text {
+  font-size: 16px;
+  color: #8e8e8e;
+  font-weight: 500;
+  margin-top: 10px;
 }
