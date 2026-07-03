@@ -38,6 +38,10 @@ function ChangePassword() {
       setStatusType("error");
       return setStatusMessage("New password must be at least 8 characters!");
     }
+    if (password.newPassword.length > 72) {
+      setStatusType("error");
+      return setStatusMessage("New password cannot exceed 72 characters!");
+    }
     if (password.newPassword !== password.confirmPassword) {
       setStatusType("error");
       return setStatusMessage("Passwords do not match!");

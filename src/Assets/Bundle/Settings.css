@@ -1,6 +1,4 @@
-/* ==========================================================================
-   1. Base Styles & Variables
-   ========================================================================== */
+/* =========================== Base Style ====================== */
 * {
   margin: 0;
   padding: 0;
@@ -8,9 +6,6 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ==========================================================================
-   2. Main Layout & Wrappers
-   ========================================================================== */
 /* Container for the entire settings page */
 .main-settings-container {
   background-color: #fafafa;
@@ -30,11 +25,7 @@
   flex-direction: row;
 }
 
-/* ==========================================================================
-   3. Sidebar Navigation (Desktop First)
-/* ==========================================================================
-   3. Sidebar Navigation (Desktop First)
-   ========================================================================== */
+/*  3. Sidebar Navigation (Desktop First) */
 .settings-sidebar {
   width: 290px;
   background-color: #fafafa;
@@ -934,7 +925,6 @@ input:checked+.toggle-slider:before {
   font-size: 14px;
   color: #666;
   margin-bottom: 24px;
-  font-family: 'Outfit', sans-serif;
 }
 
 .sp-grid-container {
@@ -1240,8 +1230,44 @@ input:checked+.toggle-slider:before {
 }
 
 /* ==========================================================================
-   Archive Posts specific styles
+   Archive Posts specific styles (legacy stubs kept for safety)
    ========================================================================== */
+.archive-main-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.archive-header-container {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+}
+
+.archive-section-subtitle {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.archive-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  border: 1px dashed #ddd;
+}
+
+.archive-empty-text {
+  font-size: 16px;
+  color: #8e8e8e;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+/* ======== Archive Posts ============= */
 
 .archive-main-container {
   display: flex;

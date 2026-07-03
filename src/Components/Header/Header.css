@@ -84,8 +84,7 @@
 
 .header-brand-text .brand-wine {
   color: #111010;
-  /* Brand Dark */
-  margin-left: -1px;
+  margin-left: 0px;
 }
 
 /* Micro-animations on hover */

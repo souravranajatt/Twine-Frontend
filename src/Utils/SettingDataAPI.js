@@ -104,3 +104,14 @@ export const fetchSavedPostsAPI = async (page = 0) => {
     }
 };
 
+// Archive Posts API
+export const fetchArchivePostsAPI = async (page = 0) => {
+    try {
+        const res = await api.get(`/setting/activity/archive-posts?page=${page}`);
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
