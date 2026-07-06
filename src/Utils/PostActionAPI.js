@@ -60,6 +60,16 @@ export const archivePostAPI = async (postId) => {
     }
 };
 
+// Unarchive a post
+export const unarchivePostAPI = async (postId) => {
+    try {
+        const response = await api.patch(`/v2/posts/${postId}/unarchive`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 // Hide Likes
 export const hideLikeAPI = async (postId) => {
     try {

@@ -23,8 +23,8 @@ function HomeFeed() {
 
     // post comment state
     const [commentTexts, setCommentTexts] = useState({});
-    const [submittingComments, setSubmittingComments] = useState({});  // UI ke liye (spinner/disabled)
-    const submittingCommentsRef = useRef({});                          // synchronous guard (double submit rokne ke liye)
+    const [submittingComments, setSubmittingComments] = useState({});
+    const submittingCommentsRef = useRef({});
     const likingPostsRef = useRef({});
 
     const toggleCaption = (postId) => {
@@ -34,8 +34,9 @@ function HomeFeed() {
     // Fetch Feed
     useEffect(() => {
         const fetchFeed = async () => {
-            if (!hasMore) return;
+            if (isFetchingRef.current || !hasMore) return;
             setLoadingPosts(true);
+            isFetchingRef.current = true;
             try {
                 const data = await homeFeedFetch(page);
                 if (data.length === 0) {

@@ -123,9 +123,9 @@ function EditProfile({ profileData, setProfileData }) {
 
     if (isSubmitting.current) return;
     isSubmitting.current = true;
+    setIsLoading(true);
 
     try {
-      setIsLoading(true);
       await updateProfileAPI(formData);
 
       // Update parent state so other pages get fresh data
