@@ -115,3 +115,60 @@ export const fetchArchivePostsAPI = async (page = 0) => {
     }
 };
 
+// Fetch Interaction Preferences API
+export const fetchInteractionPreferencesAPI = async () => {
+    try {
+        const res = await api.get("/setting/privacy/intreaction-settings");
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
+// Hide Like Counts API
+export const hideLikeDefaultSettingAPI = async () => {
+    try {
+        const res = await api.patch("/setting/privacy/hide-like");
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
+// Show Like Counts API
+export const showLikeDefaultSettingAPI = async () => {
+    try {
+        const res = await api.patch("/setting/privacy/show-like");
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
+// Turn Off Commenting API
+export const turnOffCommentingDefaultSettingAPI = async () => {
+    try {
+        const res = await api.patch("/setting/privacy/turn-off-commenting");
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
+// Turn On Commenting API
+export const turnOnCommentingDefaultSettingAPI = async () => {
+    try {
+        const res = await api.patch("/setting/privacy/turn-on-commenting");
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
+
+
