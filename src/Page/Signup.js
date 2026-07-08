@@ -44,10 +44,10 @@ function Signup() {
 
     // API call yaha karna
     const userData = {
-      fullname: trimmedFullName, // match backend field as in Java
-      username: trimmedUserName, // match backend field as in Java
-      email: trimmedEmail, // match backend field as in Java
-      password: userPass // backend expects "passwordHash" as in Java
+      fullname: trimmedFullName,
+      username: trimmedUserName,
+      email: trimmedEmail,
+      password: userPass
     }
 
     setIsSignup(true);
@@ -67,126 +67,137 @@ function Signup() {
 
 
   return (
-    <div className='content-aut-wrapper'>
+    <>
+      <div className='content-aut-wrapper'>
 
-      <div className="auth-split-container">
+        <div className="auth-split-container">
 
-        {/* Left Side: Brand Info Panel */}
-        <div className="auth-left-panel">
-          <div className="brand-info-content">
-            <h1 className="brand-title">Twine</h1>
-            <p className="brand-tagline">Connect. Match. Unfold</p>
+          {/* Left Side: Brand Info Panel */}
+          <div className="auth-left-panel">
+            <div className="brand-info-content">
+              <h1 className="brand-title">Twine</h1>
+              <p className="brand-tagline">Connect. Match. Unfold</p>
 
-            <ul className="brand-features">
-              <li>
-                <UserRoundPlus className="feature-lucide-icon" />
-                <span className="feature-text">Find your people</span>
-              </li>
-              <li>
-                <Image className="feature-lucide-icon" />
-                <span className="feature-text">Share moments</span>
-              </li>
-              <li>
-                <TrendingUp className="feature-lucide-icon" />
-                <span className="feature-text">Build your timeline</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Right Side: Form Panel */}
-        <div className="auth-right-panel">
-          <div className="auth-box">
-
-            {/* Mobile Brand Logo (Visible only on mobile/tablet) */}
-            <div className="mobile-logo-container">
-              <h1 className="mobile-auth-logo">Twine</h1>
-              <p className="mobile-logo-tagline">Connect. Match. Unfold</p>
+              <ul className="brand-features">
+                <li>
+                  <UserRoundPlus className="feature-lucide-icon" />
+                  <span className="feature-text">Find your people</span>
+                </li>
+                <li>
+                  <Image className="feature-lucide-icon" />
+                  <span className="feature-text">Share moments</span>
+                </li>
+                <li>
+                  <TrendingUp className="feature-lucide-icon" />
+                  <span className="feature-text">Build your timeline</span>
+                </li>
+              </ul>
             </div>
-
-            {message && <p className="error-msg">{message}</p>}
-            <form className="auth-form" onSubmit={handleSignup}>
-
-              {/* Full Name */}
-              <div className="fields-input">
-                <input
-                  type="text"
-                  name="fullName"
-                  placeholder="Full Name"
-                  className="auth-input"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                />
-              </div>
-
-              {/* Username */}
-              <div className="fields-input">
-                <input
-                  type="text"
-                  name="userName"
-                  placeholder="Username"
-                  className="auth-input"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  autoCapitalize="none"
-                  autoComplete="off"
-                  autoCorrect="off"
-                />
-              </div>
-
-              {/* Email */}
-              <div className="fields-input">
-                <input
-                  type="email"
-                  name="emailId"
-                  placeholder="Email"
-                  className="auth-input"
-                  value={emailId}
-                  onChange={(e) => setEmailId(e.target.value)}
-                />
-              </div>
-
-              {/* Password */}
-              <div className="fields-input">
-                <input
-                  type="password"
-                  name="userPass"
-                  placeholder="Password"
-                  className="auth-input"
-                  value={userPass}
-                  onChange={(e) => setUserPass(e.target.value)}
-                  autoCapitalize="none"
-                  autoComplete="off"
-                  autoCorrect="off"
-                />
-              </div>
-
-              {/* Button */}
-              <div className="fields-input">
-                <button type="submit" className="auth-btn" disabled={isSignup}>
-                  {isSignup ? "Signing Up..." : "Sign Up"}
-                </button>
-              </div>
-
-              <div className="divider-line"></div>
-
-              {/* Footer-box */}
-              <div className="other">
-                <p className="auth-footer">
-                  Already have an account? <span><Link to="/login" className="link-col">Log in</Link></span>
-                </p>
-              </div>
-
-            </form>
           </div>
+
+          {/* Right Side: Form Panel */}
+          <div className="auth-right-panel">
+            <div className="auth-box">
+
+              {/* Mobile Brand Logo (Visible only on mobile/tablet) */}
+              <div className="mobile-logo-container">
+                <h1 className="mobile-auth-logo">Twine</h1>
+                <p className="mobile-logo-tagline">Connect. Match. Unfold</p>
+              </div>
+
+              {message && <p className="error-msg">{message}</p>}
+              <form className="auth-form" onSubmit={handleSignup}>
+
+                {/* Full Name */}
+                <div className="fields-input">
+                  <input
+                    type="text"
+                    name="fullName"
+                    placeholder="Full Name"
+                    className="auth-input"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                  />
+                </div>
+
+                {/* Username */}
+                <div className="fields-input">
+                  <input
+                    type="text"
+                    name="userName"
+                    placeholder="Username"
+                    className="auth-input"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                  />
+                </div>
+
+                {/* Email */}
+                <div className="fields-input">
+                  <input
+                    type="email"
+                    name="emailId"
+                    placeholder="Email"
+                    className="auth-input"
+                    value={emailId}
+                    onChange={(e) => setEmailId(e.target.value)}
+                  />
+                </div>
+
+                {/* Password */}
+                <div className="fields-input">
+                  <input
+                    type="password"
+                    name="userPass"
+                    placeholder="Password"
+                    className="auth-input"
+                    value={userPass}
+                    onChange={(e) => setUserPass(e.target.value)}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                  />
+                </div>
+
+                {/* Button */}
+                <div className="fields-input">
+                  <button type="submit" className="auth-btn" disabled={isSignup}>
+                    {isSignup ? "Signing Up..." : "Sign Up"}
+                  </button>
+                </div>
+
+                <div className="divider-line"></div>
+
+                {/* Footer-box */}
+                <div className="other">
+                  <p className="auth-footer">
+                    Already have an account? <span><Link to="/login" className="link-col">Log in</Link></span>
+                  </p>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
         </div>
+
+        {/* Footer-Section */}
+        <FooterArea />
 
       </div>
 
-      {/* Footer-Section */}
-      <FooterArea />
 
-    </div>
+      {/* OTP Verification Box */}
+      {/* <div>
+        <div>
+          <h3>OTP Verification </h3>
+        </div>
+      </div> */}
+
+    </>
   );
 }
 
