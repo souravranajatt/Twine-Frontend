@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   HeartPlus, UserLock, UserRoundPlus, UserRoundCheck,
   LayoutGrid, History, SquareUser, MapPin, BadgeCheck,
-  BriefcaseBusiness, CalendarDays, Loader2, MoreHorizontal
+  BriefcaseBusiness, CalendarDays, MoreHorizontal
 } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../Assets/Bundle/Profile.css";
+import "../Assets/Bundle/GlobalSpinner.css";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import NotFoundPage from "../ErrorHandler/ErrrorDesign/ErrorPageDesign";
@@ -343,33 +344,37 @@ function Profile() {
                   {actionType === "UNFOLLOWBTN" && (
                     <button className="profileUnFollowActionBtns-Box" onClick={handleUnfollow} disabled={isFollowing}>
                       {isFollowing
-                        ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" />
+                        ? <span className="twine-profile-actions-others-btn-spinner"></span>
                         : <UserRoundCheck size={20} className="profileActionBtnIconDesign" />}
-                      <span className="followActionButtonSpan">Unfollow</span>
+                      {!isFollowing && <span className="followActionButtonSpan">Unfollow</span>}
                     </button>
                   )}
                   {actionType === "REQUESTEDBTN" && (
                     <button className="profileUnFollowActionBtns-Box" onClick={handleCancelRequest} disabled={isFollowing}>
                       {isFollowing
-                        ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" />
+                        ? <span className="twine-profile-actions-others-btn-spinner"></span>
                         : <UserRoundCheck size={20} className="profileActionBtnIconDesign" />}
-                      <span className="followActionButtonSpan">Requested</span>
+                      {!isFollowing && <span className="followActionButtonSpan">Requested</span>}
                     </button>
                   )}
                   {actionType === "FOLLOWBTN" && (
                     <button className="profileFollowActionBtns-Box" onClick={handleFollow} disabled={isFollowing}>
                       {isFollowing
-                        ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" />
+                        ? <span className="twine-profile-actions-follow-btn-spinner"></span>
                         : <UserRoundPlus size={20} className="profileActionBtnIconDesign" />}
-                      <span className="followActionButtonSpan">
-                        {userProfileDataURL.followerStatus === true ? <>Follows you</> : <>Follow</>}
-                      </span>
+                      {!isFollowing && (
+                        <span className="followActionButtonSpan">
+                          {userProfileDataURL.followerStatus === true ? <>Follows you</> : <>Follow</>}
+                        </span>
+                      )}
                     </button>
                   )}
                   {!userProfileDataURL.crushStatus && !userProfileDataURL.crushSentStatus && (
                     <button className="profileSendLikeActionBtns-Box" name="action" value="likeSend" onClick={handleSendSecretLike} disabled={isSecretLikeSend}>
-                      {isSecretLikeSend ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" /> : <HeartPlus size={20} className="profileActionBtnIconDesign" />}
-                      <span>{isSecretLikeSend ? "Sending..." : "Send Crush"}</span>
+                      {isSecretLikeSend
+                        ? <span className="twine-profile-actions-others-btn-spinner"></span>
+                        : <HeartPlus size={20} className="profileActionBtnIconDesign" />}
+                      {!isSecretLikeSend && <span>Send Crush</span>}
                     </button>
                   )}
                 </div>
@@ -395,9 +400,9 @@ function Profile() {
                   <div className="profileActionContentBtn-Box">
                     <button className="profileUnFollowActionBtns-Box" onClick={handleUnblock} disabled={isUnblocking}>
                       {isUnblocking
-                        ? <Loader2 size={20} className="profileActionBtnIconDesign spinner-icon" />
+                        ? <span className="twine-profile-actions-unblock-btn-spinner"></span>
                         : <UserRoundCheck size={20} className="profileActionBtnIconDesign" />}
-                      <span>Unblock</span>
+                      {!isUnblocking && <span>Unblock</span>}
                     </button>
                   </div>
                 )}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Image, Heart, Tag, MapPin } from "lucide-react";
 import "./PostCard.css";
+import "../../../Assets/Bundle/GlobalSpinner.css";
 import { uploadPostAPI } from "../../../Utils/PostFeaturesAPI.js";
 import PostCardSkeleton from "./PostCardSkeleton.js";
 
@@ -167,11 +168,9 @@ function PostCard({ loggedUserData }) {
                         {error && <p className="errorPost">{error}</p>}
                         {success && <p className="successPost">{success}</p>}
 
-                        {uploadStatus !== "idle" && (
+                        {(uploadStatus === "uploading" || uploadStatus === "done") && (
                             <div className="uploadProgressBar-wrapper">
-                                <div className={`uploadProgressBar-shimmer ${uploadStatus === "done" ? "uploadProgressBar--done" :
-                                    uploadStatus === "error" ? "uploadProgressBar--error" : ""
-                                    }`} />
+                                <div className={`uploadProgressBar-shimmer ${uploadStatus === "done" ? "uploadProgressBar--done" : ""}`} />
                             </div>
                         )}
 
@@ -185,7 +184,7 @@ function PostCard({ loggedUserData }) {
                         <div className="createPost-fields">
                             <button type="submit" className="postButtonDesign"
                                 disabled={!file || isUploading}>
-                                {isUploading ? 'Uploading...' : 'Upload Post'}
+                                {isUploading ? <span className="twine-upload-btn-spinner"></span> : 'Upload Post'}
                             </button>
                         </div>
 

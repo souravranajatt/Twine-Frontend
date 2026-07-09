@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MapPin, BriefcaseBusiness, CalendarDays, Link2, BadgeCheck, Copy, UserX, Flag, Venus, Mars, Loader2 } from "lucide-react";
+import { MapPin, BriefcaseBusiness, CalendarDays, Link2, BadgeCheck, Copy, UserX, Flag, Venus, Mars } from "lucide-react";
 import { blockUserAPI, unblockUserAPI } from "../../../Utils/userProfileAPI.js";
 import "./PopupModal.css";
+import "../../../Assets/Bundle/GlobalSpinner.css";
 
 function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, username }) {
 
@@ -134,9 +135,9 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
                         <div className="popupActionDivider-Box" />
                         <button className="popupActionBtn-Box popupActionDanger-Box" onClick={handleBlock} disabled={isBlocking}>
                             {isBlocking
-                                ? <Loader2 size={16} className="popupActionIcon-Box spinner-icon" />
+                                ? <span className="twine-profile-actions-block-btn-spinner"></span>
                                 : <UserX height="16" width="16" className="popupActionIcon-Box" />}
-                            <span>{localData.blockedStatus ? "Unblock" : "Block"}</span>
+                            {!isBlocking && <span>{localData.blockedStatus ? "Unblock" : "Block"}</span>}
                         </button>
                         <div className="popupActionDivider-Box" />
                         <button className="popupActionBtn-Box popupActionDanger-Box">

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Loader2, BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal } from "lucide-react";
+import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import "./HomeFeed.css";
+import "../../../Assets/Bundle/GlobalSpinner.css";
 import { homeFeedFetch } from "../../../Utils/homePageAPI.js";
 import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../../Utils/PostActionAPI.js";
 import formatPostTime from "../../../Lib/formatPostTime.js";
@@ -321,7 +322,7 @@ function HomeFeed() {
                                                 }
                                             >
                                                 {submittingComments[post.fetchPostId]
-                                                    ? <Loader2 size={18} className="comment-icon spinner-icon" />
+                                                    ? <span className="twine-comment-btn-spinner"></span>
                                                     : <SendHorizontal size={18} className="comment-icon" />}
                                             </button>
                                         </form>
@@ -333,14 +334,12 @@ function HomeFeed() {
                     ))}
 
                     {loadingPosts && (
-                        <div className="feed-loading-spinner-box">
-                            <Loader2 size={30} className="spinner-icon" />
+                        <div className="twine-loader-spinner-center">
+                            <span className="twine-loader-spinner"></span>
                         </div>
                     )}
                 </div>
             )}
-
-            {/* Showing Popup for Each Post */}
             <PostBoxModal
                 isOpen={activePostForModal !== null}
                 onClose={() => setActivePostForModal(null)}

@@ -339,29 +339,6 @@
     color: #F0186E;
 }
 
-/* Spinner */
-.feed-loading-spinner-box {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding: 30px 0;
-}
-
-.spinner-icon {
-    animation: spin-loader 1s linear infinite;
-    color: #ff3b6c;
-}
-
-@keyframes spin-loader {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
 /* Responsive */
 @media (max-width: 480px) {
     .feed-wrapper {

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserTimelinePostsAPI } from "../../../Utils/userProfileAPI.js";
-import { HeartOff, Play, Users, Loader2 } from "lucide-react";
+import { HeartOff, Play, Users } from "lucide-react";
 import "./TimelinePosts.css";
+import "../../../Assets/Bundle/GlobalSpinner.css";
 import TimelineSkeleton from "../SkeletonBody/TimelineSkeleton.js";
 import PostBoxModal from "../../PostModal/PostBoxModal.js";
 
@@ -136,8 +137,8 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
                             </div>
                             {/* Pagination Loader */}
                             {loadingTimeline && timelinePosts.length > 0 && (
-                                <div className="feed-loading-spinner-box">
-                                    <Loader2 size={30} className="spinner-icon" />
+                                <div className="twine-loader-spinner-center">
+                                    <span className="twine-loader-spinner"></span>
                                 </div>
                             )}
                         </div>

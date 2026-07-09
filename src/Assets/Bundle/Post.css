@@ -26,29 +26,6 @@
     height: fit-content;
 }
 
-/* ===== LOADER ===== */
-.post-page-loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 80px 0;
-}
-
-.post-page-spinner {
-    animation: post-spin 1s linear infinite;
-    color: #ff3b6c;
-}
-
-@keyframes post-spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 /* ===== ERROR ===== */
 .post-page-error-box {
     display: flex;

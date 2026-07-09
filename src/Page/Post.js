@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, Loader2, MapPin, Lock } from 'lucide-react';
+import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, MapPin, Lock } from 'lucide-react';
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import { postFetchAPI, fetchCommentsAPI } from "../Utils/PostFeaturesAPI.js";
@@ -9,6 +9,7 @@ import { loggedUserDataAPI } from "../Utils/homePageAPI.js";
 import formatPostTime from "../Lib/formatPostTime.js";
 import renderFormattedCaption from "../Lib/renderFormattedCaption.js";
 import "../Assets/Bundle/Post.css";
+import "../Assets/Bundle/GlobalSpinner.css";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
@@ -429,7 +430,7 @@ function Post() {
                                         disabled={submittingComment || !commentText.trim()}
                                     >
                                         {submittingComment
-                                            ? <Loader2 size={16} className="post-page-spinner" />
+                                            ? <span className='twine-comment-modal-post-spinner'></span>
                                             : <SendHorizontal size={16} />
                                         }
                                     </button>
@@ -490,8 +491,8 @@ function Post() {
 
                                         {/* Pagination Loader */}
                                         {loadingComments && comments.length > 0 && (
-                                            <div className="post-page-comments-loader" style={{ padding: "10px 0" }}>
-                                                <Loader2 size={20} className="post-page-spinner" />
+                                            <div className="twine-loader-spinner-center">
+                                                <div className="twine-loader-spinner"></div>
                                             </div>
                                         )}
                                         <div ref={commentsEndRef} />

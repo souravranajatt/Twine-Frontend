@@ -1,0 +1,143 @@
+/* For Comment home Feed and profile feed */
+.twine-comment-btn-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px dashed #F0186E;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* For Comment modal post */
+.twine-comment-modal-post-spinner {
+    width: 16px;
+    height: 16px;
+    border: 1.5px dashed #F0186E;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* For Follow, Unfollow, RequestCancel and Send Crush Unblock Home Feed */
+.twine-profile-actions-follow-btn-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px dashed #ffffff;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.twine-profile-actions-others-btn-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px dashed #F0186E;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.twine-profile-actions-unblock-btn-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px dashed #18181b;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.twine-profile-actions-block-btn-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px dashed #e0183e;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* For Upload Post Button */
+.twine-upload-btn-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px dashed #ffffff;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Post Dropdown Spinner */
+.post-dropdown-spinner {
+    width: 18px;
+    height: 18px;
+    margin: 0 auto;
+    border: 2px dashed #18181b;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    display: block;
+}
+
+/* For Post Dropdown Delete Button */
+.twine-delete-btn-spinner {
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+    border: 2px dashed #ffffff;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    display: block;
+}
+
+/* Global Button Spinner  */
+.twine-loader-spinner {
+    display: inline-block;
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: conic-gradient(#ff3b6c 0deg 30deg,
+            transparent 30deg 45deg,
+            rgba(255, 59, 108, 0.75) 45deg 75deg,
+            transparent 75deg 90deg,
+            rgba(255, 59, 108, 0.45) 90deg 120deg,
+            transparent 120deg 135deg,
+            rgba(255, 59, 108, 0.2) 135deg 165deg,
+            transparent 165deg 180deg,
+            #2a2a2a 180deg 210deg,
+            transparent 210deg 225deg,
+            #2a2a2a 225deg 255deg,
+            transparent 255deg 270deg,
+            #2a2a2a 270deg 300deg,
+            transparent 300deg 315deg,
+            #2a2a2a 315deg 345deg,
+            transparent 345deg 360deg);
+    -webkit-mask: radial-gradient(farthest-side, transparent 65%, #000 66%);
+    mask: radial-gradient(farthest-side, transparent 65%, #000 66%);
+    animation: twineSpinnerRotation 0.7s linear infinite;
+}
+
+.twine-loader-spinner-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+
+/* For Animation */
+
+@keyframes twineSpinnerRotation {
+    to {
+        transform: rotate(360deg);
+    }
+}

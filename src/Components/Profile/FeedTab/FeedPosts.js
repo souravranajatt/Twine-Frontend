@@ -6,9 +6,10 @@ import formatPostTime from "../../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
 import {
     Heart, Forward, MessageCircle,
-    BadgeCheck, Aperture, Loader2, SendHorizontal, MoreHorizontal
+    BadgeCheck, Aperture, SendHorizontal, MoreHorizontal
 } from "lucide-react";
 import "./FeedPosts.css";
+import "../../../Assets/Bundle/GlobalSpinner.css";
 import PostsSkeleton from "../SkeletonBody/PostsSkeleton.js";
 import PostBoxModal from "../../PostModal/PostBoxModal.js";
 import PostDropDown from "../../PostModal/PostDropDown.js";
@@ -410,7 +411,7 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                                     }
                                                 >
                                                     {submittingComments[post.fetchPostId]
-                                                        ? <Loader2 size={18} className="comment-icon spinner-icon" />
+                                                        ? <span className="twine-comment-btn-spinner"></span>
                                                         : <SendHorizontal size={18} className="comment-icon" />}
                                                 </button>
                                             </form>
@@ -434,8 +435,8 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                     )}
                     {/* Pagination Loader */}
                     {loadingPosts && profilePosts.length > 0 && (
-                        <div className="feed-loading-spinner-box">
-                            <Loader2 size={30} className="spinner-icon" />
+                        <div className="twine-loader-spinner-center">
+                            <span className="twine-loader-spinner"></span>
                         </div>
                     )}
                 </div>

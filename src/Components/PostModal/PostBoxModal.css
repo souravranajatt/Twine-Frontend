@@ -346,29 +346,6 @@
     margin: 4px 0;
 }
 
-/* Spinner loader styling */
-.post-modal-spinner-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 0;
-    color: #8e8e93;
-}
-
-.spinner-icon {
-    animation: postModalSpin 1s linear infinite;
-}
-
-@keyframes postModalSpin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 .post-modal-empty-comments {
     text-align: center;
     color: #8e8e93;

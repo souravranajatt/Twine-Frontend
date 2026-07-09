@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { savePostAPI, unsavePostAPI, archivePostAPI, hideLikeAPI, unhideLikeAPI, disableCommentingAPI, enableCommentingAPI, deletePostAPI } from '../../Utils/PostActionAPI';
 import { useNavigate } from "react-router-dom";
 import "./PostDropDown.css";
+import "../../Assets/Bundle/GlobalSpinner.css";
 
 function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
 
@@ -192,13 +193,13 @@ function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
                     <button className='post-dropdown-action'>Edit Post</button>
                     <button className='post-dropdown-action' style={{ color: "red", fontWeight: "600" }} onClick={() => setShowDeleteConfirm(true)}>Delete Post</button>
                     <button className='post-dropdown-action' onClick={handleArchive} disabled={archivingState}>
-                        {archivingState ? <div className="post-dropdown-spinner button-spinner"></div> : "Archive Post"}
+                        {archivingState ? <span className="post-dropdown-spinner"></span> : "Archive Post"}
                     </button>
                     <button className='post-dropdown-action' onClick={handleLikeHide} disabled={likeHidingState}>
-                        {likeHidingState ? <div className="post-dropdown-spinner button-spinner"></div> : (localPost.likeVisible ? "Hide Likes" : "Show Likes")}
+                        {likeHidingState ? <span className="post-dropdown-spinner"></span> : (localPost.likeVisible ? "Hide Likes" : "Show Likes")}
                     </button>
                     <button className='post-dropdown-action' onClick={handleCommentToggle} disabled={commentTogglingState}>
-                        {commentTogglingState ? <div className="post-dropdown-spinner button-spinner"></div> : (localPost.commentEnable ? "Disable Comments" : "Enable Comments")}
+                        {commentTogglingState ? <span className="post-dropdown-spinner"></span> : (localPost.commentEnable ? "Disable Comments" : "Enable Comments")}
                     </button>
                     <button className='post-dropdown-action' onClick={handleCopyLink}>Copy Link</button>
                 </>
@@ -207,7 +208,7 @@ function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
                     <button className='post-dropdown-action' style={{ color: "red", fontWeight: "600" }}>Report</button>
                     <button className='post-dropdown-action' onClick={goToPost}>Go to Post</button>
                     <button className='post-dropdown-action' onClick={handleSave} disabled={savingState}>
-                        {savingState ? <div className="post-dropdown-spinner button-spinner"></div> : (localPost.savedByCurrentUser ? "Unsave Post" : "Save Post")}
+                        {savingState ? <span className="post-dropdown-spinner"></span> : (localPost.savedByCurrentUser ? "Unsave Post" : "Save Post")}
                     </button>
                     <button className='post-dropdown-action' onClick={handleCopyLink}>Copy Link</button>
                 </>
@@ -228,7 +229,7 @@ function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
                             onClick={handleDeleteConfirm}
                             disabled={deletingState}
                         >
-                            {deletingState ? <div className="post-dropdown-spinner button-spinner"></div> : "Delete"}
+                            {deletingState ? <span className="twine-delete-btn-spinner"></span> : "Delete"}
                         </button>
                         <button
                             className="pd-cancel-action-btn"

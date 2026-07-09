@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { X, Heart, MessageCircle, Forward, SendHorizontal, Loader2, BadgeCheck, MapPin } from "lucide-react";
+import { X, Heart, MessageCircle, Forward, SendHorizontal, BadgeCheck, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../Utils/PostActionAPI.js";
 import { fetchCommentsAPI } from "../../Utils/PostFeaturesAPI.js";
@@ -7,6 +7,7 @@ import { loggedUserDataAPI } from "../../Utils/homePageAPI.js";
 import formatPostTime from "../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../Lib/renderFormattedCaption.js";
 import "./PostBoxModal.css";
+import "../../Assets/Bundle/GlobalSpinner.css";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
@@ -391,8 +392,8 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
 
                                     {/* Pagination Loader */}
                                     {loadingComments && comments.length > 0 && (
-                                        <div className="post-modal-spinner-container" style={{ padding: "10px 0" }}>
-                                            <Loader2 size={20} className="spinner-icon" />
+                                        <div className="twine-loader-spinner-center">
+                                            <div className="twine-loader-spinner"></div>
                                         </div>
                                     )}
                                     <div ref={commentsEndRef} />
@@ -460,7 +461,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                                     disabled={submittingComment || !commentText.trim()}
                                 >
                                     {submittingComment ? (
-                                        <Loader2 size={16} className="spinner-icon" />
+                                        <span className="twine-comment-modal-post-spinner"></span>
                                     ) : (
                                         <SendHorizontal size={16} />
                                     )}

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { X, Loader2, BadgeCheck } from "lucide-react";
+import { X, BadgeCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { fetchFollowersAPI } from "../../../Utils/userProfileAPI.js";
 import "./FollowerList.css";
+import "../../../Assets/Bundle/GlobalSpinner.css";
 
 function FollowerList({ isOpen, onClose, targetUserId }) {
   const [followers, setFollowers] = useState([]);
@@ -108,8 +109,8 @@ function FollowerList({ isOpen, onClose, targetUserId }) {
 
             {/* Pagination & Loading  */}
             {loading && (
-              <div className="follower-modal-spinner">
-                <Loader2 size={24} className="spinner-icon" />
+              <div className="twine-loader-spinner-center">
+                <span className="twine-loader-spinner"></span>
               </div>
             )}
 

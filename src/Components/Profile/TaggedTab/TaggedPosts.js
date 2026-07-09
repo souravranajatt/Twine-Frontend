@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import useInfiniteScroll from "../../../Lib/useInfiniteScroll.js";
 import { searchUserTaggedPostsAPI } from "../../../Utils/userProfileAPI.js";
-import { CircleUser, Loader2, Play } from "lucide-react";
+import { CircleUser, Play } from "lucide-react";
 import "./TaggedPosts.css";
+import "../../../Assets/Bundle/GlobalSpinner.css";
 import TaggedSkeleton from "../SkeletonBody/TaggedSkeleton.js";
 import PostBoxModal from "../../PostModal/PostBoxModal.js";
 
@@ -126,8 +127,8 @@ function TaggedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                     </div>
                     {/* Pagination Loader */}
                     {loadingTagged && taggedPosts.length > 0 && (
-                        <div className="feed-loading-spinner-box">
-                            <Loader2 size={30} className="spinner-icon" />
+                        <div className="twine-loader-spinner-center">
+                            <span className="twine-loader-spinner"></span>
                         </div>
                     )}
                 </div>

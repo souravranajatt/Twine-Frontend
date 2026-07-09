@@ -40,7 +40,7 @@
     background-color: transparent;
     transition: background-color 0.1s ease;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: #1c1c1e;
+    color: #18181b;
     font-weight: 500;
 }
 
@@ -81,6 +81,7 @@
         width: 85vw;
         max-width: 320px;
         z-index: 1000;
+        align-items: center;
         animation: iosCenterAppear 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         transform-origin: center center;
         box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.25), 0 0 0 100vw rgba(0, 0, 0, 0.4);
@@ -89,30 +90,6 @@
     .post-dropdown-action {
         padding: 16px 20px;
         text-align: center;
-    }
-}
-
-.post-dropdown-spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-top: 2px solid #1c1c1e;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-.button-spinner {
-    margin: 0 auto;
-    display: block;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
     }
 }
 
@@ -207,16 +184,12 @@
 }
 
 .pd-delete-action-btn {
-    background: linear-gradient(135deg, #ff5f57 0%, #ff3b30 100%);
+    background: #262626;
     color: #fff;
 }
 
-.pd-delete-action-btn:hover:not(:disabled) {
-    background: linear-gradient(135deg, #e8504a 0%, #c9221a 100%);
-}
-
-.pd-delete-action-btn:active:not(:disabled) {
-    background: linear-gradient(135deg, #d44540 0%, #b51c15 100%);
+.pd-delete-action-btn:hover {
+    background: #404040;
 }
 
 .pd-cancel-action-btn {
