@@ -1,7 +1,8 @@
 import '../AuthCSS/AuthPage.css'; // Style File
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signupUserAuthAPI } from "../Utils/authAPI.js"; // Import API
+import { signupUserAuthAPI, sendOtpAuthAPI, verifyOtpAuthAPI } from "../Utils/authAPI.js"; // Import API
+import { maskEmail } from "../Lib/maskEmail.js"; // Email Masker
 import { Image, UserRoundPlus, TrendingUp } from "lucide-react";
 import FooterArea from "../Components/Footer/Footer.js";
 
@@ -12,15 +13,31 @@ function Signup() {
   const [userName, setUserName] = useState("");
   const [emailId, setEmailId] = useState("");
   const [userPass, setUserPass] = useState("");
+  const [otpValue, setOtpValue] = useState("");
+
+  // Full data
+  const [userData, setUserData] = useState({});
+
   const [message, setMessage] = useState("");
+  const [verifyMessage, setVerifyMessage] = useState("");
+
   const [isSignup, setIsSignup] = useState(false);
   const isSignupRef = useRef(false);
+  const [isVerify, setIsVerify] = useState(false);
+  const isVerifyRef = useRef(false);
+
+  const [OTPBox, setOTPBox] = useState(false);
+
   const navigate = useNavigate();
 
-  // Final submit validation
-  const handleSignup = async (e) => { // we can also write , const handleSignup (e){ }
+
+  // Final submit validation to request OTP
+  const handleSignup = async (e) => {
 
     e.preventDefault();
+
+    setMessage("");
+    setVerifyMessage("");
 
     if (isSignupRef.current || isSignup) return;
 
@@ -42,20 +59,22 @@ function Signup() {
 
 
 
-    // API call yaha karna
-    const userData = {
+    // Create Data Object
+    const signupData = {
       fullname: trimmedFullName,
       username: trimmedUserName,
       email: trimmedEmail,
       password: userPass
     }
 
+    setUserData(signupData);
+
     setIsSignup(true);
     isSignupRef.current = true;
 
     try {
-      await signupUserAuthAPI(userData);
-      navigate("/");
+      await sendOtpAuthAPI(signupData);
+      setOTPBox(true);
     } catch (err) {
       setMessage(err.message || err);
     } finally {
@@ -63,6 +82,48 @@ function Signup() {
       isSignupRef.current = false;
     }
 
+  }
+
+  // Handle OTP verification and final registration
+  const handleVerifyOTP = async (e) => {
+
+    e.preventDefault();
+
+    setMessage("");
+    setVerifyMessage("")
+
+    if (isVerifyRef.current || isVerify) return;
+
+    // Check OTP Validation
+    if (!otpValue || otpValue.trim().length !== 6) {
+      return setVerifyMessage("Please enter a valid 6-digit OTP!");
+    }
+
+    // Set Loading State
+    setIsVerify(true);
+    isVerifyRef.current = true;
+
+    try {
+      //  Verify OTP first
+      await verifyOtpAuthAPI({
+        email: userData.email,
+        otp: otpValue.trim()
+      });
+
+      setVerifyMessage("OTP Verified Successfully!");
+
+      // Create user
+      await signupUserAuthAPI(userData);
+      setOTPBox(false);
+      setOtpValue("");
+      navigate("/");
+
+    } catch (err) {
+      setVerifyMessage(err.message || err);
+    } finally {
+      setIsVerify(false);
+      isVerifyRef.current = false;
+    }
   }
 
 
@@ -165,7 +226,7 @@ function Signup() {
                 {/* Button */}
                 <div className="fields-input">
                   <button type="submit" className="auth-btn" disabled={isSignup}>
-                    {isSignup ? "Signing Up..." : "Sign Up"}
+                    {isSignup ? <span className="twine-auth-btn-spinner" /> : "Sign Up"}
                   </button>
                 </div>
 
@@ -191,11 +252,55 @@ function Signup() {
 
 
       {/* OTP Verification Box */}
-      {/* <div>
-        <div>
-          <h3>OTP Verification </h3>
+      {OTPBox && (
+        <div className="otp-overlay">
+          <div className="otp-modal-box">
+            <h3 className="otp-title">Verify Your Email</h3>
+            <p className="otp-subtitle">
+              We have sent a 6-digit OTP code to <span className="otp-email-highlight">{maskEmail(emailId.trim().toLowerCase())}</span>.
+            </p>
+
+            {verifyMessage && <p className="error-msg">{verifyMessage}</p>}
+
+            <div className="fields-input">
+              <input
+                type="text"
+                placeholder="Enter 6-Digit OTP"
+                className="auth-input otp-input"
+                maxLength={6}
+                value={otpValue}
+                onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ""))}
+                autoComplete="one-time-code"
+              />
+            </div>
+
+            <div className="otp-btn-group">
+              <button
+                type="button"
+                className="auth-btn otp-verify-btn"
+                onClick={handleVerifyOTP}
+                disabled={isVerify}
+              >
+                {isVerify ? <span className="twine-auth-btn-spinner" /> : "Verify & Sign Up"}
+              </button>
+
+              <button
+                type="button"
+                className="otp-cancel-btn"
+                onClick={() => {
+                  setOTPBox(false);
+                  setOtpValue("");
+                  setMessage("");
+                  setVerifyMessage("");
+                }}
+                disabled={isVerify}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
-      </div> */}
+      )}
 
     </>
   );

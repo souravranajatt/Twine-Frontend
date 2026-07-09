@@ -26,7 +26,6 @@ function Login() {
     if (!UserId.trim()) return setMessage("Username is required!");
     if (!UserPwd) return setMessage("Password is required!");
     if (UserPwd.length > 72) return setMessage("Password cannot exceed 72 characters!");
-    if (UserPwd.length < 8) return setMessage("Password must be at least 8 characters long!");
 
     // Send Data as JSON Object
     const userData = {
@@ -114,7 +113,7 @@ function Login() {
 
               <div className="fields-input">
                 <button type="submit" className="auth-btn" disabled={isLogin}>
-                  {isLogin ? "Logging in..." : "Log in"}
+                  {isLogin ? <span className="twine-auth-btn-spinner" /> : "Log in"}
                 </button>
               </div>
 

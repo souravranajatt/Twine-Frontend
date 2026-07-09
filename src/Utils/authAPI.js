@@ -20,6 +20,26 @@ export const signupUserAuthAPI = async (userData) => {
   }
 };
 
+// Signup Send OTP API Function
+export const sendOtpAuthAPI = async (userData) => {
+  try {
+    const response = await api.post("/auth/send-otp", userData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Something went wrong!";
+  }
+};
+
+// Verify OTP API Function
+export const verifyOtpAuthAPI = async (otpData) => {
+  try {
+    const response = await api.post("/auth/verify-otp", otpData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Something went wrong!";
+  }
+};
+
 // Logout Functionality ..
 export const logoutHandleAPI = async () => {
   try {

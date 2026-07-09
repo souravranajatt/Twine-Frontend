@@ -299,3 +299,138 @@
     font-weight: 400;
   }
 }
+
+/* OTP Modal Overlay */
+.otp-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeInOTP 0.3s ease-out;
+}
+
+@keyframes fadeInOTP {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.otp-modal-box {
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  padding: 32px 28px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  animation: slideUpOTP 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpOTP {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.otp-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 12px;
+}
+
+.otp-subtitle {
+  font-size: 14.5px;
+  color: #737373;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.otp-email-highlight {
+  color: #111;
+  font-weight: 600;
+}
+
+.otp-input {
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 4px;
+  font-weight: 600;
+}
+
+.otp-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.otp-verify-btn {
+  background-color: #ff3b6c !important;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.otp-verify-btn:hover {
+  background-color: #e0325c !important;
+}
+
+.otp-cancel-btn {
+  background-color: transparent;
+  color: #737373;
+  border: 1px solid #dbdbdb;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.otp-cancel-btn:hover {
+  background-color: #f5f5f5;
+  color: #262626;
+}
+
+/* Unique Auth Button Loading Spinner */
+.twine-auth-btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px dashed #ffffff;
+  border-radius: 50%;
+  animation: twineSpinnerRotation 0.7s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes twineSpinnerRotation {
+  to {
+    transform: rotate(360deg);
+  }
+}
