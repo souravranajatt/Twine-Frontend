@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Loader2 } from "lucide-react";
 import { fetchBlockedListAPI } from "../../Utils/SettingDataAPI.js";
 import { unblockUserAPI } from "../../Utils/userProfileAPI.js";
 
@@ -57,8 +56,8 @@ function BlockUserList() {
 
   if (isLoading) {
     return (
-      <div className="st-loading-spinner-box">
-        <Loader2 size={40} className="spin-icon" />
+      <div className="twine-setting-spinner-center">
+        <span className="twine-loader-spinner" />
       </div>
     );
   }
@@ -82,12 +81,11 @@ function BlockUserList() {
               </div>
               <span className="blocked-user-name">{user.username}</span>
               <button
-                className="unblock-Btn"
+                className="setting-unblock-Btn"
                 onClick={() => handleUnBlockUser(user.userId)}
                 disabled={isUnblocking}
-                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '100px' }}
               >
-                {unblockingUsers.has(user.userId) ? <Loader2 size={18} className="spin-icon" style={{ color: '#ffffff' }} /> : "Unblock"}
+                {unblockingUsers.has(user.userId) ? <span className="twine-setting-btn-spinner" /> : "Unblock"}
               </button>
             </div>
           ))

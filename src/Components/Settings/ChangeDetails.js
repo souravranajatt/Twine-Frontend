@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Loader2 } from "lucide-react";
 import { userPersonalDetailsUpdateAPI } from "../../Utils/SettingDataAPI.js";
 
 function ChangeDetails({ personalDetails, setPersonalDetails }) {
@@ -127,7 +126,7 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
 
         <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <button className="save-btn" type="submit" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '130px' }}>
-            {isLoading ? <Loader2 size={20} className="spin-icon" /> : 'Save changes'}
+            {isLoading ? <span className="twine-setting-btn-spinner" /> : 'Save changes'}
           </button>
           {statusMessage && (
             <span className={`status-text ${statusType}`}>

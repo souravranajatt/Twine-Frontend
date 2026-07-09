@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
 import { deactivateAccountAPI } from "../../Utils/SettingDataAPI.js";
 import { logoutHandleAPI } from "../../Utils/authAPI.js";
+import "../../Assets/Bundle/GlobalSpinner.css";
 
 function AccountDeactivate({ setShowExpiredPopup }) {
   const navigate = useNavigate();
@@ -85,7 +85,7 @@ function AccountDeactivate({ setShowExpiredPopup }) {
 
         <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
           <button type="submit" className="deactivate-btn" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '180px' }}>
-            {isLoading ? <Loader2 size={20} className="spin-icon" style={{ color: '#ffffff' }} /> : 'Deactivate Account'}
+            {isLoading ? <span className="twine-setting-btn-spinner"></span> : 'Deactivate Account'}
           </button>
           {statusMessage && (
             <span className={`status-text ${statusType}`}>

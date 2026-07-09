@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Loader2 } from "lucide-react";
 import { updateProfileAPI } from "../../Utils/SettingDataAPI.js";
+import "../../Assets/Bundle/GlobalSpinner.css";
 
 function EditProfile({ profileData, setProfileData }) {
   const [statusMessage, setStatusMessage] = useState(null);
@@ -311,7 +311,7 @@ function EditProfile({ profileData, setProfileData }) {
 
         <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <button type="submit" className="save-btn" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '130px' }}>
-            {isLoading ? <Loader2 size={20} className="spin-icon" /> : 'Save changes'}
+            {isLoading ? <span className="twine-setting-btn-spinner"></span> : 'Save changes'}
           </button>
           {statusMessage && (
             <span className={`status-text ${statusType}`}>

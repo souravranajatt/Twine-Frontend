@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import { Loader2 } from "lucide-react";
 import { updatePasswordAPI } from "../../Utils/SettingDataAPI.js";
 
 function ChangePassword() {
@@ -129,7 +128,7 @@ function ChangePassword() {
 
         <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
           <button type="submit" className="save-btn" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '170px' }}>
-            {isLoading ? <Loader2 size={20} className="spin-icon" style={{ color: '#ffffff' }} /> : "Update Password"}
+            {isLoading ? <span className="twine-setting-btn-spinner" /> : "Update Password"}
           </button>
           {statusMessage && (
             <span className={`status-text ${statusType}`}>{statusMessage}</span>

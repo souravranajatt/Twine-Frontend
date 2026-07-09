@@ -479,12 +479,12 @@ datalist option {
   font-family: 'Outfit', sans-serif;
 }
 
-.unblock-Btn {
+.setting-unblock-Btn {
   margin-left: auto;
   width: auto;
-  height: 30px;
+  height: 40px;
   padding: 5px 15px;
-  border-radius: 8px;
+  border-radius: 5px;
   background-color: #f44336;
   color: white;
   border: none;
@@ -493,9 +493,13 @@ datalist option {
   font-weight: 500;
   transition: all 0.3s ease;
   -webkit-tap-highlight-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 100px;
 }
 
-.unblock-Btn:hover {
+.setting-unblock-Btn:hover {
   background-color: #d32f2f;
 }
 
@@ -508,24 +512,6 @@ datalist option {
   to {
     transform: rotate(360deg);
   }
-}
-
-.spin-icon {
-  animation: spin 1s linear infinite;
-  color: #F0186E;
-}
-
-.save-btn .spin-icon {
-  color: #ffffff;
-}
-
-/* Settings Loading Spinner Container */
-.st-loading-spinner-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-  width: 100%;
 }
 
 /* Sessions List */
@@ -1320,8 +1306,8 @@ input:checked+.toggle-slider:before {
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: #262626;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   font-weight: 500;
@@ -1334,8 +1320,7 @@ input:checked+.toggle-slider:before {
 }
 
 .ap-unarchive-btn:hover {
-  background-color: #e5e7eb;
-  color: #111827;
+  background-color: #404040
 }
 
 /* Skeleton Loading Card */
@@ -1392,32 +1377,6 @@ input:checked+.toggle-slider:before {
 
   100% {
     background-position: -200% 0;
-  }
-}
-
-/* Spinner and Load-more */
-.ap-loadmore-spinner {
-  display: flex;
-  justify-content: center;
-  padding: 16px;
-}
-
-.ap-spinner-circle {
-  width: 24px;
-  height: 24px;
-  border: 2px solid #f3f4f6;
-  border-top-color: #6b7280;
-  border-radius: 50%;
-  animation: apRotate 0.8s infinite linear;
-}
-
-@keyframes apRotate {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
   }
 }
 

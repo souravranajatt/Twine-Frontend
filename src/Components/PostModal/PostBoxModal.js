@@ -392,8 +392,8 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
 
                                     {/* Pagination Loader */}
                                     {loadingComments && comments.length > 0 && (
-                                        <div className="twine-loader-spinner-center">
-                                            <div className="twine-loader-spinner"></div>
+                                        <div className="twine-postmodal-spinner-center">
+                                            <span className="twine-loader-spinner"></span>
                                         </div>
                                     )}
                                     <div ref={commentsEndRef} />

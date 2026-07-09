@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import "../../Assets/Bundle/Settings.css";
+import "../../Assets/Bundle/GlobalSpinner.css";
 import { fetchArchivePostsAPI } from "../../Utils/SettingDataAPI.js";
 import { unarchivePostAPI } from "../../Utils/PostActionAPI.js";
 import useInfiniteScroll from "../../Lib/useInfiniteScroll.js";
@@ -181,7 +182,7 @@ function ArchivePosts() {
                   onClick={() => handleUnarchivePlaceholder(post.postId)}
                   disabled={isUnarchiving[post.postId]}
                 >
-                  {isUnarchiving[post.postId] ? <div className="ap-spinner-circle" /> : "Unarchive"}
+                  {isUnarchiving[post.postId] ? <span className="twine-setting-btn-spinner" /> : "Unarchive"}
                 </button>
               </div>
             </div>
@@ -189,8 +190,8 @@ function ArchivePosts() {
 
           {/* Load-more indicator */}
           {loading && (
-            <div className="ap-loadmore-spinner">
-              <div className="ap-spinner-circle" />
+            <div className="twine-loader-spinner-center">
+              <span className="twine-loader-spinner"></span>
             </div>
           )}
         </div>

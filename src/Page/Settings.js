@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import "../Assets/Bundle/Settings.css";
-import { Loader2 } from "lucide-react";
+import "../Assets/Bundle/GlobalSpinner.css";
 import { settingDataAPI, userPersonalDetailsFetchAPI } from "../Utils/SettingDataAPI.js";
 
 // Import Page Components
@@ -103,9 +103,9 @@ function Settings() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="st-loading-spinner-box">
-          <Loader2 size={40} className="spin-icon" />
-        </div>
+        <div className="twine-setting-spinner-center">
+          <span className="twine-loader-spinner"></span>
+        </div >
       );
     }
 
