@@ -501,7 +501,7 @@ function Post() {
                             </div>
                         ) : (<>
                             <div style={{ padding: "20px", textAlign: "center" }}>
-                                <p style={{ color: "#888", fontSize: "13px" }}><i>Comments are disabled for this post</i></p>
+                                <p style={{ color: "#8e8e93", fontSize: "13px" }}><i>Comments are disabled for this post</i></p>
                             </div>
                         </>)}
 

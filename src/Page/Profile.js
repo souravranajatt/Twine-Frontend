@@ -389,13 +389,14 @@ function Profile() {
                   <div className="LockedAccountIconBox">
                     <UserLock height="24" width="24" className="LockedAccountIconContentBox" />
                   </div>
-                  <p className="LockedAccountSpanMsgBox"><span>Blocked Account</span></p>
+                  <div className="contextMsgBox">
+                    <p className="LockedAccountSpanMsgBox"><span>Blocked Account</span></p>
+                    <p className="contextMsgBoxParagraphText">
+                      <span>You've blocked this account.</span>
+                    </p>
+                  </div>
                 </div>
-                <div className="contextMsgBox">
-                  <p className="contextMsgBoxParagraphText">
-                    <span>You've blocked this account.</span>
-                  </p>
-                </div>
+
                 {userProfileDataURL.searchLoggedUser === false && (
                   <div className="profileActionContentBtn-Box">
                     <button className="profileUnFollowActionBtns-Box" onClick={handleUnblock} disabled={isUnblocking}>

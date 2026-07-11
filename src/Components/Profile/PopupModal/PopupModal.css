@@ -58,7 +58,6 @@
     font-size: 15px;
     font-weight: 700;
     color: #111010;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
 }
 
@@ -91,9 +90,8 @@
 
 .popupModalInfoText-Box {
     font-size: 13.5px;
-    color: #3a3a3c;
+    color: #111010;
     font-weight: 500;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .popupModalInfoLink-Box {
@@ -130,10 +128,9 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    color: #3a3a3c;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #111010;
     transition: background-color 0.15s ease;
 }
 
@@ -158,5 +155,5 @@
 
 .popupActionIcon-Box {
     stroke-width: 2;
-    color: #3a3a3c;
+    color: #111010;
 }

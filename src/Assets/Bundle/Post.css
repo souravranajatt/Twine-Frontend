@@ -98,6 +98,7 @@
 
 .post-page-private-subtext {
     font-size: 13px;
+    font-weight: 400;
     color: #8e8e93;
 }
 
@@ -149,10 +150,6 @@
     text-decoration: none;
 }
 
-.post-page-username-link:hover {
-    text-decoration: underline;
-}
-
 .post-page-verify-badge {
     fill: #F0186E;
     color: #ffffff;
@@ -168,10 +165,10 @@
 }
 
 .post-page-time {
-    font-size: 12.5px;
+    font-size: 12px;
     color: #8e8e93;
-    font-weight: 400;
     margin-left: 2px;
+    font-weight: 400;
 }
 
 /* ===== POST MEDIA ===== */
@@ -216,14 +213,13 @@
 }
 
 .post-page-caption-text {
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 400;
     color: #1c1c1e;
     line-height: 1.5;
     overflow-wrap: break-word;
     word-wrap: break-word;
     white-space: pre-wrap;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* ===== META ROW ===== */
@@ -238,10 +234,9 @@
 .post-page-location {
     font-size: 12px;
     color: #8e8e93;
-    font-weight: 600;
+    font-weight: 700;
     display: flex;
     align-items: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .post-page-meta-divider {
@@ -320,9 +315,8 @@
 
 .post-page-action-count {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     color: #1c1c1e;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .post-page-share-btn {
@@ -333,8 +327,8 @@
 .post-page-comment-form {
     display: flex;
     align-items: center;
-    background-color: #f3f4f6;
-    border: 1px solid #e5e7eb;
+    background-color: #f3f3f6cc;
+    border: 1px solid #0000000a;
     border-radius: 9999px;
     padding: 6px 4px 6px 14px;
     transition: all 0.25s ease;
@@ -353,9 +347,8 @@
     background: transparent;
     outline: none;
     font-size: 13.5px;
-    color: #1a202c;
+    color: #111010;
     padding: 5px 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .post-page-comment-input::placeholder {
@@ -404,7 +397,8 @@
     text-align: center;
     color: #8e8e93;
     font-size: 13px;
-    padding: 20px 0;
+    font-weight: 400;
+    padding: 40px 10px;
 }
 
 .post-page-comments-list {
@@ -442,7 +436,6 @@
 .post-page-comment-body {
     flex: 1;
     min-width: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .post-page-comment-meta {
@@ -467,11 +460,13 @@
 
 .post-page-comment-text {
     font-size: 13.5px;
-    color: #3a3a3c;
     line-height: 1.45;
+    color: #1c1c1e;
     margin: 0;
-    overflow-wrap: break-word;
+    font-weight: 400;
+    display: inline;
     word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 /* ===== RESPONSIVE ===== */

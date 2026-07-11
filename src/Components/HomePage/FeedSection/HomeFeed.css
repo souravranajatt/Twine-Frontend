@@ -55,8 +55,8 @@
 }
 
 .username-title {
-    color: #111;
-    font-weight: 600;
+    color: #111010;
+    font-weight: 700;
     font-size: 15px;
     display: flex;
     align-items: center;
@@ -74,9 +74,10 @@
 }
 
 .profilePostTimeText {
-    font-size: 12.5px;
+    font-size: 12px;
     color: #8e8e93;
     margin-left: 2px;
+    font-weight: 400;
 }
 
 /* Post Media */
@@ -123,8 +124,9 @@
 .caption-paraHead {
     font-weight: 400;
     overflow-wrap: break-word;
+    word-wrap: break-word;
     white-space: pre-wrap;
-    font-size: 14.5px;
+    font-size: 14px;
     line-height: 1.5;
     color: #1c1c1e;
 }
@@ -144,6 +146,12 @@
     color: #09090b;
     font-weight: 600;
     cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.caption-mention:hover {
+    color: #000000;
+    text-decoration: underline;
 }
 
 .captionShowMoreBtn {
@@ -169,7 +177,7 @@
 .postMetaLocation {
     font-size: 12px;
     color: #8e8e93;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .metaDivider {
@@ -233,8 +241,7 @@
 
 .postActionCountText {
     font-size: 14px;
-    font-weight: 600;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
     color: #1c1c1e;
 }
 
@@ -282,8 +289,8 @@
 .commentPost-Box {
     display: flex;
     align-items: center;
-    background-color: #f3f4f6;
-    border: 1px solid #e5e7eb;
+    background-color: #f3f3f6cc;
+    border: 1px solid #0000000a;
     border-radius: 9999px;
     padding: 6px 4px 6px 14px;
     transition: all 0.25s ease;
@@ -302,7 +309,7 @@
     background: transparent;
     outline: none;
     font-size: 13.5px;
-    color: #1a202c;
+    color: #111010;
 }
 
 .commentPost-field::placeholder {

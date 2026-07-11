@@ -57,7 +57,7 @@ function FollowerList({ isOpen, onClose, targetUserId }) {
       {/* Modal box */}
       <div className="follower-modal-box">
         <div className="follower-modal-header">
-          <h3>Followers</h3>
+          <h3 className="headerForFollowerList">Followers</h3>
           <button className="follower-modal-close" onClick={onClose}>
             <X size={20} />
           </button>
@@ -73,7 +73,7 @@ function FollowerList({ isOpen, onClose, targetUserId }) {
               <div key={item.userId} className="follower-list-row">
                 {/* User info linking to profile */}
                 <Link
-                  to={`/${item.username}/posts`}
+                  to={`/${item.username}`}
                   onClick={onClose}
                   className="follower-info-link"
                 >

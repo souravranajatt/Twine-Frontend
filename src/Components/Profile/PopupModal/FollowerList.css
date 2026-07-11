@@ -60,7 +60,7 @@
   justify-content: space-between;
 }
 
-.follower-modal-header h3 {
+.follower-modal-header h3.headerForFollowerList {
   font-size: 16px;
   font-weight: 700;
   color: #111010;
@@ -157,7 +157,7 @@
 .follower-row-username {
   font-size: 14px;
   font-weight: 600;
-  color: #1c1c1e;
+  color: #111010;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -172,7 +172,7 @@
 
 /* Follow status badge (read-only) */
 .follower-row-btn {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   padding: 5px 12px;
   border-radius: 8px;
