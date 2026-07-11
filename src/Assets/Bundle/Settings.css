@@ -141,8 +141,9 @@
 }
 
 .section-subtitle {
-  color: #888888;
-  font-size: 16px;
+  color: #8e8e93;
+  font-size: 14px;
+  font-weight: 400;
   margin-bottom: 40px;
 }
 
@@ -296,6 +297,7 @@
   border: 1px solid #dbdbdb;
   border-radius: 6px;
   font-size: 15px;
+  font-weight: 400;
   color: #1a1a1a;
   background-color: #fafafa;
   transition: all 0.3s ease;
@@ -479,8 +481,7 @@ datalist option {
 .blocked-user-name {
   color: #1a1a1a;
   font-size: 15px;
-  font-weight: 500;
-  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
 }
 
 .setting-unblock-Btn {
@@ -705,7 +706,7 @@ input:checked+.toggle-slider:before {
   }
 
   .section-subtitle {
-    font-size: 15px;
+    font-size: 14px;
     margin-bottom: 24px;
   }
 
@@ -977,7 +978,6 @@ input:checked+.toggle-slider:before {
   color: #ffffff;
   font-weight: 600;
   font-size: 16px;
-  font-family: 'Outfit', sans-serif;
 }
 
 .sp-grid-video-badge {
@@ -1054,18 +1054,17 @@ input:checked+.toggle-slider:before {
 
 .sp-empty-title {
   font-size: 18px;
-  font-weight: 600;
-  color: #374151;
+  font-weight: 700;
+  color: rgb(55, 65, 81);
   margin-bottom: 6px;
-  font-family: 'Outfit', sans-serif;
 }
 
 .sp-empty-text {
-  color: #6b7280;
+  color: #8e8e93;
   font-size: 14px;
+  font-weight: 400;
   max-width: 320px;
   line-height: 1.5;
-  font-family: 'Outfit', sans-serif;
 }
 
 
@@ -1314,12 +1313,11 @@ input:checked+.toggle-slider:before {
   color: #ffffff;
   border: none;
   border-radius: 8px;
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
   margin-top: 8px;
   transition: background-color 0.2s ease, color 0.2s ease;
-  font-family: 'Outfit', sans-serif;
   text-align: center;
 }
 
@@ -1399,17 +1397,15 @@ input:checked+.toggle-slider:before {
 
 .ap-empty-title {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   color: #374151;
   margin: 12px 0 6px 0;
-  font-family: 'Outfit', sans-serif;
 }
 
 .ap-empty-text {
-  color: #6b7280;
+  color: #8e8e93;
   font-size: 14px;
   max-width: 320px;
   line-height: 1.5;
   margin: 0;
-  font-family: 'Outfit', sans-serif;
 }
