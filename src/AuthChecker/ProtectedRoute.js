@@ -1,15 +1,15 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../Utils/instanceAPI"; // tumhara axios instance (withCredentials:true)
+import api from "../Utils/instanceAPI";
 import Loader from "../Components/Loader/Loader";
 
 const ProtectedRoute = ({ children }) => {
-  const [auth, setAuth] = useState(null); // null → loading
+  const [auth, setAuth] = useState(null);
 
   useEffect(() => {
     const verifyAuth = async () => {
       try {
-        const res = await api.get("/auth/check-auth"); // backend se auth check
+        const res = await api.get("/auth/check-auth");
         setAuth(res.data);
       } catch (err) {
         setAuth(false);
@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
     verifyAuth();
   }, []);
 
-  if (auth === null) return <Loader />; // optional loading
+  if (auth === null) return <Loader />;
 
   return auth ? children : <Navigate to="/login" replace />;
 };

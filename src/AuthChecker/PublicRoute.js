@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../Utils/instanceAPI"; // axios instance withCredentials:true
+import api from "../Utils/instanceAPI";
 import Loader from "../Components/Loader/Loader";
 
 const PublicRoute = ({ children }) => {
@@ -19,9 +19,8 @@ const PublicRoute = ({ children }) => {
     checkAuth();
   }, []);
 
-  if (auth === null) return <Loader />; // optional loading
+  if (auth === null) return <Loader />;
 
-  // If logged in → redirect to home page
   return auth ? <Navigate to="/" replace /> : children;
 };
 
