@@ -1,12 +1,20 @@
 import { Bell, User, Search, LogOut, CircleUserRound } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import useDebounce from "../../Lib/useDebounce.js";
 import "./Header.css";
 import { logoutHandleAPI } from "../../Utils/authAPI";
+import { searchUsersAPI } from "../../Utils/searchAPI.js";
+
+const Default_ProfilePhoto = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
 function Header() {
 
   const [searchGo, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+
   const [profileTabNav, setProfileTabNav] = useState(false);
   const [notifyTabNav, setNotifyTabNav] = useState(false);
   const navigate = useNavigate();
@@ -14,6 +22,10 @@ function Header() {
   // Refs to detect outside click
   const profileRef = useRef(null);
   const notifyRef = useRef(null);
+  const searchRef = useRef(null);
+
+  // Debounced value
+  const debouncedSearch = useDebounce(searchGo, 500);
 
   // Toogle Nav Bar
   const HandleprofileTabNavToogleBtn = () => {
@@ -34,6 +46,9 @@ function Header() {
       if (notifyRef.current && !notifyRef.current.contains(event.target)) {
         setNotifyTabNav(false);
       }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowResults(false);
+      }
     };
 
     document.addEventListener("click", handleClickOutside);
@@ -43,9 +58,38 @@ function Header() {
   }, []);
 
   // Define Search Variable & Search Handle
-  const searchHandle = (e) => {
-    // API for Search
-  }
+  useEffect(() => {
+
+    if (!debouncedSearch || debouncedSearch.trim().length <= 1) {
+      setSearchResults([]);
+      setShowResults(false);
+      return;
+    }
+
+    const controller = new AbortController(); // cancel previous request
+
+    const fetchResults = async () => {
+      setIsSearching(true);
+      try {
+        const data = await searchUsersAPI(
+          debouncedSearch.trim(),
+          controller.signal
+        );
+        setSearchResults(data);
+        setShowResults(true);
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.log("Search error!", err);
+        }
+      } finally {
+        setIsSearching(false);
+      }
+    };
+
+    fetchResults();
+
+    return () => controller.abort();
+  }, [debouncedSearch]);
 
   // Logout Functionality ....
   const logoutHandle = async () => {
@@ -108,24 +152,71 @@ function Header() {
       </div>
 
       {/* Header Center */}
-      <div className="header-center">
+      <div className="header-center" ref={searchRef}>
         {/* Search Box Form */}
-        <form className="search-box" onSubmit={searchHandle}>
+        <form className="search-box" onSubmit={(e) => e.preventDefault()}>
           <div className="search-nav-icons">
-            <Search size={16} className="search-icon" />
+            {isSearching
+              ? <div className="twine-search-spinner-center">
+                <div className="twine-search-loader-spinner"></div>
+              </div>
+              : <Search size={16} className="search-icon" />
+            }
           </div>
           <input
             type="text"
             placeholder="Search"
             name="search"
             value={searchGo}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              if (!e.target.value) setShowResults(false);
+            }}
+            onFocus={(e) => {
+              if (searchResults.length > 0 && e.target.value.trim().length > 1) setShowResults(true);
+            }}
             className="boxField"
             autoCorrect="off"
             autoComplete="off"
             autoCapitalize="none"
           />
         </form>
+
+        {/* Search Results Dropdown */}
+        {showResults && (
+          <div className="search-dropdown">
+            {searchResults.length === 0 ? (
+              <p className="search-no-result">No users found</p>
+            ) : (
+              searchResults.map(user => (
+                <Link
+                  to={`/${user.username}`}
+                  key={user.userId}
+                  className="search-result-item"
+                  onClick={() => {
+                    setShowResults(false);
+                    setSearch("");
+                  }}
+                >
+                  <img
+                    src={user.profilePhoto || Default_ProfilePhoto}
+                    alt={user.username}
+                    className="search-result-avatar"
+                  />
+                  <div className="search-result-info">
+                    <p className="search-result-username">
+                      {user.username}
+                    </p>
+                    <p className="search-result-fullname">
+                      {user.fullname}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+        )}
+
       </div>
 
       {/* Header Right */}
