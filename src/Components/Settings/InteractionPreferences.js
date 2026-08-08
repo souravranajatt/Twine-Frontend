@@ -6,19 +6,25 @@ import {
   hideLikeDefaultSettingAPI,
   showLikeDefaultSettingAPI,
   turnOffCommentingDefaultSettingAPI,
-  turnOnCommentingDefaultSettingAPI
+  turnOnCommentingDefaultSettingAPI,
+  updateTaggingPreferenceAPI,
+  updateMentionPreferenceAPI
 } from "../../Utils/SettingDataAPI.js";
 
 function InteractionPreferences() {
   const [preferences, setPreferences] = useState({
     likeVisible: true,
-    commentingEnable: true
+    commentingEnable: true,
+    taggingEnable: "EVERYONE",
+    mentionEnable: "EVERYONE"
   });
   const [isLoading, setIsLoading] = useState(true);
 
   const hasFetched = useRef(false);
   const isTogglingLike = useRef(false);
   const isTogglingComment = useRef(false);
+  const isUpdatingTagging = useRef(false);
+  const isUpdatingMention = useRef(false);
 
   useEffect(() => {
     if (hasFetched.current) return;
@@ -31,7 +37,9 @@ function InteractionPreferences() {
         if (data) {
           setPreferences({
             likeVisible: data.likeVisible ?? true,
-            commentingEnable: data.commentingEnable ?? true
+            commentingEnable: data.commentingEnable ?? true,
+            taggingEnable: data.taggingEnable ?? "EVERYONE",
+            mentionEnable: data.mentionEnable ?? "EVERYONE"
           });
         }
       } catch (err) {
@@ -44,7 +52,7 @@ function InteractionPreferences() {
     fetchPreferences();
   }, []);
 
-  // Update like visiblity
+  // Update like visibility
   const handleLikeToggle = async () => {
     if (isTogglingLike.current) return;
     isTogglingLike.current = true;
@@ -90,6 +98,75 @@ function InteractionPreferences() {
     }
   };
 
+  // Update tagging preference
+  const handleTaggingChange = async (e) => {
+    const displayValue = e.target.value.trim().toLowerCase();
+
+    // Explicit mapping - UI values to backend enum values
+    const ENUM_MAP = {
+      "everyone": "EVERYONE",
+      "following": "FOLLOWING_ONLY",
+      "no_one": "NO_ONE"
+    };
+
+    const enumValue = ENUM_MAP[displayValue];
+    if (!enumValue) {
+      console.error("Unknown display value:", displayValue, "from raw:", e.target.value);
+      return;
+    }
+
+    console.log("Mapped to enum:", enumValue);
+
+    if (isUpdatingTagging.current || preferences.taggingEnable === enumValue) return;
+    isUpdatingTagging.current = true;
+
+    const previousValue = preferences.taggingEnable;
+    setPreferences(prev => ({ ...prev, taggingEnable: enumValue }));
+
+    try {
+      await updateTaggingPreferenceAPI(enumValue);
+    } catch (err) {
+      console.error("Failed to update tagging preference:", err);
+      setPreferences(prev => ({ ...prev, taggingEnable: previousValue }));
+    } finally {
+      isUpdatingTagging.current = false;
+    }
+  };
+
+  // Update mention preference
+  const handleMentionChange = async (e) => {
+    const displayValue = e.target.value.trim().toLowerCase();
+
+    // Explicit mapping - UI values to backend enum values
+    const ENUM_MAP = {
+      "everyone": "EVERYONE",
+      "following": "FOLLOWING_ONLY",
+      "no_one": "NO_ONE"
+    };
+
+    const enumValue = ENUM_MAP[displayValue];
+    if (!enumValue) {
+      console.error("Unknown display value:", displayValue, "from raw:", e.target.value);
+      return;
+    }
+
+    console.log("Mapped to enum:", enumValue);
+
+    if (isUpdatingMention.current || preferences.mentionEnable === enumValue) return;
+    isUpdatingMention.current = true;
+
+    const previousValue = preferences.mentionEnable;
+    setPreferences(prev => ({ ...prev, mentionEnable: enumValue }));
+
+    try {
+      await updateMentionPreferenceAPI(enumValue);
+    } catch (err) {
+      console.error("Failed to update mention preference:", err);
+      setPreferences(prev => ({ ...prev, mentionEnable: previousValue }));
+    } finally {
+      isUpdatingMention.current = false;
+    }
+  };
 
   if (isLoading) {
     return (
@@ -98,6 +175,12 @@ function InteractionPreferences() {
       </div>
     );
   }
+
+  // Helper to convert backend enum to UI value
+  const toUIValue = (enumVal) => {
+    if (enumVal === "FOLLOWING_ONLY") return "following";
+    return enumVal.toLowerCase();
+  };
 
   return (
     <div className="ip-main-container">
@@ -148,7 +231,12 @@ function InteractionPreferences() {
             <span className="ip-item-label">Who can tag you</span>
             <span className="ip-item-desc">Choose who can tag you in their posts.</span>
           </div>
-          <select className="ip-select-input" defaultValue="everyone">
+          <select
+            className="ip-select-input"
+            value={toUIValue(preferences.taggingEnable)}
+            onChange={handleTaggingChange}
+            disabled={isUpdatingTagging.current}
+          >
             <option value="everyone">Everyone</option>
             <option value="following">People you follow</option>
             <option value="no_one">No one</option>
@@ -160,7 +248,12 @@ function InteractionPreferences() {
             <span className="ip-item-label">Who can mention you</span>
             <span className="ip-item-desc">Choose who can @mention you in their captions or comments.</span>
           </div>
-          <select className="ip-select-input" defaultValue="everyone">
+          <select
+            className="ip-select-input"
+            value={toUIValue(preferences.mentionEnable)}
+            onChange={handleMentionChange}
+            disabled={isUpdatingMention.current}
+          >
             <option value="everyone">Everyone</option>
             <option value="following">People you follow</option>
             <option value="no_one">No one</option>
@@ -172,5 +265,3 @@ function InteractionPreferences() {
 }
 
 export default InteractionPreferences;
-
-

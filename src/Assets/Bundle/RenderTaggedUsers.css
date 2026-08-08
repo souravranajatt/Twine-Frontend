@@ -1,0 +1,182 @@
+/* ── Trigger pill ───────────────────────────────── */
+.twine-tagged-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #f3f3f3;
+    border: 1px solid #dbdbdb;
+    border-radius: 9999px;
+    padding: 3px 10px 3px 8px;
+    cursor: pointer;
+    color: #111010;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.twine-tagged-toggle-btn:hover {
+    background: #e5e5e5;
+    border-color: #c6c6c6;
+}
+
+.twine-tagged-toggle-icon {
+    color: #8e8e93;
+    flex-shrink: 0;
+}
+
+.twine-tagged-btn-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #111010;
+}
+
+/* ── Full-screen blur overlay ───────────────────── */
+.twine-tagged-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: twine-tagged-fade-in 0.18s ease;
+}
+
+@keyframes twine-tagged-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ── Modal card ─────────────────────────────────── */
+.twine-tagged-modal {
+    background: #ffffff;
+    border-radius: 14px;
+    width: 340px;
+    max-width: 92vw;
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+    animation: twine-tagged-slide-up 0.2s ease;
+}
+
+@keyframes twine-tagged-slide-up {
+    from {
+        transform: translateY(18px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ── Modal header ───────────────────────────────── */
+.twine-tagged-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid #efefef;
+    flex-shrink: 0;
+}
+
+.twine-tagged-modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111010;
+}
+
+.twine-tagged-modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #8e8e93;
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    border-radius: 50%;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.twine-tagged-modal-close:hover {
+    color: #111010;
+    background: #f3f3f3;
+}
+
+/* ── Scrollable list ────────────────────────────── */
+.twine-tagged-modal-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 6px 0;
+}
+
+.twine-tagged-modal-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.twine-tagged-modal-list::-webkit-scrollbar-thumb {
+    background: #dbdbdb;
+    border-radius: 4px;
+}
+
+/* ── Row ────────────────────────────────────────── */
+.twine-tagged-modal-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: #111010;
+    transition: background 0.12s ease;
+}
+
+.twine-tagged-modal-row:hover {
+    background: #f9f9f9;
+}
+
+.twine-tagged-modal-img-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f3f3f3;
+}
+
+.twine-tagged-modal-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.twine-tagged-modal-name-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+}
+
+.twine-tagged-modal-username {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111010;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.twine-tagged-modal-badge {
+    fill: #F0186E;
+    color: #ffffff;
+    stroke-width: 2.5;
+    flex-shrink: 0;
+}

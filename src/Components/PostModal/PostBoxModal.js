@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { X, Heart, MessageCircle, Forward, SendHorizontal, BadgeCheck, MapPin } from "lucide-react";
+import { X, Heart, MessageCircle, Forward, SendHorizontal, BadgeCheck, MapPin, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../Utils/PostActionAPI.js";
 import { fetchCommentsAPI } from "../../Utils/PostFeaturesAPI.js";
 import { loggedUserDataAPI } from "../../Utils/homePageAPI.js";
 import formatPostTime from "../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../Lib/renderFormattedCaption.js";
+import RenderTaggedUsers from "../../Lib/RenderTaggedUsers.js";
+import CustomVideoPlayer from "../../Lib/CustomVideoPlayer.js";
+import PostDropDown from "./PostDropDown.js";
 import "./PostBoxModal.css";
 import "../../Assets/Bundle/GlobalSpinner.css";
 
@@ -21,6 +24,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
     const [submittingComment, setSubmittingComment] = useState(false);
     const [loggedUser, setLoggedUser] = useState(null);
     const [expandedCaption, setExpandedCaption] = useState(false);
+    const [openDropdown, setOpenDropdown] = useState(false);
 
     const originalUrlRef = useRef("");
     const commentsEndRef = useRef(null);
@@ -62,6 +66,31 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
             }
         };
     }, [isOpen, post]);
+
+    // Lock body scroll when modal open
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen]);
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (!e.target.closest('.postDropdownWrapper')) {
+                setOpenDropdown(false);
+            }
+        };
+        if (openDropdown) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [openDropdown]);
 
 
 
@@ -253,13 +282,10 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                 {/* Post Media Panel (Left) */}
                 <div className="post-modal-media-section">
                     {localPost.postType === "VIDEO" ? (
-                        <video
+                        <CustomVideoPlayer
                             src={localPost.fetchFileName}
                             className="post-modal-media-content"
-                            controls
-                            playsInline
-                            autoPlay
-                            muted
+                            autoPlay={true}
                         />
                     ) : (
                         <img
@@ -293,12 +319,6 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                                             <BadgeCheck size={16} className="post-modal-verify-badge" />
                                         )}
                                     </div>
-                                    {localPost.fetchPostLocation && (
-                                        <span className="post-modal-location-text">
-                                            <MapPin size={10} style={{ marginRight: 2 }} />
-                                            {localPost.fetchPostLocation}
-                                        </span>
-                                    )}
                                 </div>
                             </div>
 
@@ -307,6 +327,27 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                                     {formatPostTime(localPost.fetchUploadAt)}
                                 </span>
                             )}
+                            {/* Three-dot dropdown */}
+                            <div className="postDropdownWrapper" style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenDropdown(prev => !prev)}
+                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '5px', display: 'flex' }}
+                                >
+                                    <MoreHorizontal size={20} color="#111010" />
+                                </button>
+                                {openDropdown && (
+                                    <PostDropDown
+                                        isOpen={openDropdown}
+                                        onClose={() => setOpenDropdown(false)}
+                                        Post={localPost}
+                                        onPostUpdate={(updatedPost) => {
+                                            setLocalPost(updatedPost);
+                                            if (onPostUpdate) onPostUpdate(updatedPost);
+                                        }}
+                                    />
+                                )}
+                            </div>
                         </div>
 
                         {/* Caption row - placed inside header once, without repeating avatar */}
@@ -324,17 +365,24 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                             </div>
                         )}
 
-                        {/* Tagged users - placed inside header */}
-                        {localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0 && (
-                            <div className="post-modal-header-tagged">
-                                <span className="post-modal-tagged-label">With: </span>
-                                {localPost.fetchTaggedUsers.map((user) => (
-                                    <span key={user} className="post-modal-tagged-pill">
-                                        @{user.replace(/^@/, "")}
+                        {/* Location & Tagged */}
+                        {(localPost.fetchPostLocation || (localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0)) && (
+                            <div className="post-modal-location-tagged-row" style={{ display: "flex", alignItems: "center", gap: "6px", margin: "4px 0 8px" }}>
+                                {localPost.fetchPostLocation && (
+                                    <span className="post-modal-location-text" style={{ display: "inline-flex", alignItems: "center", fontSize: "11px", color: "#8e8e93" }}>
+                                        <MapPin size={10} style={{ marginRight: 2 }} />
+                                        {localPost.fetchPostLocation}
                                     </span>
-                                ))}
+                                )}
+                                {localPost.fetchPostLocation && localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0 && (
+                                    <span style={{ fontSize: "10px", color: "#8e8e93" }}>•</span>
+                                )}
+                                {localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0 && (
+                                    <RenderTaggedUsers taggedUsers={localPost.fetchTaggedUsers} />
+                                )}
                             </div>
                         )}
+
                     </div>
 
                     {/* Scrollable comments panel */}

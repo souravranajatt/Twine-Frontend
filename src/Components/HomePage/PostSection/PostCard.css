@@ -261,3 +261,218 @@
         position: relative;
     }
 }
+
+/* Unique Single Tagged System Styles */
+.twine-tag-active-icon {
+    color: #111010;
+    fill: rgba(17, 16, 16, 0.12);
+    stroke-width: 2.5;
+}
+
+.twine-tagged-chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 10px;
+    width: 100%;
+}
+
+.twine-tagged-user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f3f3f3;
+    border: 1px solid #dbdbdb;
+    padding: 4px 10px 4px 5px;
+    border-radius: 99px;
+    font-size: 13px;
+    color: #111010;
+    font-weight: 500;
+}
+
+.twine-tagged-chip-img {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.twine-tagged-chip-text {
+    font-weight: 600;
+    color: #111010;
+}
+
+.twine-tagged-chip-remove {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8e8e93;
+    border-radius: 50%;
+    padding: 2px;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.twine-tagged-chip-remove:hover {
+    background: #dbdbdb;
+    color: #111010;
+}
+
+.twine-tag-panel-box {
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 8px 0;
+}
+
+.twine-tag-search-field {
+    display: flex;
+    align-items: center;
+    background: #f3f3f6cc;
+    border: 1px solid #0000000a;
+    border-radius: 5px;
+    padding: 6px 10px;
+    gap: 6px;
+}
+
+.twine-tag-search-icon {
+    color: #8e8e93;
+    flex-shrink: 0;
+}
+
+.twine-tag-input-element {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 14px;
+    color: #111010;
+}
+
+.twine-tag-search-clear-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #8e8e93;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.twine-tag-status-text {
+    font-size: 13px;
+    color: #8e8e93;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.twine-tag-results-list {
+    max-height: 180px;
+    overflow-y: auto;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.twine-tag-user-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.twine-tag-user-row:hover:not(.twine-tag-user-row-disabled) {
+    background: #f3f3f3;
+}
+
+.twine-tag-user-row-selected {
+    background: #f3f3f3;
+}
+
+.twine-tag-user-row-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.twine-tag-user-profile-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.twine-tag-user-avatar-img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.twine-tag-user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.twine-tag-user-username-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111010;
+}
+
+.twine-tag-disabled-text {
+    font-size: 11px;
+    color: #8e8e93;
+    font-weight: 400;
+}
+
+/* Circle Checkbox */
+.twine-tag-circle-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #dbdbdb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    background: #ffffff;
+    flex-shrink: 0;
+}
+
+.twine-tag-circle-checkbox-checked {
+    background: #262626;
+    border-color: #262626;
+    color: #ffffff;
+}
+
+.twine-tag-circle-check-svg {
+    stroke-width: 3;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    .twine-tag-panel-box {
+        padding: 8px;
+    }
+
+    .twine-tag-user-row {
+        padding: 6px 8px;
+    }
+
+    .twine-tag-user-avatar-img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .twine-tag-circle-checkbox {
+        width: 18px;
+        height: 18px;
+    }
+}

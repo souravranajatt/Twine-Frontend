@@ -49,10 +49,17 @@ function Signup() {
     if (!trimmedFullName) return setMessage("Full Name is required!");
     if (trimmedFullName.length > 30) return setMessage("Full Name cannot exceed 30 characters!");
     if (!trimmedUserName) return setMessage("Username is required!");
-    if (!/^[a-z0-9_.]+$/.test(trimmedUserName)) return setMessage("Username contain only 'a-z0-9_.' !");
+    if (!/^[a-z0-9_.]+$/.test(trimmedUserName)) return setMessage("Username can only contain 'a-z, 0-9, _, .' !");
+    if (trimmedUserName.startsWith(".")) return setMessage("Username cannot start with a period!");
+    if (trimmedUserName.endsWith(".")) return setMessage("Username cannot end with a period!");
+    if (trimmedUserName.includes("..")) return setMessage("Username cannot have consecutive periods!");
     if (trimmedUserName.length > 25) return setMessage("Username cannot exceed 25 characters!");
     if (!trimmedEmail) return setMessage("Email is required!");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) return setMessage("Enter a valid email address!");
+    const emailLocalPart = trimmedEmail.split("@")[0];
+    if (emailLocalPart.startsWith(".")) return setMessage("Email cannot start with a period!");
+    if (emailLocalPart.endsWith(".")) return setMessage("Email cannot end with a period!");
+    if (emailLocalPart.includes("..")) return setMessage("Email cannot have consecutive periods!");
     if (!userPass) return setMessage("Password is required!");
     if (userPass.length > 72) return setMessage("Password cannot exceed 72 characters!");
     if (userPass.length < 8) return setMessage("Password must be at least 8 characters long!");

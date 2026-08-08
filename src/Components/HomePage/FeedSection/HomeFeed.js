@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal } from "lucide-react";
+import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import "./HomeFeed.css";
 import "../../../Assets/Bundle/GlobalSpinner.css";
@@ -7,8 +7,11 @@ import { homeFeedFetch } from "../../../Utils/homePageAPI.js";
 import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../../Utils/PostActionAPI.js";
 import formatPostTime from "../../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
+import RenderTaggedUsers from "../../../Lib/RenderTaggedUsers.js";
+import CustomVideoPlayer from "../../../Lib/CustomVideoPlayer.js";
 import PostsSkeleton from "../../Profile/SkeletonBody/PostsSkeleton.js";
 import PostBoxModal from "../../PostModal/PostBoxModal.js";
+import PostDropDown from "../../PostModal/PostDropDown.js";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
@@ -21,6 +24,28 @@ function HomeFeed() {
     const [hasMore, setHasMore] = useState(true);
     const isFetchingRef = useRef(false);
     const [expandedCaptions, setExpandedCaptions] = useState({});
+    const [openDropdownId, setOpenDropdownId] = useState(null);
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.postDropdownWrapper')) {
+                setOpenDropdownId(null);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // Lock body scroll when modal open
+    useEffect(() => {
+        if (activePostForModal) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => { document.body.style.overflow = ""; };
+    }, [activePostForModal]);
 
     // post comment state
     const [commentTexts, setCommentTexts] = useState({});
@@ -192,19 +217,40 @@ function HomeFeed() {
                                         )}
                                     </div>
                                 </div>
+                                {/* Three-dot dropdown */}
+                                <div className="postDropdownWrapper" style={{ position: "relative", marginLeft: "auto", display: "flex", alignItems: "center" }}>
+                                    <button
+                                        type="button"
+                                        onClick={() => setOpenDropdownId(prev => prev === post.fetchPostId ? null : post.fetchPostId)}
+                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '5px', display: 'flex' }}
+                                    >
+                                        <MoreHorizontal size={20} color="#111010" />
+                                    </button>
+                                    {openDropdownId === post.fetchPostId && (
+                                        <PostDropDown
+                                            isOpen={openDropdownId === post.fetchPostId}
+                                            onClose={() => setOpenDropdownId(null)}
+                                            Post={post}
+                                            onPostUpdate={(updatedPost) => {
+                                                setPosts(prev => prev.map(p => p.fetchPostId === post.fetchPostId ? updatedPost : p));
+                                            }}
+                                        />
+                                    )}
+                                </div>
                             </div>
 
                             {/* Post Media */}
                             <div className="postFeedMainContent">
                                 <div className="postMainFeedContentMiddleBox" style={{
                                     paddingBottom: post.width && post.height
-                                        ? `${(post.height / post.width) * 100}%` : '100%'
+                                        ? `${(post.height / post.width) * 100}%`
+                                        : "100%"
                                 }}>
                                     {post.postType === 'VIDEO' ? (
-                                        <video
+                                        <CustomVideoPlayer
                                             src={post.fetchFileName}
                                             className="mainContentMediaBox video-post"
-                                            controls playsInline
+                                            isParentModalOpen={activePostForModal !== null}
                                         />
                                     ) : (
                                         <img
@@ -241,12 +287,7 @@ function HomeFeed() {
                                         <span className="metaDivider">•</span>
                                     )}
                                     {post.fetchTaggedUsers?.length > 0 && (
-                                        <div className="postMetaTagged-Box">
-                                            <span className="taggedUserLabel">With </span>
-                                            {post.fetchTaggedUsers.map(u => (
-                                                <span key={u} className="taggedUserPill">@{u}</span>
-                                            ))}
-                                        </div>
+                                        <RenderTaggedUsers taggedUsers={post.fetchTaggedUsers} />
                                     )}
                                 </div>
                             )}

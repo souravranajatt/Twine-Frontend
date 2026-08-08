@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, MapPin, Lock } from 'lucide-react';
+import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, MapPin, Lock, MoreHorizontal } from 'lucide-react';
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import { postFetchAPI, fetchCommentsAPI } from "../Utils/PostFeaturesAPI.js";
@@ -8,6 +8,9 @@ import { likePostAPI, dislikePostAPI, postCommentAPI } from "../Utils/PostAction
 import { loggedUserDataAPI } from "../Utils/homePageAPI.js";
 import formatPostTime from "../Lib/formatPostTime.js";
 import renderFormattedCaption from "../Lib/renderFormattedCaption.js";
+import RenderTaggedUsers from "../Lib/RenderTaggedUsers.js";
+import CustomVideoPlayer from "../Lib/CustomVideoPlayer.js";
+import PostDropDown from "../Components/PostModal/PostDropDown.js";
 import "../Assets/Bundle/Post.css";
 import "../Assets/Bundle/GlobalSpinner.css";
 
@@ -28,6 +31,7 @@ function Post() {
     const [submittingComment, setSubmittingComment] = useState(false);
     const [expandedCaption, setExpandedCaption] = useState(false);
     const [loggedUser, setLoggedUser] = useState(null);
+    const [openDropdown, setOpenDropdown] = useState(false);
 
     const [commentPage, setCommentPage] = useState(0);
     const [hasMoreComments, setHasMoreComments] = useState(true);
@@ -48,6 +52,19 @@ function Post() {
         };
         getLoggedUser();
     }, []);
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (!e.target.closest('.postDropdownWrapper')) {
+                setOpenDropdown(false);
+            }
+        };
+        if (openDropdown) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [openDropdown]);
 
     // Fetch post
     useEffect(() => {
@@ -306,6 +323,24 @@ function Post() {
                                     )}
                                 </div>
                             </div>
+                            {/* Three-dot dropdown */}
+                            <div className="postDropdownWrapper" style={{ position: "relative", marginLeft: "auto", display: "flex", alignItems: "center" }}>
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenDropdown(prev => !prev)}
+                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '5px', display: 'flex' }}
+                                >
+                                    <MoreHorizontal size={20} color="#111010" />
+                                </button>
+                                {openDropdown && (
+                                    <PostDropDown
+                                        isOpen={openDropdown}
+                                        onClose={() => setOpenDropdown(false)}
+                                        Post={post}
+                                        onPostUpdate={(updatedPost) => setPost(updatedPost)}
+                                    />
+                                )}
+                            </div>
                         </div>
 
                         {/* Post Media */}
@@ -319,11 +354,10 @@ function Post() {
                                 }}
                             >
                                 {post.postType === "VIDEO" ? (
-                                    <video
+                                    <CustomVideoPlayer
                                         src={post.fetchFileName}
                                         className="post-page-media video-post"
-                                        controls
-                                        playsInline
+                                        autoPlay={true}
                                     />
                                 ) : (
                                     <img
@@ -351,7 +385,7 @@ function Post() {
                         )}
 
                         {/* Location & Tagged */}
-                        {(post.fetchPostLocation || (post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0)) && (
+                        {(post.fetchPostLocation || post.fetchTaggedUsers?.length > 0) && (
                             <div className="post-page-meta-row">
                                 {post.fetchPostLocation && (
                                     <span className="post-page-location">
@@ -362,13 +396,8 @@ function Post() {
                                 {post.fetchPostLocation && post.fetchTaggedUsers?.length > 0 && (
                                     <span className="post-page-meta-divider">•</span>
                                 )}
-                                {post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0 && (
-                                    <div className="post-page-tagged-box">
-                                        <span className="post-page-tagged-label">With </span>
-                                        {post.fetchTaggedUsers.map((u) => (
-                                            <span key={u} className="post-page-tagged-pill">@{u}</span>
-                                        ))}
-                                    </div>
+                                {post.fetchTaggedUsers?.length > 0 && (
+                                    <RenderTaggedUsers taggedUsers={post.fetchTaggedUsers} />
                                 )}
                             </div>
                         )}

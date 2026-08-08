@@ -4,6 +4,8 @@ import { searchUserPostsAPI } from "../../../Utils/userProfileAPI.js";
 import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../../Utils/PostActionAPI.js";
 import formatPostTime from "../../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
+import RenderTaggedUsers from "../../../Lib/RenderTaggedUsers.js";
+import CustomVideoPlayer from "../../../Lib/CustomVideoPlayer.js";
 import {
     Heart, Forward, MessageCircle,
     BadgeCheck, Aperture, SendHorizontal, MoreHorizontal
@@ -59,6 +61,16 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
 
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [openDropdownId]);
+
+    // Lock body scroll when modal open
+    useEffect(() => {
+        if (activePostForModal) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => { document.body.style.overflow = ""; };
+    }, [activePostForModal]);
 
     // Reset on User Change 
     useEffect(() => {
@@ -287,11 +299,10 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                         }}
                                     >
                                         {post.postType === "VIDEO" ? (
-                                            <video
+                                            <CustomVideoPlayer
                                                 src={post.fetchFileName}
                                                 className="profilePostContentView-Box video-post"
-                                                controls
-                                                playsInline
+                                                isParentModalOpen={activePostForModal !== null}
                                             />
                                         ) : (
                                             <img
@@ -318,29 +329,22 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
                                     </div>
                                 )}
 
-                                {/* Location & Tagged Users metadata at the bottom */}
-                                {(post.fetchPostLocation || (post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0)) && (
+                                {/* Location & Tagged metadata */}
+                                {(post.fetchPostLocation || post.fetchTaggedUsers?.length > 0) && (
                                     <div className="postMetaInfoRow">
                                         {post.fetchPostLocation && (
                                             <span className="postMetaLocation">
                                                 {post.fetchPostLocation}
                                             </span>
                                         )}
-                                        {post.fetchPostLocation && post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0 && (
+                                        {post.fetchPostLocation && post.fetchTaggedUsers?.length > 0 && (
                                             <span className="metaDivider">•</span>
                                         )}
-                                        {post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0 && (
-                                            <div className="postMetaTagged-Box">
-                                                <span className="taggedUserLabel">With </span>
-                                                {post.fetchTaggedUsers.map((taggedUser) => (
-                                                    <span key={taggedUser} className="taggedUserPill">@{taggedUser}</span>
-                                                ))}
-                                            </div>
+                                        {post.fetchTaggedUsers?.length > 0 && (
+                                            <RenderTaggedUsers taggedUsers={post.fetchTaggedUsers} />
                                         )}
                                     </div>
                                 )}
-
-
 
                                 {/* Post Actions */}
                                 <div className="postBottomAction">

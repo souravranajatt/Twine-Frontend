@@ -163,33 +163,6 @@
 
 
 
-/* Tagged Users in Post */
-.postMetaTagged-Box {
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-
-.taggedUserLabel {
-    font-size: 12px;
-    color: #8e8e93;
-    font-weight: 500;
-}
-
-.taggedUserPill {
-    font-size: 12px;
-    color: #F0186E;
-    font-weight: 600;
-    cursor: pointer;
-    transition: opacity 0.2s ease;
-}
-
-.taggedUserPill:hover {
-    opacity: 0.8;
-}
-
-
 /* Post Media */
 .profilePostMainContentMedia-Box {
     height: auto;

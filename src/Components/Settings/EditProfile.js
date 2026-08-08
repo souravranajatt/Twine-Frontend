@@ -116,6 +116,19 @@ function EditProfile({ profileData, setProfileData }) {
       return setStatusMessage("Username can only contain lowercase letters, digits, '.', and '_' !");
     }
 
+    if (username.startsWith(".")) {
+      setStatusType("error");
+      return setStatusMessage("Username cannot start with a period!");
+    }
+    if (username.endsWith(".")) {
+      setStatusType("error");
+      return setStatusMessage("Username cannot end with a period!");
+    }
+    if (username.includes("..")) {
+      setStatusType("error");
+      return setStatusMessage("Username cannot have consecutive periods!");
+    }
+
     if (bio && bio.length > 101) {
       setStatusType("error");
       return setStatusMessage("Bio can't exceed 101 characters!");

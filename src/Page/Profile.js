@@ -86,6 +86,12 @@ function Profile() {
     }
   }, [userProfileDataURL]);
 
+  // Lock body scroll when any modal is open
+  useEffect(() => {
+    document.body.style.overflow = (isModalOpen || isFollowersModalOpen) ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isModalOpen, isFollowersModalOpen]);
+
   // Follow Button Type & Action Handler
   let actionType = null;
   if (userProfileDataURL && userProfileDataURL.searchLoggedUser === false) {

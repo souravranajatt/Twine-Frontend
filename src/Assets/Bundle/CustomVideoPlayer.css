@@ -1,0 +1,102 @@
+.twine-custom-video-container {
+    position: absolute;
+    inset: 0;
+    background: #000000;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+}
+
+.twine-custom-video-element {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.twine-custom-video-container.video-post .twine-custom-video-element {
+    object-fit: contain;
+    background-color: #000000;
+}
+
+/* Controls Overlay */
+.twine-video-controls-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 40%);
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 5;
+}
+
+.twine-video-controls-overlay.visible {
+    opacity: 1;
+}
+
+.twine-video-controls-overlay.hidden {
+    opacity: 0;
+}
+
+/* Center Big Play Button */
+.twine-video-center-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.15s ease, background 0.15s ease;
+    padding-left: 3px;
+    /* visual center for play icon */
+}
+
+.twine-video-center-play-btn:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+    background: rgba(0, 0, 0, 0.75);
+}
+
+/* Bottom Bar */
+.twine-video-bottom-bar {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    pointer-events: auto;
+}
+
+.twine-video-control-btn {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(4px);
+    color: #ffffff;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.twine-video-control-btn:hover {
+    background: rgba(0, 0, 0, 0.75);
+    transform: scale(1.06);
+}

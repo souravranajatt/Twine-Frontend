@@ -170,5 +170,35 @@ export const turnOnCommentingDefaultSettingAPI = async () => {
     }
 };
 
+// Update Tagging Preference API
+export const updateTaggingPreferenceAPI = async (visibility) => {
+    try {
+        console.log("Sending tagging preference:", visibility);
+        const res = await api.patch("/setting/privacy/tagging-preference", { visibility }, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return res.data;
+    } catch (err) {
+        console.error("Tagging preference error:", err.response?.data);
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
+// Update Mention Preference API
+export const updateMentionPreferenceAPI = async (visibility) => {
+    try {
+        console.log("Sending mention preference:", visibility);
+        const res = await api.patch("/setting/privacy/mention-preference", { visibility }, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        return res.data;
+    } catch (err) {
+        console.error("Mention preference error:", err.response?.data);
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
 
 

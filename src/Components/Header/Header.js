@@ -70,6 +70,7 @@ function Header() {
 
     const fetchResults = async () => {
       setIsSearching(true);
+      setShowResults(true);
       try {
         const data = await searchUsersAPI(
           debouncedSearch.trim(),
@@ -185,7 +186,11 @@ function Header() {
         {/* Search Results Dropdown */}
         {showResults && (
           <div className="search-dropdown">
-            {searchResults.length === 0 ? (
+            {isSearching ? (
+              <div className="twine-postmodal-spinner-center">
+                <div className="twine-loader-spinner"></div>
+              </div>
+            ) : searchResults.length === 0 ? (
               <p className="search-no-result">No users found</p>
             ) : (
               searchResults.map(user => (
