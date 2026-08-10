@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { BadgeCheck, Tag, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import "../Assets/Bundle/RenderTaggedUsers.css";
+import "../Style/RenderTaggedUsers.css";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 

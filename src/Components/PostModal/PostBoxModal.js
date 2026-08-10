@@ -6,7 +6,7 @@ import { fetchCommentsAPI } from "../../Utils/PostFeaturesAPI.js";
 import { loggedUserDataAPI } from "../../Utils/homePageAPI.js";
 import formatPostTime from "../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../Lib/renderFormattedCaption.js";
-import RenderTaggedUsers from "../../Lib/RenderTaggedUsers.js";
+import RenderTaggedUsers from "../PostContainer/Structure/RenderTaggedUsers.js";
 import CustomVideoPlayer from "../../Lib/CustomVideoPlayer.js";
 import PostDropDown from "./PostDropDown.js";
 import "./PostBoxModal.css";

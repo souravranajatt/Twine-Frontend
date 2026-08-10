@@ -7,7 +7,7 @@ import { homeFeedFetch } from "../../../Utils/homePageAPI.js";
 import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../../Utils/PostActionAPI.js";
 import formatPostTime from "../../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
-import RenderTaggedUsers from "../../../Lib/RenderTaggedUsers.js";
+import RenderTaggedUsers from "../../PostContainer/Structure/RenderTaggedUsers.js";
 import CustomVideoPlayer from "../../../Lib/CustomVideoPlayer.js";
 import PostsSkeleton from "../../Profile/SkeletonBody/PostsSkeleton.js";
 import PostBoxModal from "../../PostModal/PostBoxModal.js";

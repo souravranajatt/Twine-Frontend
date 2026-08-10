@@ -8,7 +8,7 @@ import { likePostAPI, dislikePostAPI, postCommentAPI } from "../Utils/PostAction
 import { loggedUserDataAPI } from "../Utils/homePageAPI.js";
 import formatPostTime from "../Lib/formatPostTime.js";
 import renderFormattedCaption from "../Lib/renderFormattedCaption.js";
-import RenderTaggedUsers from "../Lib/RenderTaggedUsers.js";
+import RenderTaggedUsers from "../Components/PostContainer/Structure/RenderTaggedUsers.js";
 import CustomVideoPlayer from "../Lib/CustomVideoPlayer.js";
 import PostDropDown from "../Components/PostModal/PostDropDown.js";
 import "../Assets/Bundle/Post.css";

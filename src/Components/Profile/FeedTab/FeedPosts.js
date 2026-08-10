@@ -4,7 +4,7 @@ import { searchUserPostsAPI } from "../../../Utils/userProfileAPI.js";
 import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../../Utils/PostActionAPI.js";
 import formatPostTime from "../../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
-import RenderTaggedUsers from "../../../Lib/RenderTaggedUsers.js";
+import RenderTaggedUsers from "../../PostContainer/Structure/RenderTaggedUsers.js";
 import CustomVideoPlayer from "../../../Lib/CustomVideoPlayer.js";
 import {
     Heart, Forward, MessageCircle,
