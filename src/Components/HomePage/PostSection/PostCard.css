@@ -12,21 +12,23 @@
     border: 0.5px solid #dbdbdb;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
-    border-radius: 5px;
+    border-radius: 15px;
 }
 
 .profile-card-box {
     padding: 15px 20px 10px;
     display: flex;
+    border-bottom: 0.5px solid #dbdbdb;
 }
 
 .sideProfilePicHeader {
     border-radius: 50%;
-    border: 1.5px solid #dbdbdb;
+    border: 2px solid #dbdbdb;
     background-color: #f3f3f3;
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     display: flex;
+    margin-left: 10px;
     justify-content: center;
     align-items: center;
     overflow: hidden;
@@ -42,23 +44,20 @@
 }
 
 .side-info-box {
-    padding: 6px 5px;
+    padding: 5px 15px;
     width: 80%;
     overflow-wrap: break-word;
 }
 
 .fullname-tagbox {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 800;
-    margin-left: 10px;
     color: #111010;
 }
 
-.bio-tagbox {
-    font-size: 14px;
+.username-tagbox {
+    font-size: 12px;
     color: #8e8e93;
-    margin-left: 10px;
-    margin-top: 4px;
     font-weight: 400;
 }
 
@@ -68,8 +67,8 @@
 
 .createPost-header {
     font-weight: 700;
-    font-size: 18px;
-    padding: 0 4px;
+    font-size: 15px;
+    padding: 8px 4px;
     color: #111010;
 }
 
@@ -78,7 +77,7 @@
 }
 
 .createPost-fields {
-    margin: 10px auto;
+    margin: 15px auto;
     display: flex;
     width: 100%;
     align-items: flex-start;
@@ -89,12 +88,13 @@
 }
 
 .postIconBtn-Design {
-    margin-right: 2px;
+    margin-right: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
-    padding: 7px;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #dbdbdb;
 }
 
 .postIconBtn-Design:hover {
@@ -147,26 +147,26 @@
 .captionPost {
     outline: none;
     width: 100%;
-    height: 45px;
+    height: 70px;
     border-radius: 5px;
     color: #111010;
     background-color: #f3f3f6cc;
     border: 1px solid #0000000a;
     resize: none;
-    padding: 5px 8px;
+    padding: 8px 8px;
     font-size: 15px;
 }
 
 .postButtonDesign {
-    width: 107px;
-    height: 35px;
+    width: 100%;
+    height: 38px;
     border: none;
     cursor: pointer;
     background-color: #262626;
     font-weight: 700;
     color: white;
     font-size: 14px;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .postButtonDesign:hover {

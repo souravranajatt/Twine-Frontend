@@ -174,7 +174,7 @@ function PostCard({ loggedUserData }) {
                     </div>
                     <div className="side-info-box">
                         <p className="fullname-tagbox">{loggedUserData?.fullName}</p>
-                        <p className="bio-tagbox">@{loggedUserData?.userName}</p>
+                        <p className="username-tagbox">@{loggedUserData?.userName}</p>
                     </div>
                 </div>
 
