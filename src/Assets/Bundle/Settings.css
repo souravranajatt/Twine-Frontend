@@ -1286,7 +1286,8 @@ input:checked+.toggle-slider:before {
 
 .ap-post-caption {
   font-size: 14px;
-  color: #374151;
+  color: #110110;
+  font-weight: 500;
   line-height: 1.5;
   margin: 0;
 }
@@ -1299,7 +1300,7 @@ input:checked+.toggle-slider:before {
 
 .ap-post-date {
   font-size: 11px;
-  color: #9ca3af;
+  color: #8e8e93;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }

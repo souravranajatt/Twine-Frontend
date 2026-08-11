@@ -35,7 +35,10 @@ function Main() {
       {/* Main Wrapper - PostCard and HomeFeed */}
       <main className="main-wrapper">
 
-        <PostCard loggedUserData={loggedUserData} />
+        <div className="slide-bar-wrapper">
+          <PostCard loggedUserData={loggedUserData} />
+        </div>
+
         <HomeFeed />
 
       </main>

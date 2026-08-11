@@ -29,19 +29,43 @@ img {
   gap: 40px;
 }
 
+/* Side Bard Styling */
+.slide-bar-wrapper {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  width: 400px;
+  max-width: 400px;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
+
   .main-wrapper {
     flex-direction: column;
     gap: 0;
   }
+
+  .slide-bar-wrapper {
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+  }
 }
 
 @media (min-width: 480px) and (max-width: 767px) {
+
   .main-wrapper {
     flex-direction: column;
     justify-content: center;
     gap: 0;
+  }
+
+  .slide-bar-wrapper {
+    max-width: 80%;
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
   }
 }
 
@@ -50,5 +74,11 @@ img {
     justify-content: center;
     align-items: flex-start;
     gap: 20px;
+  }
+
+  .slide-bar-wrapper {
+    max-width: 395px;
+    margin-left: 20px;
+    position: relative;
   }
 }

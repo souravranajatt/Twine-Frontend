@@ -158,194 +158,192 @@ function PostCard({ loggedUserData }) {
 
 
     return (
-        <div className="slide-bar-wrapper">
-            <div className="side-bar-box">
+        <div className="side-bar-box">
 
-                {/* Profile Card */}
-                <div className="profile-card-box">
-                    <div className="sideProfilePicHeader">
-                        <img
-                            src={loggedUserData?.profilePhoto &&
-                                loggedUserData.profilePhoto !== "null"
-                                ? loggedUserData.profilePhoto : DEFAULT_IMAGE}
-                            alt="profileImage"
-                            className="sidePhotoImageBox"
-                        />
-                    </div>
-                    <div className="side-info-box">
-                        <p className="fullname-tagbox">{loggedUserData?.fullName}</p>
-                        <p className="username-tagbox">@{loggedUserData?.userName}</p>
-                    </div>
+            {/* Profile Card */}
+            <div className="profile-card-box">
+                <div className="sideProfilePicHeader">
+                    <img
+                        src={loggedUserData?.profilePhoto &&
+                            loggedUserData.profilePhoto !== "null"
+                            ? loggedUserData.profilePhoto : DEFAULT_IMAGE}
+                        alt="profileImage"
+                        className="sidePhotoImageBox"
+                    />
                 </div>
+                <div className="side-info-box">
+                    <p className="fullname-tagbox">{loggedUserData?.fullName}</p>
+                    <p className="username-tagbox">@{loggedUserData?.userName}</p>
+                </div>
+            </div>
 
-                {/* Create Post */}
-                <div className="createPost-card-box">
-                    <p className="createPost-header">Create Post</p>
-                    <form className="post-form" onSubmit={postLive}>
+            {/* Create Post */}
+            <div className="createPost-card-box">
+                <p className="createPost-header">Create Post</p>
+                <form className="post-form" onSubmit={postLive}>
 
-                        <div className="createPost-fields">
-                            <input type="file" accept="image/*,video/*"
-                                ref={fileInputRef} onChange={handleFileChange}
-                                className="postFile" />
-                            <div className="postIconBtn-Design">
-                                <button type="button" className="postBtnAsIconToogle-Box"
-                                    onClick={() => fileInputRef.current.click()}>
-                                    <Image size={21} className="iconPost" />
-                                </button>
-                            </div>
-                            {loggedUserData.uTimeline && (
-                                <div className="postIconBtn-Design">
-                                    <button type="button" className="postBtnAsIconToogle-Box"
-                                        onClick={() => setTimeLineUserPost(p => p === 0 ? 1 : 0)}>
-                                        <Heart size={21}
-                                            className={timeLineUserPost === 1
-                                                ? "iconPostTimelineChange" : "iconPost"} />
-                                    </button>
-                                </div>
-                            )}
-                            <div className="postIconBtn-Design">
-                                <button type="button" className="postBtnAsIconToogle-Box">
-                                    <MapPin size={21} className="iconPost" />
-                                </button>
-                            </div>
-                            <div className="postIconBtn-Design">
-                                <button
-                                    type="button"
-                                    className={`postBtnAsIconToogle-Box ${isTagOpen ? "twine-tag-active-btn" : ""}`}
-                                    onClick={() => setIsTagOpen(prev => !prev)}
-                                >
-                                    <Tag size={21} className={isTagOpen ? "twine-tag-active-icon" : "iconPost"} />
-                                </button>
-                            </div>
-                        </div>
-
-                        {taggedUsers.length > 0 && (
-                            <div className="twine-tagged-chips-container">
-                                {taggedUsers.map((user) => (
-                                    <div key={user.userId || user._id || user.id} className="twine-tagged-user-chip">
-                                        <img
-                                            src={user.profileImage || user.profilePhoto || DEFAULT_IMAGE}
-                                            alt={user.username || user.userName}
-                                            className="twine-tagged-chip-img"
-                                        />
-                                        <span className="twine-tagged-chip-text">@{user.username || user.userName}</span>
-                                        <button
-                                            type="button"
-                                            className="twine-tagged-chip-remove"
-                                            onClick={() => toggleTagUser(user)}
-                                        >
-                                            <X size={12} />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {isTagOpen && (
-                            <div className="twine-tag-panel-box">
-                                <div className="twine-tag-search-field">
-                                    <Search size={15} className="twine-tag-search-icon" />
-                                    <input
-                                        type="text"
-                                        className="twine-tag-input-element"
-                                        placeholder="Search user to tag..."
-                                        value={searchTagQuery}
-                                        onChange={(e) => setSearchTagQuery(e.target.value)}
-                                        autoFocus
-                                    />
-                                    {searchTagQuery && (
-                                        <button
-                                            type="button"
-                                            className="twine-tag-search-clear-btn"
-                                            onClick={() => setSearchTagQuery("")}
-                                        >
-                                            <X size={14} />
-                                        </button>
-                                    )}
-                                </div>
-
-                                {isSearchingTags && (
-                                    <div className="twine-postmodal-spinner-center">
-                                        <span className="post-dropdown-spinner"></span>
-                                    </div>
-                                )}
-
-                                {!isSearchingTags && searchTagQuery.trim() !== "" && tagSearchResults.length === 0 && (
-                                    <p className="twine-tag-status-text">No user found</p>
-                                )}
-
-                                {!isSearchingTags && tagSearchResults.length > 0 && (
-                                    <div className="twine-tag-results-list">
-                                        {tagSearchResults.map((user) => {
-                                            const uId = user.userId || user._id || user.id;
-                                            const isChecked = taggedUsers.some((u) => (u.userId || u._id || u.id) === uId);
-                                            const canTag = user.allowTagging !== false;
-
-                                            return (
-                                                <div
-                                                    key={uId}
-                                                    className={`twine-tag-user-row ${isChecked ? "twine-tag-user-row-selected" : ""} ${!canTag ? "twine-tag-user-row-disabled" : ""}`}
-                                                    onClick={() => canTag && toggleTagUser(user)}
-                                                >
-                                                    <div className="twine-tag-user-profile-group">
-                                                        <img
-                                                            src={user.profileImage || user.profilePhoto || DEFAULT_IMAGE}
-                                                            alt={user.username || user.userName}
-                                                            className="twine-tag-user-avatar-img"
-                                                        />
-                                                        <div className="twine-tag-user-details">
-                                                            <span className="twine-tag-user-username-text">@{user.username || user.userName}</span>
-                                                            {!canTag && <span className="twine-tag-disabled-text">Tagging off</span>}
-                                                        </div>
-                                                    </div>
-                                                    {canTag && (
-                                                        <div className={`twine-tag-circle-checkbox ${isChecked ? "twine-tag-circle-checkbox-checked" : ""}`}>
-                                                            {isChecked && <Check size={12} className="twine-tag-circle-check-svg" />}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        {preview && (
-                            <div className="createPost-fields">
-                                {file?.type.startsWith("image/") ? (
-                                    <img src={preview} className="previewPost" alt="Preview" />
-                                ) : (
-                                    <video src={preview} className="previewPost" controls />
-                                )}
-                            </div>
-                        )}
-
-                        {error && <p className="errorPost">{error}</p>}
-                        {success && <p className="successPost">{success}</p>}
-
-                        {(uploadStatus === "uploading" || uploadStatus === "done") && (
-                            <div className="uploadProgressBar-wrapper">
-                                <div className={`uploadProgressBar-shimmer ${uploadStatus === "done" ? "uploadProgressBar--done" : ""}`} />
-                            </div>
-                        )}
-
-                        <div className="createPost-fields">
-                            <textarea className="captionPost" value={captionPost}
-                                onChange={e => setCaption(e.target.value)}
-                                placeholder="Write caption..."
-                                autoCorrect="off" autoComplete="off" autoCapitalize="none" />
-                        </div>
-
-                        <div className="createPost-fields">
-                            <button type="submit" className="postButtonDesign"
-                                disabled={!file || isUploading}>
-                                {isUploading ? <span className="twine-upload-btn-spinner"></span> : 'Upload Post'}
+                    <div className="createPost-fields">
+                        <input type="file" accept="image/*,video/*"
+                            ref={fileInputRef} onChange={handleFileChange}
+                            className="postFile" />
+                        <div className="postIconBtn-Design">
+                            <button type="button" className="postBtnAsIconToogle-Box"
+                                onClick={() => fileInputRef.current.click()}>
+                                <Image size={21} className="iconPost" />
                             </button>
                         </div>
+                        {loggedUserData.uTimeline && (
+                            <div className="postIconBtn-Design">
+                                <button type="button" className="postBtnAsIconToogle-Box"
+                                    onClick={() => setTimeLineUserPost(p => p === 0 ? 1 : 0)}>
+                                    <Heart size={21}
+                                        className={timeLineUserPost === 1
+                                            ? "iconPostTimelineChange" : "iconPost"} />
+                                </button>
+                            </div>
+                        )}
+                        <div className="postIconBtn-Design">
+                            <button type="button" className="postBtnAsIconToogle-Box">
+                                <MapPin size={21} className="iconPost" />
+                            </button>
+                        </div>
+                        <div className="postIconBtn-Design">
+                            <button
+                                type="button"
+                                className={`postBtnAsIconToogle-Box ${isTagOpen ? "twine-tag-active-btn" : ""}`}
+                                onClick={() => setIsTagOpen(prev => !prev)}
+                            >
+                                <Tag size={21} className={isTagOpen ? "twine-tag-active-icon" : "iconPost"} />
+                            </button>
+                        </div>
+                    </div>
 
-                    </form>
-                </div>
+                    {taggedUsers.length > 0 && (
+                        <div className="twine-tagged-chips-container">
+                            {taggedUsers.map((user) => (
+                                <div key={user.userId || user._id || user.id} className="twine-tagged-user-chip">
+                                    <img
+                                        src={user.profileImage || user.profilePhoto || DEFAULT_IMAGE}
+                                        alt={user.username || user.userName}
+                                        className="twine-tagged-chip-img"
+                                    />
+                                    <span className="twine-tagged-chip-text">@{user.username || user.userName}</span>
+                                    <button
+                                        type="button"
+                                        className="twine-tagged-chip-remove"
+                                        onClick={() => toggleTagUser(user)}
+                                    >
+                                        <X size={12} />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {isTagOpen && (
+                        <div className="twine-tag-panel-box">
+                            <div className="twine-tag-search-field">
+                                <Search size={15} className="twine-tag-search-icon" />
+                                <input
+                                    type="text"
+                                    className="twine-tag-input-element"
+                                    placeholder="Search user to tag..."
+                                    value={searchTagQuery}
+                                    onChange={(e) => setSearchTagQuery(e.target.value)}
+                                    autoFocus
+                                />
+                                {searchTagQuery && (
+                                    <button
+                                        type="button"
+                                        className="twine-tag-search-clear-btn"
+                                        onClick={() => setSearchTagQuery("")}
+                                    >
+                                        <X size={14} />
+                                    </button>
+                                )}
+                            </div>
+
+                            {isSearchingTags && (
+                                <div className="twine-postmodal-spinner-center">
+                                    <span className="post-dropdown-spinner"></span>
+                                </div>
+                            )}
+
+                            {!isSearchingTags && searchTagQuery.trim() !== "" && tagSearchResults.length === 0 && (
+                                <p className="twine-tag-status-text">No user found</p>
+                            )}
+
+                            {!isSearchingTags && tagSearchResults.length > 0 && (
+                                <div className="twine-tag-results-list">
+                                    {tagSearchResults.map((user) => {
+                                        const uId = user.userId || user._id || user.id;
+                                        const isChecked = taggedUsers.some((u) => (u.userId || u._id || u.id) === uId);
+                                        const canTag = user.allowTagging !== false;
+
+                                        return (
+                                            <div
+                                                key={uId}
+                                                className={`twine-tag-user-row ${isChecked ? "twine-tag-user-row-selected" : ""} ${!canTag ? "twine-tag-user-row-disabled" : ""}`}
+                                                onClick={() => canTag && toggleTagUser(user)}
+                                            >
+                                                <div className="twine-tag-user-profile-group">
+                                                    <img
+                                                        src={user.profileImage || user.profilePhoto || DEFAULT_IMAGE}
+                                                        alt={user.username || user.userName}
+                                                        className="twine-tag-user-avatar-img"
+                                                    />
+                                                    <div className="twine-tag-user-details">
+                                                        <span className="twine-tag-user-username-text">@{user.username || user.userName}</span>
+                                                        {!canTag && <span className="twine-tag-disabled-text">Tagging off</span>}
+                                                    </div>
+                                                </div>
+                                                {canTag && (
+                                                    <div className={`twine-tag-circle-checkbox ${isChecked ? "twine-tag-circle-checkbox-checked" : ""}`}>
+                                                        {isChecked && <Check size={12} className="twine-tag-circle-check-svg" />}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {preview && (
+                        <div className="createPost-fields">
+                            {file?.type.startsWith("image/") ? (
+                                <img src={preview} className="previewPost" alt="Preview" />
+                            ) : (
+                                <video src={preview} className="previewPost" controls />
+                            )}
+                        </div>
+                    )}
+
+                    {error && <p className="errorPost">{error}</p>}
+                    {success && <p className="successPost">{success}</p>}
+
+                    {(uploadStatus === "uploading" || uploadStatus === "done") && (
+                        <div className="uploadProgressBar-wrapper">
+                            <div className={`uploadProgressBar-shimmer ${uploadStatus === "done" ? "uploadProgressBar--done" : ""}`} />
+                        </div>
+                    )}
+
+                    <div className="createPost-fields">
+                        <textarea className="captionPost" value={captionPost}
+                            onChange={e => setCaption(e.target.value)}
+                            placeholder="Write caption..."
+                            autoCorrect="off" autoComplete="off" autoCapitalize="none" />
+                    </div>
+
+                    <div className="createPost-fields">
+                        <button type="submit" className="postButtonDesign"
+                            disabled={!file || isUploading}>
+                            {isUploading ? <span className="twine-upload-btn-spinner"></span> : 'Upload Post'}
+                        </button>
+                    </div>
+
+                </form>
             </div>
         </div>
     );
