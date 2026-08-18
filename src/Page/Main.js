@@ -4,6 +4,7 @@ import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import HomeFeed from "../Components/HomePage/FeedSection/HomeFeed.js";
 import PostCard from "../Components/HomePage/PostSection/PostCard.js";
+import UserSuggestion from "../Components/HomePage/UserSuggestion/UserSuggestion.js";
 import { loggedUserDataAPI } from "../Utils/homePageAPI.js";
 
 function Main() {
@@ -37,6 +38,7 @@ function Main() {
 
         <div className="slide-bar-wrapper">
           <PostCard loggedUserData={loggedUserData} />
+          <UserSuggestion />
         </div>
 
         <HomeFeed />

@@ -268,7 +268,6 @@ button {
 
 .profileFollowActionBtns-Box:hover {
     background-color: #d61562;
-    transform: translateY(-1px);
 }
 
 .profileSendLikeActionBtns-Box:hover,
