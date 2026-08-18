@@ -1,0 +1,83 @@
+@keyframes suggestionShimmer {
+    0% {
+        background-position: -300px 0;
+    }
+    100% {
+        background-position: 300px 0;
+    }
+}
+
+.skel-suggestion-avatar,
+.skel-suggestion-text,
+.skel-suggestion-btn,
+.skel-suggestion-title {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 600px 100%;
+    animation: suggestionShimmer 1.4s infinite linear;
+    border-radius: 4px;
+}
+
+.skel-suggestion-container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 15px #0000001a;
+    border: 0.5px solid #dbdbdb;
+}
+
+.skel-suggestion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.skel-suggestion-title {
+    width: 140px;
+    height: 18px;
+    border-radius: 4px;
+}
+
+.skel-suggestion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.skel-suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 2px 0;
+}
+
+.skel-suggestion-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.skel-suggestion-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.skel-suggestion-name {
+    width: 65%;
+    height: 14px;
+}
+
+.skel-suggestion-username {
+    width: 45%;
+    height: 12px;
+}
+
+.skel-suggestion-btn {
+    width: 68px;
+    height: 32px;
+    border-radius: 20px;
+    flex-shrink: 0;
+}

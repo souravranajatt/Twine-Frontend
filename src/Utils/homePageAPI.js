@@ -21,3 +21,13 @@ export const loggedUserDataAPI = async () => {
         throw error.response?.data || "Something went wrong!";
     }
 };
+
+// Fetch User Suggestions API
+export const fetchUserSuggestionsAPI = async (page = 0, size = 10) => {
+    try {
+        const response = await api.get(`/suggestions?page=${page}&size=${size}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || "Failed to fetch user suggestions!";
+    }
+};
