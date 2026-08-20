@@ -3,14 +3,15 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, MapPin, Lock, MoreHorizontal } from 'lucide-react';
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
-import { postFetchAPI, fetchCommentsAPI } from "../Utils/PostFeaturesAPI.js";
-import { likePostAPI, dislikePostAPI, postCommentAPI } from "../Utils/PostActionAPI.js";
+import { postFetchAPI } from "../Utils/PostFeaturesAPI.js";
+import { likePostAPI, dislikePostAPI } from "../Utils/PostActionAPI.js";
 import { loggedUserDataAPI } from "../Utils/homePageAPI.js";
 import formatPostTime from "../Lib/formatPostTime.js";
 import renderFormattedCaption from "../Lib/renderFormattedCaption.js";
 import RenderTaggedUsers from "../Components/PostContainer/Structure/RenderTaggedUsers.js";
 import CustomVideoPlayer from "../Lib/CustomVideoPlayer.js";
 import PostDropDown from "../Components/PostModal/PostDropDown.js";
+import CommentSection from "../Components/PostContainer/Structure/CommentSection.js";
 import "../Assets/Bundle/Post.css";
 import "../Assets/Bundle/GlobalSpinner.css";
 
@@ -25,20 +26,14 @@ function Post() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const [comments, setComments] = useState([]);
-    const [loadingComments, setLoadingComments] = useState(false);
     const [commentText, setCommentText] = useState("");
     const [submittingComment, setSubmittingComment] = useState(false);
     const [expandedCaption, setExpandedCaption] = useState(false);
     const [loggedUser, setLoggedUser] = useState(null);
     const [openDropdown, setOpenDropdown] = useState(false);
 
-    const [commentPage, setCommentPage] = useState(0);
-    const [hasMoreComments, setHasMoreComments] = useState(true);
-    const isFetchingCommentsRef = useRef(false);
-    const commentsEndRef = useRef(null);
     const likingRef = useRef(false);
-    const commentingRef = useRef(false);
+    const commentSectionRef = useRef(null);
 
     // Fetch logged user
     useEffect(() => {
@@ -89,76 +84,7 @@ function Post() {
         getPost();
     }, [postId]);
 
-    // Fetch comments
-    useEffect(() => {
-        if (!post || post.privateAccount) return;
 
-        setComments([]);
-        setCommentPage(0);
-        setHasMoreComments(true);
-        isFetchingCommentsRef.current = true;
-        setLoadingComments(true);
-
-        const getComments = async () => {
-            try {
-                const data = await fetchCommentsAPI(postId, 0);
-                setComments(data || []);
-                if (!data || data.length < 15) {
-                    setHasMoreComments(false);
-                }
-            } catch (err) {
-                console.error("Failed to load comments", err);
-                setComments([]);
-                setHasMoreComments(false);
-            } finally {
-                setLoadingComments(false);
-                isFetchingCommentsRef.current = false;
-            }
-        };
-        getComments();
-    }, [post?.fetchPostId]);
-
-    // Infinite scroll listener for comments on post page
-    useEffect(() => {
-        const handleScroll = async () => {
-            if (!hasMoreComments || isFetchingCommentsRef.current || loadingComments || !post || post.privateAccount) return;
-
-            // Check if scroll is near bottom
-            if (
-                window.innerHeight + document.documentElement.scrollTop + 100 >=
-                document.documentElement.scrollHeight
-            ) {
-                isFetchingCommentsRef.current = true;
-                setLoadingComments(true);
-                const nextPage = commentPage + 1;
-
-                try {
-                    const data = await fetchCommentsAPI(postId, nextPage);
-                    if (!data || data.length === 0) {
-                        setHasMoreComments(false);
-                    } else {
-                        setCommentPage(nextPage);
-                        setComments((prev) => {
-                            const existingIds = new Set(prev.map(c => c.commentId));
-                            const newComments = data.filter(c => !existingIds.has(c.commentId));
-                            return [...prev, ...newComments];
-                        });
-                        if (data.length < 15) {
-                            setHasMoreComments(false);
-                        }
-                    }
-                } catch (err) {
-                    console.error("Failed to load page comments", err);
-                } finally {
-                    setLoadingComments(false);
-                    isFetchingCommentsRef.current = false;
-                }
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [hasMoreComments, commentPage, loadingComments, post, postId]);
 
     // Like handler
     const handleLike = async () => {
@@ -193,44 +119,20 @@ function Post() {
         }
     };
 
-    // Comment handler
+    // Comment handler via CommentSection ref
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         const text = commentText.trim();
-        if (!text || commentingRef.current) return;
+        if (!text || submittingComment) return;
 
-        commentingRef.current = true;
         setSubmittingComment(true);
-        setCommentText("");
-
-        const newComment = {
-            commentId: `temp-${Date.now()}`,
-            username: loggedUser?.userName || "you",
-            profileImage: loggedUser?.profilePhoto || DEFAULT_IMAGE,
-            commentText: text,
-            createdAt: new Date().toISOString(),
-            fetchVerified: loggedUser?.verify || false
-        };
-
-        setComments(prev => [...prev, newComment]);
-
-        // Scroll to bottom to show user's comment
-        setTimeout(() => {
-            commentsEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 80);
-
-        setPost(prev => ({ ...prev, commentCount: (prev.commentCount || 0) + 1 }));
-
         try {
-            await postCommentAPI(postId, { commentText: text, parentId: null });
+            await commentSectionRef.current?.submitNewComment(text);
+            setCommentText("");
         } catch (err) {
-            console.error("Comment failed", err);
-            setComments(prev => prev.filter(c => c.commentId !== newComment.commentId));
-            setPost(prev => ({ ...prev, commentCount: Math.max(0, (prev.commentCount || 1) - 1) }));
-            setCommentText(text);
+            console.error("Failed to post comment via CommentSection", err);
         } finally {
             setSubmittingComment(false);
-            commentingRef.current = false;
         }
     };
 
@@ -469,65 +371,18 @@ function Post() {
 
                         {/* Comments Section */}
                         {post.commentEnable ? (
-                            <div className="post-page-comments-section">
-
-                                {loadingComments && comments.length === 0 ? (
-                                    <div className="post-page-comments-list">
-                                        {[...Array(4)].map((_, idx) => (
-                                            <div key={idx} className="post-page-comment-skeleton">
-                                                <div className="comment-skeleton-avatar skeleton-shimmer" />
-                                                <div className="comment-skeleton-info">
-                                                    <div className="comment-skeleton-name skeleton-shimmer" />
-                                                    <div className="comment-skeleton-text skeleton-shimmer" />
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : comments.length === 0 ? (
-                                    <div className="post-page-no-comments">
-                                        <p>No comments yet. Start the conversation!</p>
-                                    </div>
-                                ) : (
-                                    <div className="post-page-comments-list">
-                                        {comments.map((comment) => (
-                                            <div key={comment.commentId} className="post-page-comment-row">
-                                                <div className="post-page-comment-avatar-wrapper">
-                                                    <img
-                                                        src={comment.profileImage && comment.profileImage !== "null"
-                                                            ? comment.profileImage : DEFAULT_IMAGE}
-                                                        className="post-page-comment-avatar"
-                                                        alt={comment.username}
-                                                    />
-                                                </div>
-                                                <div className="post-page-comment-body">
-                                                    <div className="post-page-comment-meta">
-                                                        <span className="post-page-comment-username">
-                                                            {comment.username}
-                                                        </span>
-                                                        {comment.fetchVerified && (
-                                                            <BadgeCheck size={13} className="post-page-verify-badge inline" />
-                                                        )}
-                                                        <span className="post-page-comment-time">
-                                                            {formatPostTime(comment.createdAt)}
-                                                        </span>
-                                                    </div>
-                                                    <p className="post-page-comment-text">
-                                                        {comment.commentText}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        ))}
-
-                                        {/* Pagination Loader */}
-                                        {loadingComments && comments.length > 0 && (
-                                            <div className="twine-postmodal-spinner-center">
-                                                <span className="twine-loader-spinner"></span>
-                                            </div>
-                                        )}
-                                        <div ref={commentsEndRef} />
-                                    </div>
-                                )}
-                            </div>
+                            <CommentSection
+                                ref={commentSectionRef}
+                                postId={post.fetchPostId}
+                                isModal={false}
+                                loggedUser={loggedUser}
+                                onCommentCountUpdate={(change) => {
+                                    setPost(prev => ({
+                                        ...prev,
+                                        commentCount: Math.max(0, (prev.commentCount || 0) + change)
+                                    }));
+                                }}
+                            />
                         ) : (<>
                             <div style={{ padding: "20px", textAlign: "center" }}>
                                 <p style={{ color: "#8e8e93", fontSize: "13px" }}><i>Comments are disabled for this post</i></p>

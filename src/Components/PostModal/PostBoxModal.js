@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { X, Heart, MessageCircle, Forward, SendHorizontal, BadgeCheck, MapPin, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
-import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../Utils/PostActionAPI.js";
-import { fetchCommentsAPI } from "../../Utils/PostFeaturesAPI.js";
+import { likePostAPI, dislikePostAPI } from "../../Utils/PostActionAPI.js";
 import { loggedUserDataAPI } from "../../Utils/homePageAPI.js";
 import formatPostTime from "../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../Lib/renderFormattedCaption.js";
@@ -10,6 +9,7 @@ import RenderTaggedUsers from "../PostContainer/Structure/RenderTaggedUsers.js";
 import CustomVideoPlayer from "../../Lib/CustomVideoPlayer.js";
 import PostDropDown from "./PostDropDown.js";
 import useScrollLock from "../../Lib/useScrollLock.js";
+import CommentSection from "../PostContainer/Structure/CommentSection.js";
 import "./PostBoxModal.css";
 import "../../Assets/Bundle/GlobalSpinner.css";
 
@@ -17,10 +17,6 @@ const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v177685
 
 function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
     const [localPost, setLocalPost] = useState(null);
-    const [comments, setComments] = useState([]);
-    const [loadingComments, setLoadingComments] = useState(false);
-    const [hasMoreComments, setHasMoreComments] = useState(true);
-    const [commentPage, setCommentPage] = useState(0);
     const [commentText, setCommentText] = useState("");
     const [submittingComment, setSubmittingComment] = useState(false);
     const [loggedUser, setLoggedUser] = useState(null);
@@ -28,10 +24,8 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
     const [openDropdown, setOpenDropdown] = useState(false);
 
     const originalUrlRef = useRef("");
-    const commentsEndRef = useRef(null);
-    const isFetchingRef = useRef(false);
     const likingRef = useRef(false);
-    const commentingRef = useRef(false);
+    const commentSectionRef = useRef(null);
 
     // Fetch logged user data
     useEffect(() => {
@@ -85,75 +79,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
 
 
 
-    // Fetch comments on Initial/Reset
-    useEffect(() => {
-        if (isOpen && post?.fetchPostId) {
-            // Reset pagination states
-            setComments([]);
-            setCommentPage(0);
-            setHasMoreComments(true);
-            isFetchingRef.current = true;
-            setLoadingComments(true);
 
-            const getComments = async () => {
-                try {
-                    const data = await fetchCommentsAPI(post.fetchPostId, 0);
-                    setComments(data || []);
-                    if (!data || data.length < 15) {
-                        setHasMoreComments(false);
-                    }
-                } catch (err) {
-                    console.error("Failed to load comments", err);
-                    setComments([]);
-                    setHasMoreComments(false);
-                } finally {
-                    setLoadingComments(false);
-                    isFetchingRef.current = false;
-                }
-            };
-            getComments();
-        } else {
-            setComments([]);
-            setCommentPage(0);
-            setHasMoreComments(false);
-            isFetchingRef.current = false;
-        }
-    }, [isOpen, post?.fetchPostId]);
-
-    // Scroll handler to fetch next page of comments
-    const handleScroll = async (e) => {
-        if (!hasMoreComments || isFetchingRef.current || loadingComments || !post?.fetchPostId) return;
-
-        const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
-        // Check if user has scrolled near bottom
-        if (scrollHeight - scrollTop - clientHeight <= 30) {
-            isFetchingRef.current = true;
-            setLoadingComments(true);
-            const nextPage = commentPage + 1;
-
-            try {
-                const data = await fetchCommentsAPI(post.fetchPostId, nextPage);
-                if (!data || data.length === 0) {
-                    setHasMoreComments(false);
-                } else {
-                    setCommentPage(nextPage);
-                    setComments((prev) => {
-                        const existingIds = new Set(prev.map(c => c.commentId));
-                        const newComments = data.filter(c => !existingIds.has(c.commentId));
-                        return [...prev, ...newComments];
-                    });
-                    if (data.length < 15) {
-                        setHasMoreComments(false);
-                    }
-                }
-            } catch (err) {
-                console.error("Failed to fetch paginated comments", err);
-            } finally {
-                setLoadingComments(false);
-                isFetchingRef.current = false;
-            }
-        }
-    };
 
     if (!isOpen || !localPost) return null;
 
@@ -198,60 +124,20 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
         }
     };
 
-    // Add Comment API call
+    // Add Comment API call via CommentSection ref
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         const text = commentText.trim();
-        if (!text || commentingRef.current) return;
+        if (!text || submittingComment) return;
 
-        commentingRef.current = true;
         setSubmittingComment(true);
-        setCommentText("");
-
-        const newCommentObj = {
-            commentId: `temp-${Date.now()}`,
-            username: loggedUser?.userName || "you",
-            profileImage: loggedUser?.profilePhoto || DEFAULT_IMAGE,
-            commentText: text,
-            createdAt: new Date().toISOString(),
-            fetchVerified: loggedUser?.verify || false
-        };
-
-        // Optimistic Update
-        setComments((prev) => [...prev, newCommentObj]);
-
-        // Scroll to the bottom to show user's comment
-        setTimeout(() => {
-            commentsEndRef.current?.scrollIntoView({ behavior: "smooth" });
-        }, 80);
-
-        const updatedPost = {
-            ...localPost,
-            commentCount: (localPost.commentCount || 0) + 1
-        };
-        setLocalPost(updatedPost);
-        if (onPostUpdate) {
-            onPostUpdate(updatedPost);
-        }
-
         try {
-            await postCommentAPI(localPost.fetchPostId, { commentText: text, parentId: null });
+            await commentSectionRef.current?.submitNewComment(text);
+            setCommentText("");
         } catch (err) {
-            console.error("Comment submit failed", err);
-            // Rollback comment 
-            setComments((prev) => prev.filter((c) => c.commentId !== newCommentObj.commentId));
-            const rolledBackPost = {
-                ...localPost,
-                commentCount: Math.max(0, (localPost.commentCount || 1) - 1)
-            };
-            setLocalPost(rolledBackPost);
-            if (onPostUpdate) {
-                onPostUpdate(rolledBackPost);
-            }
-            setCommentText(text); // Restore typed text
+            console.error("Failed to post comment via CommentSection", err);
         } finally {
             setSubmittingComment(false);
-            commentingRef.current = false;
         }
     };
 
@@ -376,69 +262,24 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
 
                     </div>
 
-                    {/* Scrollable comments panel */}
+                    {/* CommentSection */}
                     {localPost.commentEnable ? (
-                        <div className="post-modal-comments-scrollview" onScroll={handleScroll}>
-
-                            {/* Comments List */}
-                            {loadingComments && comments.length === 0 ? (
-                                <div className="post-modal-comments-list">
-                                    {[...Array(4)].map((_, idx) => (
-                                        <div key={idx} className="post-modal-comment-skeleton">
-                                            <div className="comment-skeleton-avatar" />
-                                            <div className="comment-skeleton-info">
-                                                <div className="comment-skeleton-name" />
-                                                <div className="comment-skeleton-text" />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : comments.length === 0 ? (
-                                <div className="post-modal-empty-comments">
-                                    <p>No comments yet. Start the conversation!</p>
-                                </div>
-                            ) : (
-                                <div className="post-modal-comments-list">
-                                    {comments.map((comment) => (
-                                        <div key={comment.commentId} className="post-modal-comment-row">
-                                            <div className="post-modal-comment-avatar-div">
-                                                <img
-                                                    src={comment.profileImage && comment.profileImage !== "null"
-                                                        ? comment.profileImage
-                                                        : DEFAULT_IMAGE}
-                                                    className="post-modal-comment-avatar-img"
-                                                    alt={comment.username}
-                                                />
-                                            </div>
-                                            <div className="post-modal-comment-body">
-                                                <div className="post-modal-comment-meta">
-                                                    <span className="post-modal-comment-username">
-                                                        {comment.username}
-                                                    </span>
-                                                    {comment.fetchVerified && (
-                                                        <BadgeCheck size={14} className="post-modal-verify-badge inline-badge" />
-                                                    )}
-                                                    <span className="post-modal-comment-time">
-                                                        {formatPostTime(comment.createdAt)}
-                                                    </span>
-                                                </div>
-                                                <p className="post-modal-comment-text">
-                                                    {comment.commentText}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    {/* Pagination Loader */}
-                                    {loadingComments && comments.length > 0 && (
-                                        <div className="twine-postmodal-spinner-center">
-                                            <span className="twine-loader-spinner"></span>
-                                        </div>
-                                    )}
-                                    <div ref={commentsEndRef} />
-                                </div>
-                            )}
-                        </div>
+                        <CommentSection
+                            ref={commentSectionRef}
+                            postId={localPost.fetchPostId}
+                            isModal={true}
+                            loggedUser={loggedUser}
+                            onCommentCountUpdate={(change) => {
+                                const updatedPost = {
+                                    ...localPost,
+                                    commentCount: Math.max(0, (localPost.commentCount || 0) + change)
+                                };
+                                setLocalPost(updatedPost);
+                                if (onPostUpdate) {
+                                    onPostUpdate(updatedPost);
+                                }
+                            }}
+                        />
                     ) : (
                         <div style={{ padding: "20px", textAlign: "center" }}>
                             <p style={{ color: "#8e8e93", fontSize: "13px" }}><i>Comments are disabled for this post</i></p>
