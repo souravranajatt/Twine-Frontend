@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { X, BadgeCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { fetchFollowersAPI } from "../../../Utils/userProfileAPI.js";
+import useScrollLock from "../../../Lib/useScrollLock";
 import "./FollowerList.css";
 import "../../../Assets/Bundle/GlobalSpinner.css";
 
@@ -20,6 +21,8 @@ function FollowerList({ isOpen, onClose, targetUserId }) {
       loadFollowers(0, true);
     }
   }, [isOpen, targetUserId]);
+
+  useScrollLock(isOpen);
 
   // Load followers from API
   const loadFollowers = async (pageNum, isInitial = false) => {

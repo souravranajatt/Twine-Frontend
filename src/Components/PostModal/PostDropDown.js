@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { savePostAPI, unsavePostAPI, archivePostAPI, hideLikeAPI, unhideLikeAPI, disableCommentingAPI, enableCommentingAPI, deletePostAPI } from '../../Utils/PostActionAPI';
 import { useNavigate } from "react-router-dom";
+import useScrollLock from "../../Lib/useScrollLock";
 import "./PostDropDown.css";
 import "../../Assets/Bundle/GlobalSpinner.css";
 
@@ -22,12 +23,14 @@ function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
     const navigate = useNavigate();
 
 
-    // Keep localPost 
+    // Set Post to local state
     useEffect(() => {
         if (isOpen && Post) {
             setLocalPost(Post);
         }
     }, [isOpen, Post]);
+
+    useScrollLock(isOpen);
 
     // Handle copying to clipboard
     const handleCopyLink = async () => {

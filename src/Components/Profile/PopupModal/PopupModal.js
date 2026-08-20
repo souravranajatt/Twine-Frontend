@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { MapPin, BriefcaseBusiness, CalendarDays, Link2, BadgeCheck, Copy, UserX, Flag, Venus, Mars } from "lucide-react";
 import { blockUserAPI, unblockUserAPI } from "../../../Utils/userProfileAPI.js";
+import useScrollLock from "../../../Lib/useScrollLock";
 import "./PopupModal.css";
 import "../../../Assets/Bundle/GlobalSpinner.css";
 
@@ -16,6 +17,8 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
             setLocalData(userProfileDataURL);
         }
     }, [isOpen, userProfileDataURL]);
+
+    useScrollLock(isOpen);
 
 
     // Handle Block/Unblock user
@@ -112,7 +115,7 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
                     {userProfileDataURL?.searchUserLink && (
                         <div className="popupModalInfoRow-Box">
                             <Link2 height="15" width="15" className="popupModalInfoIcon-Box" />
-                            <span className="popupModalInfoLink-Box">{userProfileDataURL.searchUserLink}</span>
+                            <a href={userProfileDataURL.searchUserLink.startsWith('http') ? userProfileDataURL.searchUserLink : `https://${userProfileDataURL.searchUserLink}`} target="_blank" rel="noopener noreferrer" className="popupModalInfoLink-Box">{userProfileDataURL.searchUserLink}</a>
                         </div>
                     )}
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BadgeCheck, Tag, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import useScrollLock from "../../../Lib/useScrollLock";
 import "../Style/RenderTaggedUsers.css";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
@@ -8,17 +9,7 @@ const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v177685
 function RenderTaggedUsers({ taggedUsers }) {
     const [open, setOpen] = useState(false);
 
-    // Lock body scroll when modal is open
-    useEffect(() => {
-        if (open) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-        return () => {
-            document.body.style.overflow = "";
-        };
-    }, [open]);
+    useScrollLock(open);
 
     if (!taggedUsers || taggedUsers.length === 0) return null;
 
@@ -47,11 +38,11 @@ function RenderTaggedUsers({ taggedUsers }) {
             >
                 <Tag size={12} className="twine-tagged-toggle-icon" />
                 <span className="twine-tagged-btn-text">
-                    Tagged{count > 1 ? ` +${count}` : ""}
+                    Tagged
                 </span>
             </button>
 
-            {/* Full-screen blur overlay + modal */}
+            {/* overlay modal */}
             {open && (
                 <div
                     className="twine-tagged-overlay"

@@ -9,6 +9,7 @@ import renderFormattedCaption from "../../Lib/renderFormattedCaption.js";
 import RenderTaggedUsers from "../PostContainer/Structure/RenderTaggedUsers.js";
 import CustomVideoPlayer from "../../Lib/CustomVideoPlayer.js";
 import PostDropDown from "./PostDropDown.js";
+import useScrollLock from "../../Lib/useScrollLock.js";
 import "./PostBoxModal.css";
 import "../../Assets/Bundle/GlobalSpinner.css";
 
@@ -52,6 +53,8 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
         }
     }, [post]);
 
+    useScrollLock(isOpen);
+
     // Handle URL change when modal opens/closes
     useEffect(() => {
         if (isOpen && post) {
@@ -66,18 +69,6 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
             }
         };
     }, [isOpen, post]);
-
-    // Lock body scroll when modal open
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-        return () => {
-            document.body.style.overflow = "";
-        };
-    }, [isOpen]);
 
     // Close dropdown on outside click
     useEffect(() => {
