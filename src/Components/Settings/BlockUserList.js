@@ -54,20 +54,16 @@ function BlockUserList() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="twine-setting-spinner-center">
-        <span className="twine-loader-spinner" />
-      </div>
-    );
-  }
-
   return (
     <div className="settings-form">
       <h2 className="sf-section-title">Blocked Users</h2>
       <p className="section-subtitle">Manage users you've blocked</p>
       <div className="blocked-list">
-        {blockedList.length === 0 ? (
+        {isLoading ? (
+          <div className="twine-setting-spinner-center">
+            <span className="twine-loader-spinner" />
+          </div>
+        ) : blockedList.length === 0 ? (
           <p className="empty-text">You haven't blocked anyone yet</p>
         ) : (
           blockedList.map(user => (
