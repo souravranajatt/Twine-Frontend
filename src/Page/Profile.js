@@ -17,6 +17,7 @@ import TimelinePosts from "../Components/Profile/TimelineTab/TimelinePosts.js";
 import TaggedPosts from "../Components/Profile/TaggedTab/TaggedPosts.js";
 import PopupModal from "../Components/Profile/PopupModal/PopupModal.js";
 import FollowerList from "../Components/Profile/PopupModal/FollowerList.js";
+import RequestOptionBox from "../Components/Profile/PopupModal/RequestOptionBox.js";
 import ProfileCardSkeleton from "../Components/Profile/SkeletonBody/ProfileCardSkeleton.js";
 
 const VALID_TABS = ["posts", "timeline", "tagged"];
@@ -273,6 +274,13 @@ function Profile() {
 
             {/* Profile Header */}
             <div className="profileHeader-Box">
+
+              {/* Follow request banner  */}
+              <RequestOptionBox
+                userProfileDataURL={userProfileDataURL}
+                onProfileRefresh={(freshProfile) => setUserProfileDataURL(freshProfile)}
+              />
+
               <div className="profileImageHeader-Box">
                 <div className="profileImagePFP-Box">
                   <img

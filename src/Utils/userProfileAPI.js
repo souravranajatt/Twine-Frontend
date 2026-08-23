@@ -44,6 +44,26 @@ export const cancelFollowRequestAPI = async (targetUserId) => {
   }
 };
 
+// Accept Request 
+export const acceptRequestAPI = async (targetUserId) => {
+  try {
+    const res = await api.post(`/v1/user/follow/accept/${targetUserId}`);
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || "Something went wrong!";
+  }
+};
+
+// Reject Request 
+export const rejectRequestAPI = async (targetUserId) => {
+  try {
+    const res = await api.delete(`/v1/user/follow/reject/${targetUserId}`);
+    return res.data;
+  } catch (err) {
+    throw err.response?.data || "Something went wrong!";
+  }
+};
+
 // Block User API....
 export const blockUserAPI = async (targetUserId) => {
   try {
