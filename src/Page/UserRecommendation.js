@@ -91,6 +91,13 @@ function UserRecommendation() {
       await followUserAPI(userId);
       const newStatus = user.isPrivate ? "REQUESTED" : "UNFOLLOW";
       setFollowStatus((prev) => ({ ...prev, [userId]: newStatus }));
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.userId === userId
+            ? { ...u, followedByMe: !user.isPrivate, isRequestSent: !!user.isPrivate }
+            : u
+        )
+      );
     } catch (error) {
       console.error("Failed to follow user:", error);
     } finally {
@@ -110,6 +117,13 @@ function UserRecommendation() {
     try {
       await unfollowUserAPI(userId);
       setFollowStatus((prev) => ({ ...prev, [userId]: "FOLLOW" }));
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.userId === userId
+            ? { ...u, followedByMe: false, isRequestSent: false }
+            : u
+        )
+      );
     } catch (error) {
       console.error("Failed to unfollow user:", error);
     } finally {
@@ -129,6 +143,13 @@ function UserRecommendation() {
     try {
       await cancelFollowRequestAPI(userId);
       setFollowStatus((prev) => ({ ...prev, [userId]: "FOLLOW" }));
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.userId === userId
+            ? { ...u, followedByMe: false, isRequestSent: false }
+            : u
+        )
+      );
     } catch (error) {
       console.error("Failed to cancel follow request:", error);
     } finally {
@@ -173,8 +194,10 @@ function UserRecommendation() {
                   const displayName = user.name || user.username;
                   const userId = user.userId;
 
-                  // current button status
-                  const currentStatus = followStatus[userId] || (user.followedByMe ? "UNFOLLOW" : "FOLLOW");
+                  // current button status 
+                  const currentStatus = followStatus[userId] || (
+                    user.followedByMe ? "UNFOLLOW" : user.isRequestSent ? "REQUESTED" : "FOLLOW"
+                  );
 
                   // Follow/Requested/Unfollow button based on state variable
                   let actionButton = null;
@@ -216,7 +239,7 @@ function UserRecommendation() {
                         {isFollowing[userId] ? (
                           <div className="twine-profile-actions-follow-btn-spinner"></div>
                         ) : (
-                          "Follow"
+                          user.followsYou ? "Follows you" : "Follow"
                         )}
                       </button>
                     );
