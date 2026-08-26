@@ -126,19 +126,56 @@
 .recommendation-follow-btn {
   background: #F0186E;
   color: #fff;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 20px;
   padding: 8px 18px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.1s ease;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 86px;
+  min-height: 35px;
 }
 
 .recommendation-follow-btn:hover {
   background: #d61562;
+}
+
+.recommendation-unfollow-btn,
+.recommendation-requested-btn {
+  background: #f4f4f5;
+  color: #18181b;
+  border: 1px solid #e4e4e7;
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 86px;
+  min-height: 35px;
+}
+
+.recommendation-unfollow-btn:hover,
+.recommendation-requested-btn:hover {
+  background: #e4e4e7;
+}
+
+.recommendation-follow-btn:disabled,
+.recommendation-unfollow-btn:disabled,
+.recommendation-requested-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
 }
 
 /* Skeleton List */
@@ -243,8 +280,12 @@
     font-size: 12.5px;
   }
 
-  .recommendation-follow-btn {
+  .recommendation-follow-btn,
+  .recommendation-unfollow-btn,
+  .recommendation-requested-btn {
     padding: 7px 16px;
     font-size: 13px;
+    min-width: 78px;
+    min-height: 32px;
   }
 }

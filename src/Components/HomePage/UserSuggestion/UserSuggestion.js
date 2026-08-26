@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { BadgeCheck } from "lucide-react";
 import { fetchUserSuggestionsAPI } from "../../../Utils/homePageAPI.js";
+import { followUserAPI, unfollowUserAPI, cancelFollowRequestAPI } from "../../../Utils/userProfileAPI.js";
 import UserSuggestionSkeleton from "./UserSuggestionSkeleton.js";
+import "../../../Assets/Bundle/GlobalSpinner.css";
 import "./UserSuggestion.css";
 
 const DEFAULT_AVATAR = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
@@ -11,6 +13,11 @@ function UserSuggestion() {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const hasFetched = useRef(false);
+
+  // Follow State & Action Tracking
+  const [followStatus, setFollowStatus] = useState({});
+  const [isFollowing, setIsFollowing] = useState({});
+  const followRef = useRef({});
 
   useEffect(() => {
     if (hasFetched.current) return;
@@ -29,6 +36,64 @@ function UserSuggestion() {
 
     loadSuggestions();
   }, []);
+
+  // Follow User Action
+  const handleFollow = async (user) => {
+    const userId = user.userId;
+    if (!userId || followRef.current[userId]) return;
+
+    followRef.current[userId] = true;
+    setIsFollowing((prev) => ({ ...prev, [userId]: true }));
+
+    try {
+      await followUserAPI(userId);
+      const newStatus = user.isPrivate ? "REQUESTED" : "UNFOLLOW";
+      setFollowStatus((prev) => ({ ...prev, [userId]: newStatus }));
+    } catch (error) {
+      console.error("Failed to follow user:", error);
+    } finally {
+      setIsFollowing((prev) => ({ ...prev, [userId]: false }));
+      followRef.current[userId] = false;
+    }
+  };
+
+  // Unfollow User Action
+  const handleUnfollow = async (user) => {
+    const userId = user.userId;
+    if (!userId || followRef.current[userId]) return;
+
+    followRef.current[userId] = true;
+    setIsFollowing((prev) => ({ ...prev, [userId]: true }));
+
+    try {
+      await unfollowUserAPI(userId);
+      setFollowStatus((prev) => ({ ...prev, [userId]: "FOLLOW" }));
+    } catch (error) {
+      console.error("Failed to unfollow user:", error);
+    } finally {
+      setIsFollowing((prev) => ({ ...prev, [userId]: false }));
+      followRef.current[userId] = false;
+    }
+  };
+
+  // Cancel Follow Request Action
+  const handleCancelRequest = async (user) => {
+    const userId = user.userId;
+    if (!userId || followRef.current[userId]) return;
+
+    followRef.current[userId] = true;
+    setIsFollowing((prev) => ({ ...prev, [userId]: true }));
+
+    try {
+      await cancelFollowRequestAPI(userId);
+      setFollowStatus((prev) => ({ ...prev, [userId]: "FOLLOW" }));
+    } catch (error) {
+      console.error("Failed to cancel follow request:", error);
+    } finally {
+      setIsFollowing((prev) => ({ ...prev, [userId]: false }));
+      followRef.current[userId] = false;
+    }
+  };
 
   if (loading) {
     return <UserSuggestionSkeleton count={5} />;
@@ -51,6 +116,56 @@ function UserSuggestion() {
               ? user.profilePicture
               : DEFAULT_AVATAR;
             const displayName = user.name || user.username;
+            const userId = user.userId;
+
+            // current button status
+            const currentStatus = followStatus[userId] || (user.followedByMe ? "UNFOLLOW" : "FOLLOW");
+
+            // Follow/Requested/Unfollow button based on state variable
+            let actionButton = null;
+            if (currentStatus === "UNFOLLOW") {
+              actionButton = (
+                <button
+                  onClick={() => handleUnfollow(user)}
+                  disabled={isFollowing[userId]}
+                  className="suggestion-unfollow-btn"
+                >
+                  {isFollowing[userId] ? (
+                    <div className="twine-profile-actions-others-btn-spinner"></div>
+                  ) : (
+                    "Unfollow"
+                  )}
+                </button>
+              );
+            } else if (currentStatus === "REQUESTED") {
+              actionButton = (
+                <button
+                  onClick={() => handleCancelRequest(user)}
+                  disabled={isFollowing[userId]}
+                  className="suggestion-requested-btn"
+                >
+                  {isFollowing[userId] ? (
+                    <div className="twine-profile-actions-others-btn-spinner"></div>
+                  ) : (
+                    "Requested"
+                  )}
+                </button>
+              );
+            } else {
+              actionButton = (
+                <button
+                  onClick={() => handleFollow(user)}
+                  disabled={isFollowing[userId]}
+                  className="follow-btn"
+                >
+                  {isFollowing[userId] ? (
+                    <div className="twine-profile-actions-follow-btn-spinner"></div>
+                  ) : (
+                    "Follow"
+                  )}
+                </button>
+              );
+            }
 
             return (
               <div key={user.userId || user.username} className="suggestion-item">
@@ -70,7 +185,7 @@ function UserSuggestion() {
                     <span className="suggestion-username">@{user.username}</span>
                   </div>
                 </Link>
-                <button className="follow-btn">Follow</button>
+                {actionButton}
               </div>
             );
           })

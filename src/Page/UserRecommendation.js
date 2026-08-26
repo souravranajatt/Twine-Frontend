@@ -5,6 +5,7 @@ import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import useInfiniteScroll from "../Lib/useInfiniteScroll.js";
 import { fetchUserSuggestionsAPI } from "../Utils/homePageAPI.js";
+import { followUserAPI, unfollowUserAPI, cancelFollowRequestAPI } from "../Utils/userProfileAPI.js";
 import "../Assets/Bundle/GlobalSpinner.css";
 import "../Assets/Bundle/UserRecommendation.css";
 
@@ -20,6 +21,11 @@ function UserRecommendation() {
   const isFetchingRef = useRef(false);
   const hasFetchedInitial = useRef(false);
   const pageRef = useRef(0);
+
+  // Follow State & Action Tracking
+  const [followStatus, setFollowStatus] = useState({});
+  const [isFollowing, setIsFollowing] = useState({});
+  const followRef = useRef({});
 
   const fetchRecommendations = async (pageToFetch) => {
     if (isFetchingRef.current) return;
@@ -73,6 +79,64 @@ function UserRecommendation() {
     fetchRecommendations(0);
   }, []);
 
+  // Follow User Action
+  const handleFollow = async (user) => {
+    const userId = user.userId;
+    if (!userId || followRef.current[userId]) return;
+
+    followRef.current[userId] = true;
+    setIsFollowing((prev) => ({ ...prev, [userId]: true }));
+
+    try {
+      await followUserAPI(userId);
+      const newStatus = user.isPrivate ? "REQUESTED" : "UNFOLLOW";
+      setFollowStatus((prev) => ({ ...prev, [userId]: newStatus }));
+    } catch (error) {
+      console.error("Failed to follow user:", error);
+    } finally {
+      setIsFollowing((prev) => ({ ...prev, [userId]: false }));
+      followRef.current[userId] = false;
+    }
+  };
+
+  // Unfollow User Action
+  const handleUnfollow = async (user) => {
+    const userId = user.userId;
+    if (!userId || followRef.current[userId]) return;
+
+    followRef.current[userId] = true;
+    setIsFollowing((prev) => ({ ...prev, [userId]: true }));
+
+    try {
+      await unfollowUserAPI(userId);
+      setFollowStatus((prev) => ({ ...prev, [userId]: "FOLLOW" }));
+    } catch (error) {
+      console.error("Failed to unfollow user:", error);
+    } finally {
+      setIsFollowing((prev) => ({ ...prev, [userId]: false }));
+      followRef.current[userId] = false;
+    }
+  };
+
+  // Cancel Follow Request Action
+  const handleCancelRequest = async (user) => {
+    const userId = user.userId;
+    if (!userId || followRef.current[userId]) return;
+
+    followRef.current[userId] = true;
+    setIsFollowing((prev) => ({ ...prev, [userId]: true }));
+
+    try {
+      await cancelFollowRequestAPI(userId);
+      setFollowStatus((prev) => ({ ...prev, [userId]: "FOLLOW" }));
+    } catch (error) {
+      console.error("Failed to cancel follow request:", error);
+    } finally {
+      setIsFollowing((prev) => ({ ...prev, [userId]: false }));
+      followRef.current[userId] = false;
+    }
+  };
+
   return (
     <div className="recommendation-page-container">
       <HeaderArea />
@@ -107,6 +171,56 @@ function UserRecommendation() {
                     ? user.profilePicture
                     : DEFAULT_AVATAR;
                   const displayName = user.name || user.username;
+                  const userId = user.userId;
+
+                  // current button status
+                  const currentStatus = followStatus[userId] || (user.followedByMe ? "UNFOLLOW" : "FOLLOW");
+
+                  // Follow/Requested/Unfollow button based on state variable
+                  let actionButton = null;
+                  if (currentStatus === "UNFOLLOW") {
+                    actionButton = (
+                      <button
+                        onClick={() => handleUnfollow(user)}
+                        disabled={isFollowing[userId]}
+                        className="recommendation-unfollow-btn"
+                      >
+                        {isFollowing[userId] ? (
+                          <div className="twine-profile-actions-others-btn-spinner"></div>
+                        ) : (
+                          "Unfollow"
+                        )}
+                      </button>
+                    );
+                  } else if (currentStatus === "REQUESTED") {
+                    actionButton = (
+                      <button
+                        onClick={() => handleCancelRequest(user)}
+                        disabled={isFollowing[userId]}
+                        className="recommendation-requested-btn"
+                      >
+                        {isFollowing[userId] ? (
+                          <div className="twine-profile-actions-others-btn-spinner"></div>
+                        ) : (
+                          "Requested"
+                        )}
+                      </button>
+                    );
+                  } else {
+                    actionButton = (
+                      <button
+                        onClick={() => handleFollow(user)}
+                        disabled={isFollowing[userId]}
+                        className="recommendation-follow-btn"
+                      >
+                        {isFollowing[userId] ? (
+                          <div className="twine-profile-actions-follow-btn-spinner"></div>
+                        ) : (
+                          "Follow"
+                        )}
+                      </button>
+                    );
+                  }
 
                   return (
                     <div key={user.userId || user.username} className="recommendation-list-item">
@@ -127,7 +241,7 @@ function UserRecommendation() {
                         </div>
                       </Link>
 
-                      <button className="recommendation-follow-btn">Follow</button>
+                      {actionButton}
                     </div>
                   );
                 })}
