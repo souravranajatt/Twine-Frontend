@@ -267,7 +267,7 @@ div.nav-bar-icons {
   color: inherit;
   cursor: pointer;
   width: 100%;
-  padding: 0;
+  padding: 14px 18px;
   margin: 0;
   display: flex;
   align-items: center;
@@ -322,7 +322,7 @@ div.nav-bar-icons {
 .profile-dropdown .dropdown-listItem {
   border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
   border-radius: 0;
-  padding: 14px 18px;
+  padding: 0px;
   font-weight: 500;
   margin: 0;
   color: #1c1c1e;
