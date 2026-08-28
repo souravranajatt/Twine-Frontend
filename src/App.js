@@ -1,6 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { AuthProvider } from './AuthChecker/AuthContext';
 import Login from './Page/Login'; // Login Page
 import Signup from './Page/Signup'; // Signup Page
 import Main from './Page/Main'; // Main Page 
@@ -21,65 +22,67 @@ function ScrollToTop() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
+    <AuthProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
 
-        {/* Public Routes */}
-        <Route path='/login' element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        } />
-        <Route path='/signup' element={
-          <PublicRoute>
-            <Signup />
-          </PublicRoute>
-        } />
+          {/* Public Routes */}
+          <Route path='/login' element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          } />
+          <Route path='/signup' element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          } />
 
-        {/* Protected Routes */}
-        <Route path='/' element={
-          <ProtectedRoute>
-            <Main />
-          </ProtectedRoute>
-        } />
+          {/* Protected Routes */}
+          <Route path='/' element={
+            <ProtectedRoute>
+              <Main />
+            </ProtectedRoute>
+          } />
 
-        <Route path='/people/recommendations' element={
-          <ProtectedRoute>
-            <UserRecommendation />
-          </ProtectedRoute>
-        } />
+          <Route path='/people/recommendations' element={
+            <ProtectedRoute>
+              <UserRecommendation />
+            </ProtectedRoute>
+          } />
 
-        <Route path='/:username' element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        } />
+          <Route path='/:username' element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
 
-        <Route path='/:username/:tab' element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        } />
+          <Route path='/:username/:tab' element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          } />
 
-        <Route path='/account/settings' element={
-          <ProtectedRoute>
-            <Settings />
-          </ProtectedRoute>
-        } />
+          <Route path='/account/settings' element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          } />
 
-        <Route path='/:username/posts/:postId' element={
-          <ProtectedRoute>
-            <Post />
-          </ProtectedRoute>
-        } />
+          <Route path='/:username/posts/:postId' element={
+            <ProtectedRoute>
+              <Post />
+            </ProtectedRoute>
+          } />
 
 
-        {/* Catch-All */}
-        <Route path="*" element={<NotFoundPage />} />
+          {/* Catch-All */}
+          <Route path="*" element={<NotFoundPage />} />
 
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

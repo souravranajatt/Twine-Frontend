@@ -5,7 +5,7 @@ import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import { postFetchAPI } from "../Utils/PostFeaturesAPI.js";
 import { likePostAPI, dislikePostAPI } from "../Utils/PostActionAPI.js";
-import { loggedUserDataAPI } from "../Utils/homePageAPI.js";
+import { useAuth } from "../AuthChecker/AuthContext.js";
 import formatPostTime from "../Lib/formatPostTime.js";
 import renderFormattedCaption from "../Lib/renderFormattedCaption.js";
 import RenderTaggedUsers from "../Components/PostContainer/Structure/RenderTaggedUsers.js";
@@ -21,6 +21,7 @@ function Post() {
 
     const { username, postId } = useParams();
     const navigate = useNavigate();
+    const { loggedUser } = useAuth();
 
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -29,24 +30,10 @@ function Post() {
     const [commentText, setCommentText] = useState("");
     const [submittingComment, setSubmittingComment] = useState(false);
     const [expandedCaption, setExpandedCaption] = useState(false);
-    const [loggedUser, setLoggedUser] = useState(null);
     const [openDropdown, setOpenDropdown] = useState(false);
 
     const likingRef = useRef(false);
     const commentSectionRef = useRef(null);
-
-    // Fetch logged user
-    useEffect(() => {
-        const getLoggedUser = async () => {
-            try {
-                const data = await loggedUserDataAPI();
-                setLoggedUser(data);
-            } catch (err) {
-                console.error("Failed to get logged user", err);
-            }
-        };
-        getLoggedUser();
-    }, []);
 
     // Close dropdown on outside click
     useEffect(() => {

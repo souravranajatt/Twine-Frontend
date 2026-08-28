@@ -1,31 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import "../Assets/Bundle/Main.css";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import HomeFeed from "../Components/HomePage/FeedSection/HomeFeed.js";
 import PostCard from "../Components/HomePage/PostSection/PostCard.js";
 import UserSuggestion from "../Components/HomePage/UserSuggestion/UserSuggestion.js";
-import { loggedUserDataAPI } from "../Utils/homePageAPI.js";
+import { useAuth } from "../AuthChecker/AuthContext.js";
 
 function Main() {
-
-  const [loggedUserData, setLoggedUserData] = useState(null);
-  const hasFetched = useRef(false);
-
-  useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
-    const fetchLoggedData = async () => {
-      try {
-        const res = await loggedUserDataAPI();
-        setLoggedUserData(res);
-      } catch (err) {
-        setLoggedUserData(null);
-      }
-    };
-    fetchLoggedData();
-  }, []);
+  const { loggedUser } = useAuth();
 
   return (
     <div className="home-main-container">
@@ -37,7 +20,7 @@ function Main() {
       <main className="main-wrapper">
 
         <div className="slide-bar-wrapper">
-          <PostCard loggedUserData={loggedUserData} />
+          <PostCard loggedUserData={loggedUser} />
           <UserSuggestion />
         </div>
 

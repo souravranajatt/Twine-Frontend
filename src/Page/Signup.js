@@ -5,8 +5,10 @@ import { signupUserAuthAPI, sendOtpAuthAPI, verifyOtpAuthAPI } from "../Utils/au
 import { maskEmail } from "../Lib/maskEmail.js"; // Email Masker
 import { Image, UserRoundPlus, TrendingUp } from "lucide-react";
 import FooterArea from "../Components/Footer/Footer.js";
+import { useAuth } from "../AuthChecker/AuthContext.js";
 
 function Signup() {
+  const { login } = useAuth();
 
   // Define Variable 
   const [fullName, setFullName] = useState("");
@@ -121,6 +123,7 @@ function Signup() {
 
       // Create user
       await signupUserAuthAPI(userData);
+      await login();
       setOTPBox(false);
       setOtpValue("");
       navigate("/");

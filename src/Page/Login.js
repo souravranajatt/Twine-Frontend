@@ -4,8 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { loginUserAuthAPI } from "../Utils/authAPI.js"; // Import API 
 import { Image, UserRoundPlus, TrendingUp, User } from "lucide-react";
 import FooterArea from "../Components/Footer/Footer.js";
+import { useAuth } from "../AuthChecker/AuthContext.js";
 
 function Login() {
+  const { login } = useAuth();
 
   // Define Variable of Fields 
   const [UserId, setUserId] = useState("");
@@ -37,6 +39,7 @@ function Login() {
     isLoginRef.current = true;
     try {
       await loginUserAuthAPI(userData);
+      await login();
       navigate("/");
     } catch (err) {
       setMessage(err.message || err);

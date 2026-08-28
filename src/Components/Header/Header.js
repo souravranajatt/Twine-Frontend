@@ -3,12 +3,13 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useDebounce from "../../Lib/useDebounce.js";
 import "./Header.css";
-import { logoutHandleAPI } from "../../Utils/authAPI";
 import { searchUsersAPI } from "../../Utils/searchAPI.js";
+import { useAuth } from "../../AuthChecker/AuthContext.js";
 
 const Default_ProfilePhoto = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
 function Header() {
+  const { loggedUser, logout } = useAuth();
 
   const [searchGo, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -94,9 +95,8 @@ function Header() {
 
   // Logout Functionality ....
   const logoutHandle = async () => {
-    // Call Logout API
     try {
-      await logoutHandleAPI();
+      await logout();
       setProfileTabNav(false);
       setNotifyTabNav(false);
       navigate("/login", { replace: true });
@@ -224,51 +224,53 @@ function Header() {
 
       </div>
 
-      {/* Header Right */}
-      <div className="header-right">
-        {/* Profile-Notify Nav Bar Icons */}
-        <div className="nav-bar-icons">
-          {/* Notification DropDown */}
-          <div className="icon-left" ref={notifyRef}>
-            <button type="button" className="headerRightIconBtn-ToogleBox" onClick={HandlenotifyTabNavToogleBtn}><Bell size={20} className="iconTabRight" /></button>
-            {notifyTabNav && (
-              <div className="dropdown notify-dropdown">
-                <ul className="dropdown-unorderList">
-                  <li className="dropdown-listItem">❤️ Liked your post</li>
-                  <li className="dropdown-listItem">👀 Someone sent a like</li>
-                  <li className="dropdown-listItem">✅ twine.ceo followed you</li>
-                </ul>
-              </div>
-            )}
-          </div>
+      {/* Header Right - Only shown when logged in */}
+      {loggedUser && (
+        <div className="header-right">
+          {/* Profile-Notify Nav Bar Icons */}
+          <div className="nav-bar-icons">
+            {/* Notification DropDown */}
+            <div className="icon-left" ref={notifyRef}>
+              <button type="button" className="headerRightIconBtn-ToogleBox" onClick={HandlenotifyTabNavToogleBtn}><Bell size={20} className="iconTabRight" /></button>
+              {notifyTabNav && (
+                <div className="dropdown notify-dropdown">
+                  <ul className="dropdown-unorderList">
+                    <li className="dropdown-listItem">❤️ Liked your post</li>
+                    <li className="dropdown-listItem">👀 Someone sent a like</li>
+                    <li className="dropdown-listItem">✅ twine.ceo followed you</li>
+                  </ul>
+                </div>
+              )}
+            </div>
 
-          {/* Profile DropDown */}
-          <div className="icon-left" ref={profileRef}>
-            <button type="button" className="headerRightIconBtn-ToogleBox" onClick={HandleprofileTabNavToogleBtn}><User size={20} className="iconTabRight" /></button>
-            {profileTabNav && (
-              <div className="dropdown profile-dropdown">
-                <ul className="dropdown-unorderList">
-                  <li className="dropdown-listItem">
-                    <Link to="/account/settings" className="dropdown-linkList">
-                      <button type="button" className="dropDownBtnDesign-Box">
-                        <CircleUserRound size={18} className="dropdownIcons" />
-                        Settings & Privacy
+            {/* Profile DropDown */}
+            <div className="icon-left" ref={profileRef}>
+              <button type="button" className="headerRightIconBtn-ToogleBox" onClick={HandleprofileTabNavToogleBtn}><User size={20} className="iconTabRight" /></button>
+              {profileTabNav && (
+                <div className="dropdown profile-dropdown">
+                  <ul className="dropdown-unorderList">
+                    <li className="dropdown-listItem">
+                      <Link to="/account/settings" className="dropdown-linkList">
+                        <button type="button" className="dropDownBtnDesign-Box">
+                          <CircleUserRound size={18} className="dropdownIcons" />
+                          Settings & Privacy
+                        </button>
+                      </Link>
+                    </li>
+                    <li className="dropdown-listItem">
+                      <button type="button" className="dropDownBtnDesign-Box" onClick={logoutHandle}>
+                        <LogOut size={18} className="dropdownIcons" />
+                        Logout
                       </button>
-                    </Link>
-                  </li>
-                  <li className="dropdown-listItem">
-                    <button type="button" className="dropDownBtnDesign-Box" onClick={logoutHandle}>
-                      <LogOut size={18} className="dropdownIcons" />
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
 
+          </div>
         </div>
-      </div>
+      )}
 
     </header>
   );

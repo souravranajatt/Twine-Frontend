@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { X, Heart, MessageCircle, Forward, SendHorizontal, BadgeCheck, MapPin, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { likePostAPI, dislikePostAPI } from "../../Utils/PostActionAPI.js";
-import { loggedUserDataAPI } from "../../Utils/homePageAPI.js";
+import { useAuth } from "../../AuthChecker/AuthContext.js";
 import formatPostTime from "../../Lib/formatPostTime.js";
 import renderFormattedCaption from "../../Lib/renderFormattedCaption.js";
 import RenderTaggedUsers from "../PostContainer/Structure/RenderTaggedUsers.js";
@@ -16,29 +16,16 @@ import "../../Assets/Bundle/GlobalSpinner.css";
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
 function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
+    const { loggedUser } = useAuth();
     const [localPost, setLocalPost] = useState(null);
     const [commentText, setCommentText] = useState("");
     const [submittingComment, setSubmittingComment] = useState(false);
-    const [loggedUser, setLoggedUser] = useState(null);
     const [expandedCaption, setExpandedCaption] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(false);
 
     const originalUrlRef = useRef("");
     const likingRef = useRef(false);
     const commentSectionRef = useRef(null);
-
-    // Fetch logged user data
-    useEffect(() => {
-        const getLoggedUser = async () => {
-            try {
-                const data = await loggedUserDataAPI();
-                setLoggedUser(data);
-            } catch (err) {
-                console.error("Failed to get logged user data", err);
-            }
-        };
-        getLoggedUser();
-    }, []);
 
     // Update local post state if prop changes
     useEffect(() => {
