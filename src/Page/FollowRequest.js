@@ -4,6 +4,7 @@ import { BadgeCheck, Check, X } from "lucide-react";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import useInfiniteScroll from "../Lib/useInfiniteScroll.js";
+import formatPostTime from "../Lib/formatPostTime.js";
 import { fetchFollowRequestsAPI } from "../Utils/homePageAPI.js";
 import { acceptRequestAPI, rejectRequestAPI } from "../Utils/userProfileAPI.js";
 import "../Assets/Bundle/GlobalSpinner.css";
@@ -186,6 +187,14 @@ function FollowRequest() {
                                                     </div>
                                                     <div className="follow-request-item-username-row">
                                                         <span className="follow-request-item-username">@{user.username}</span>
+                                                        {(user.requestedOn) && (
+                                                            <>
+                                                                <span className="follow-request-item-dot">•</span>
+                                                                <span className="follow-request-item-time">
+                                                                    {formatPostTime(user.requestedOn)}
+                                                                </span>
+                                                            </>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </Link>
