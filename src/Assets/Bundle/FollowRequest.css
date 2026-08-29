@@ -1,5 +1,5 @@
-/* UserRecommendation Page Layout */
-.recommendation-page-container {
+/* FollowRequest Page Layout */
+.follow-request-page-container {
   background-color: #fafafa;
   width: 100%;
   min-height: 100vh;
@@ -7,7 +7,7 @@
   flex-direction: column;
 }
 
-.recommendation-main-content {
+.follow-request-main-content {
   margin-top: 71px;
   display: flex;
   flex: 1;
@@ -17,7 +17,7 @@
   padding: 24px 16px 40px;
 }
 
-.recommendation-wrapper-box {
+.follow-request-wrapper-box {
   max-width: 600px;
   width: 100%;
   margin: 0 auto;
@@ -28,46 +28,66 @@
   padding: 20px 24px;
 }
 
-.recommendation-header-section {
+.follow-request-header-section {
   margin-bottom: 20px;
   padding-bottom: 14px;
   border-bottom: 0.5px solid #efefef;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-.recommendation-header-title {
+.follow-request-header-text-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.follow-request-header-title {
   margin: 0 0 4px 0;
   font-size: 20px;
   font-weight: 700;
   color: #1a1a1a;
 }
 
-.recommendation-header-subtitle {
+.follow-request-header-subtitle {
   margin: 0;
   font-size: 13px;
   color: #666;
 }
 
+.follow-request-count-badge {
+  background: #fdf2f6;
+  color: #F0186E;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(240, 24, 110, 0.15);
+  white-space: nowrap;
+}
+
 /* Vertical List Layout */
-.recommendation-list {
+.follow-request-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.recommendation-list-item {
+.follow-request-list-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 10px 4px;
+  padding: 12px 4px;
   border-bottom: 0.5px solid #f5f5f5;
+  transition: background-color 0.15s ease;
 }
 
-.recommendation-list-item:last-child {
+.follow-request-list-item:last-child {
   border-bottom: none;
 }
 
-.recommendation-item-user-info {
+.follow-request-item-user-info {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -77,15 +97,16 @@
   color: inherit;
 }
 
-.recommendation-item-avatar {
+.follow-request-item-avatar {
   width: 52px;
   height: 52px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  border: 1px solid #f0f0f0;
 }
 
-.recommendation-item-meta {
+.follow-request-item-meta {
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -93,13 +114,13 @@
   flex: 1;
 }
 
-.recommendation-item-name-row {
+.follow-request-item-name-row {
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-.recommendation-item-name {
+.follow-request-item-name {
   font-size: 15px;
   font-weight: 700;
   color: #1a1a1a;
@@ -108,23 +129,44 @@
   text-overflow: ellipsis;
 }
 
-.recommendation-verify-badge {
+.follow-request-verify-badge {
   fill: #F0186E;
   color: #ffffff;
   stroke-width: 2;
   flex-shrink: 0;
 }
 
-.recommendation-item-username {
+.follow-request-item-username-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.follow-request-item-username {
   font-size: 13px;
   color: #666;
-  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
+  font-weight: 500;
   text-overflow: ellipsis;
 }
 
-.recommendation-follow-btn {
+.follow-request-item-time {
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Actions Group */
+.follow-request-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.follow-request-confirm-btn {
   background: #F0186E;
   color: #fff;
   border: 1px solid transparent;
@@ -139,16 +181,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 86px;
+  min-width: 82px;
   min-height: 35px;
 }
 
-.recommendation-follow-btn:hover {
+.follow-request-confirm-btn:hover {
   background: #d61562;
 }
 
-.recommendation-unfollow-btn,
-.recommendation-requested-btn {
+.follow-request-delete-btn {
   background: #f4f4f5;
   color: #18181b;
   border: 1px solid #e4e4e7;
@@ -163,30 +204,51 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 86px;
+  min-width: 82px;
   min-height: 35px;
 }
 
-.recommendation-unfollow-btn:hover,
-.recommendation-requested-btn:hover {
+.follow-request-delete-btn:hover {
   background: #e4e4e7;
+  color: #09090b;
 }
 
-.recommendation-follow-btn:disabled,
-.recommendation-unfollow-btn:disabled,
-.recommendation-requested-btn:disabled {
-  opacity: 0.8;
+.follow-request-status-badge {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.follow-request-status-badge.confirmed {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.follow-request-status-badge.deleted {
+  background: #f4f4f5;
+  color: #71717a;
+  border: 1px solid #e4e4e7;
+}
+
+.follow-request-confirm-btn:disabled,
+.follow-request-delete-btn:disabled {
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
-/* Skeleton List */
-.recommendation-skel-list {
+/* Skeleton Loading List */
+.follow-request-skel-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.recommendation-skel-item {
+.follow-request-skel-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -194,55 +256,65 @@
   padding: 10px 4px;
 }
 
-.recommendation-skel-avatar-row {
+.follow-request-skel-avatar-row {
   width: 52px;
   height: 52px;
   border-radius: 50%;
   flex-shrink: 0;
+  background: #f0f0f0;
 }
 
-.recommendation-skel-meta {
+.follow-request-skel-meta {
   display: flex;
   flex-direction: column;
   gap: 6px;
   flex: 1;
 }
 
-.recommendation-skel-name-line {
+.follow-request-skel-name-line {
   width: 140px;
   height: 16px;
   border-radius: 4px;
+  background: #f0f0f0;
 }
 
-.recommendation-skel-user-line {
+.follow-request-skel-user-line {
   width: 90px;
   height: 13px;
   border-radius: 4px;
+  background: #f0f0f0;
 }
 
-.recommendation-skel-btn-row {
-  width: 78px;
-  height: 34px;
-  border-radius: 20px;
+.follow-request-skel-actions-row {
+  display: flex;
+  gap: 8px;
   flex-shrink: 0;
 }
 
-.no-more-recommendations {
+.follow-request-skel-btn-row {
+  width: 74px;
+  height: 34px;
+  border-radius: 20px;
+  background: #f0f0f0;
+}
+
+/* Empty State / End of List */
+.no-more-follow-requests {
   text-align: center;
-  padding: 20px 0 8px;
+  padding: 24px 0 8px;
   font-size: 13px;
   color: #8e8e8e;
 }
 
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
-  .recommendation-main-content {
+  .follow-request-main-content {
     margin-top: 71px;
     padding: 0 0 30px;
     width: 100%;
   }
 
-  .recommendation-wrapper-box {
+  .follow-request-wrapper-box {
     max-width: 100%;
     border-radius: 0;
     border: none;
@@ -250,43 +322,51 @@
     padding: 16px 16px;
   }
 
-  .recommendation-list-item {
+  .follow-request-list-item {
     gap: 12px;
     padding: 10px 0;
   }
 
-  .recommendation-item-user-info {
-    gap: 14px;
+  .follow-request-item-user-info {
+    gap: 12px;
   }
 
-  .recommendation-header-title {
+  .follow-request-header-title {
     font-size: 18px;
   }
 
-  .recommendation-header-subtitle {
+  .follow-request-header-subtitle {
     font-size: 12px;
   }
 
-  .recommendation-item-avatar,
-  .recommendation-skel-avatar-row {
+  .follow-request-item-avatar,
+  .follow-request-skel-avatar-row {
     width: 46px;
     height: 46px;
   }
 
-  .recommendation-item-name {
+  .follow-request-item-name {
     font-size: 14.5px;
   }
 
-  .recommendation-item-username {
+  .follow-request-item-username {
     font-size: 12.5px;
   }
 
-  .recommendation-follow-btn,
-  .recommendation-unfollow-btn,
-  .recommendation-requested-btn {
-    padding: 7px 16px;
+  .follow-request-actions-group {
+    gap: 6px;
+  }
+
+  .follow-request-confirm-btn,
+  .follow-request-delete-btn {
+    padding: 7px 14px;
     font-size: 13px;
-    min-width: 78px;
+    min-width: 70px;
     min-height: 32px;
+  }
+
+  .follow-request-skel-btn-row {
+    width: 66px;
+    height: 32px;
   }
 }

@@ -31,3 +31,13 @@ export const fetchUserSuggestionsAPI = async (page = 0, size = 10) => {
         throw error.response?.data || "Failed to fetch user suggestions!";
     }
 };
+
+// Fetch Follow Requests API
+export const fetchFollowRequestsAPI = async (page = 0, size = 15) => {
+    try {
+        const response = await api.get(`/follow-requests?page=${page}&size=${size}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || "Failed to fetch follow requests!";
+    }
+};

@@ -9,6 +9,7 @@ import Profile from './Page/Profile'; // Profile Page
 import Settings from './Page/Settings'; // Settings Page
 import Post from './Page/Post'; // Post Page
 import UserRecommendation from './Page/UserRecommendation'; // User Recommendation Page
+import FollowRequest from './Page/FollowRequest'; // Follow Request Page
 import ProtectedRoute from "./AuthChecker/ProtectedRoute"; // To Protect Pages 
 import PublicRoute from "./AuthChecker/PublicRoute"; // To Protect Pages 
 import NotFoundPage from "./ErrorHandler/ErrrorDesign/ErrorPageDesign";
@@ -49,6 +50,12 @@ function App() {
           <Route path='/people/recommendations' element={
             <ProtectedRoute>
               <UserRecommendation />
+            </ProtectedRoute>
+          } />
+
+          <Route path='/people/follow-requests' element={
+            <ProtectedRoute>
+              <FollowRequest />
             </ProtectedRoute>
           } />
 

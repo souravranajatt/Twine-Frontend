@@ -118,7 +118,7 @@ button {
     display: flex;
     align-items: center;
     gap: 4px;
-    color: #8e8e93;
+    color: #666;
 }
 
 .profileUsernameVerifyBadgeIcon-Box {
