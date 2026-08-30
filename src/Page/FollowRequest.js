@@ -28,7 +28,7 @@ function FollowRequest() {
     const [actionStatus, setActionStatus] = useState({});
     const actionRef = useRef({});
 
-    // Fetch follow requests from backend API
+    // Fetch follow requests
     const fetchRequests = async (pageToFetch) => {
         if (isFetchingRef.current) return;
         isFetchingRef.current = true;
