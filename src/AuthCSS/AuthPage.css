@@ -1,4 +1,4 @@
-/* Disable The User Selection */
+/* ***** User Selection ***** */
 .brand-title,
 .brand-features,
 .fields-input,
@@ -11,7 +11,7 @@
   user-select: none;
 }
 
-/* Main Wrapper */
+/* ***** Global Layout ***** */
 .content-aut-wrapper {
   background-color: #fafafa;
   min-height: 100vh;
@@ -21,24 +21,19 @@
   justify-content: space-between;
 }
 
-/* Split Layout Container */
 .auth-split-container {
   display: flex;
   flex-grow: 1;
   width: 100%;
   max-width: 1050px;
-  /* Bring left checklist and right form closer together */
   margin: 0 auto;
-  /* Center the layout on large screens */
   min-height: calc(100vh - 70px);
-  /* Leave room for footer */
 }
 
-/* Left Brand Panel */
+/* ***** Left Brand Panel ***** */
 .auth-left-panel {
   width: 50%;
   background-color: #fafafa;
-  /* Uniform background to match the right side and footer perfectly */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,7 +64,6 @@
   font-size: 76px;
   font-weight: 500;
   color: #ff3b6c;
-  /* Signature pink */
   margin-bottom: 8px;
   letter-spacing: -0.5px;
 }
@@ -81,12 +75,6 @@
   margin-bottom: 48px;
 }
 
-/* Mobile-only logo container hidden on desktop */
-.mobile-logo-container {
-  display: none;
-}
-
-/* Features Checklist */
 .brand-features {
   list-style: none;
   display: flex;
@@ -110,7 +98,6 @@
   width: 24px;
   height: 24px;
   color: #ff3b6c;
-  /* Elegant pink brand color */
   flex-shrink: 0;
 }
 
@@ -120,11 +107,10 @@
   font-weight: 500;
 }
 
-/* Right Form Panel */
+/* ***** Right Form Panel ***** */
 .auth-right-panel {
   width: 50%;
   background-color: #fafafa;
-  /* Keep previous light-grey background */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -133,12 +119,37 @@
 
 .auth-box {
   width: 100%;
-  max-width: 380px;
+  max-width: 388px;
   text-align: center;
   background-color: transparent;
 }
 
-/* Error Msg */
+.mobile-logo-container {
+  display: none;
+}
+
+.auth-card-box {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #dbdbdb;
+  border-radius: 12px;
+  padding: 36px 32px 28px 32px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.auth-error-box {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  text-align: center;
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
 .error-msg {
   width: 100%;
   padding: 10px 14px;
@@ -149,7 +160,6 @@
   line-height: 1.4;
 }
 
-/* Form Styles */
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -177,7 +187,6 @@
 
 .auth-input:focus {
   border-color: #a8a8a8;
-  /* Clean simple grey border on focus */
   box-shadow: none;
 }
 
@@ -202,7 +211,6 @@
   transform: scale(0.98);
 }
 
-/* Forgot Password Link */
 .forgot-password-wrapper {
   margin-top: 16px;
   margin-bottom: 24px;
@@ -221,14 +229,12 @@
   opacity: 0.8;
 }
 
-/* Plain Divider */
 .divider-line {
   height: 1px;
   background-color: #dbdbdb;
   margin-bottom: 24px;
 }
 
-/* Footer Box Inside Form */
 .other {
   background-color: transparent;
   text-align: center;
@@ -250,48 +256,7 @@
   opacity: 0.8;
 }
 
-/* Responsive Grid Split Layout */
-@media (max-width: 900px) {
-  .auth-left-panel {
-    display: none;
-    /* Hide left info panel on smaller screens */
-  }
-
-  .auth-right-panel {
-    width: 100%;
-    padding: 40px 20px;
-    background-color: #ffffff;
-    /* Smooth mobile experience */
-  }
-
-  .content-aut-wrapper {
-    background-color: #ffffff;
-  }
-
-  /* Show mobile brand logo on mobile screen */
-  .mobile-logo-container {
-    display: block;
-    margin-bottom: 32px;
-    text-align: center;
-  }
-
-  .mobile-auth-logo {
-    font-family: 'Billabong', 'Georgia', serif;
-    font-size: 44px;
-    font-weight: 500;
-    color: #ff3b6c;
-    margin-bottom: 6px;
-    letter-spacing: -0.5px;
-  }
-
-  .mobile-logo-tagline {
-    font-size: 14px;
-    color: #c94a65;
-    font-weight: 400;
-  }
-}
-
-/* OTP Modal Overlay */
+/* ***** OTP Modal ***** */
 .otp-overlay {
   position: fixed;
   top: 0;
@@ -409,7 +374,7 @@
   color: #262626;
 }
 
-/* Unique Auth Button Loading Spinner */
+/* ***** Loading Spinner ***** */
 .twine-auth-btn-spinner {
   width: 18px;
   height: 18px;
@@ -423,5 +388,53 @@
 @keyframes twineSpinnerRotation {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ***** Responsive Media Queries ***** */
+@media (max-width: 900px) {
+  .auth-left-panel {
+    display: none;
+  }
+
+  .auth-right-panel {
+    width: 100%;
+    padding: 40px 20px;
+    background-color: #ffffff;
+  }
+
+  .content-aut-wrapper {
+    background-color: #ffffff;
+  }
+
+  .mobile-logo-container {
+    display: block;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .mobile-auth-logo {
+    font-family: 'Billabong', 'Georgia', serif;
+    font-size: 44px;
+    font-weight: 500;
+    color: #ff3b6c;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+
+  .mobile-logo-tagline {
+    font-size: 14px;
+    color: #c94a65;
+    font-weight: 400;
+  }
+}
+
+@media (max-width: 786px) {
+  .auth-card-box {
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
   }
 }

@@ -30,8 +30,6 @@ function ForgotPassword() {
     setMessage("");
 
     try {
-      // Structure placeholder for future API call
-      // e.g. await sendPasswordResetLinkAPI(identifier.trim());
       setMessage("If an account matches that info, we've sent a link to reset your password.");
       setMessageType("success");
     } catch (err) {
@@ -114,22 +112,24 @@ function ForgotPassword() {
                   {isLoading ? <span className="twine-auth-btn-spinner" /> : "Send Login Link"}
                 </button>
 
-                <div className="forgot-divider">
-                  <div className="forgot-divider-line" />
-                  <span className="forgot-divider-text">OR</span>
-                  <div className="forgot-divider-line" />
-                </div>
+              </form>
 
-                <Link to="/signup" className="forgot-create-account-link">
+              <div className="forgot-divider">
+                <div className="forgot-divider-line" />
+                <span className="forgot-divider-text">OR</span>
+                <div className="forgot-divider-line" />
+              </div>
+
+              <div className="forgot-bottom-links">
+                <Link to="/signup" className="forgot-bottom-link">
                   Create new account
                 </Link>
-              </form>
-            </div>
+                <span className="forgot-link-separator">•</span>
+                <Link to="/login" className="forgot-bottom-link">
+                  Back to login
+                </Link>
+              </div>
 
-            <div className="forgot-back-to-login-box">
-              <Link to="/login" className="forgot-back-to-login-link">
-                Back to login
-              </Link>
             </div>
 
           </div>

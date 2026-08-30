@@ -88,54 +88,58 @@ function Login() {
               <p className="mobile-logo-tagline">Connect. Match. Unfold</p>
             </div>
 
-            {message && <p className="error-msg">{message}</p>}
-            <form className="auth-form" onSubmit={handleSubmit}>
+            {/* Login Card Box */}
+            <div className="auth-card-box">
+              {message && <div className="auth-error-box">{message}</div>}
+              <form className="auth-form" onSubmit={handleSubmit}>
 
-              <div className="fields-input">
-                <input
-                  type="text"
-                  placeholder="Username or email"
-                  value={UserId}
-                  className="auth-input"
-                  onChange={(e) => setUserId(e.target.value)}
-                />
-              </div>
+                <div className="fields-input">
+                  <input
+                    type="text"
+                    placeholder="Username or email"
+                    value={UserId}
+                    className="auth-input"
+                    onChange={(e) => setUserId(e.target.value)}
+                  />
+                </div>
 
-              <div className="fields-input">
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={UserPwd}
-                  className="auth-input"
-                  onChange={(e) => setUserPwd(e.target.value)}
-                  autoCapitalize="none"
-                  autoComplete="off"
-                  autoCorrect="off"
-                />
-              </div>
+                <div className="fields-input">
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    value={UserPwd}
+                    className="auth-input"
+                    onChange={(e) => setUserPwd(e.target.value)}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect="off"
+                  />
+                </div>
 
-              <div className="fields-input">
-                <button type="submit" className="auth-btn" disabled={isLogin}>
-                  {isLogin ? <span className="twine-auth-btn-spinner" /> : "Log in"}
-                </button>
-              </div>
+                <div className="fields-input">
+                  <button type="submit" className="auth-btn" disabled={isLogin}>
+                    {isLogin ? <span className="twine-auth-btn-spinner" /> : "Log in"}
+                  </button>
+                </div>
 
-              {/* Forgot password */}
-              <div className="forgot-password-wrapper">
-                <Link to="/auth/forgot-password" className="forgot-password-link">Forgot password?</Link>
-              </div>
+                {/* Forgot password */}
+                <div className="forgot-password-wrapper">
+                  <Link to="/auth/forgot-password" className="forgot-password-link">Forgot password?</Link>
+                </div>
+
+              </form>
 
               <div className="divider-line"></div>
 
-              {/* Footer navigation */}
               <div className="other">
                 <p className="auth-footer">
-                  Don’t have an account?{" "}
+                  Don't have an account?{" "}
                   <span><Link to="/signup" className="link-col">Sign up</Link></span>
                 </p>
               </div>
 
-            </form>
+            </div>
+
           </div>
         </div>
 
