@@ -122,7 +122,7 @@ function Login() {
 
               {/* Forgot password */}
               <div className="forgot-password-wrapper">
-                <Link to="/forgot-password" className="forgot-password-link">Forgot password?</Link>
+                <Link to="/auth/forgot-password" className="forgot-password-link">Forgot password?</Link>
               </div>
 
               <div className="divider-line"></div>

@@ -1,11 +1,9 @@
 import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import { deactivateAccountAPI } from "../../Utils/SettingDataAPI.js";
 import { useAuth } from "../../AuthChecker/AuthContext.js";
 import "../../Assets/Bundle/GlobalSpinner.css";
 
 function AccountDeactivate() {
-  const navigate = useNavigate();
   const { logout } = useAuth();
   const [deactivatePassword, setDeactivatePassword] = useState("");
   const [deactivateReason, setDeactivateReason] = useState("Need a break");

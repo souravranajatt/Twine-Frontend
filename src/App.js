@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { AuthProvider } from './AuthChecker/AuthContext';
 import Login from './Page/Login'; // Login Page
 import Signup from './Page/Signup'; // Signup Page
+import ForgotPassword from './Page/ForgotPassword'; // Forgot Password Page
 import Main from './Page/Main'; // Main Page 
 import Profile from './Page/Profile'; // Profile Page 
 import Settings from './Page/Settings'; // Settings Page
@@ -37,6 +38,11 @@ function App() {
           <Route path='/signup' element={
             <PublicRoute>
               <Signup />
+            </PublicRoute>
+          } />
+          <Route path='/auth/forgot-password' element={
+            <PublicRoute>
+              <ForgotPassword />
             </PublicRoute>
           } />
 
