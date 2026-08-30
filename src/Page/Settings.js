@@ -4,7 +4,7 @@ import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import "../Assets/Bundle/Settings.css";
 import "../Assets/Bundle/GlobalSpinner.css";
-import { settingDataAPI, userPersonalDetailsFetchAPI } from "../Utils/SettingDataAPI.js";
+import { settingDataAPI } from "../Utils/SettingDataAPI.js";
 
 // Import Page Components
 import EditProfile from "../Components/Settings/EditProfile.js";
@@ -32,8 +32,6 @@ function Settings() {
   const [isMobileView, setIsMobileView] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
-  const [showExpiredPopup, setShowExpiredPopup] = useState(false);
-  const [personalDetails, setPersonalDetails] = useState(null);
 
   const hasFetched = useRef(false);
 
@@ -45,12 +43,8 @@ function Settings() {
     const fetchInitialSettings = async () => {
       try {
         setIsLoading(true);
-        const [profileRes, detailsRes] = await Promise.all([
-          settingDataAPI(),
-          userPersonalDetailsFetchAPI()
-        ]);
+        const profileRes = await settingDataAPI();
         setProfileData(profileRes);
-        setPersonalDetails(detailsRes);
       } catch (err) {
         console.error("Error fetching settings:", err);
       } finally {
@@ -109,7 +103,7 @@ function Settings() {
       );
     }
 
-    if (!profileData && (activeSection === "edit-profile" || activeSection === "private-account" || activeSection === "change-details")) {
+    if (!profileData && (activeSection === "edit-profile" || activeSection === "private-account")) {
       return (
         <div className="settings-form empty-state">
           <p className="empty-text">Failed to load profile settings. Please refresh the page.</p>
@@ -127,19 +121,10 @@ function Settings() {
         );
 
       case "change-details":
-        return (
-          <ChangeDetails
-            personalDetails={personalDetails}
-            setPersonalDetails={setPersonalDetails}
-          />
-        );
+        return <ChangeDetails />;
 
       case "deactivate":
-        return (
-          <AccountDeactivate
-            setShowExpiredPopup={setShowExpiredPopup}
-          />
-        );
+        return <AccountDeactivate />;
 
       case "delete-account":
         return <AcccountDeletion />;
@@ -340,7 +325,7 @@ function Settings() {
 
           {/* mobile view size handle  */}
           {(!isMobileView || activeSection) && (
-            <main className="settings-content" style={{ display: 'flex', flexDirection: 'column', minHeight: '100%' }}>
+            <main className="settings-content">
               <div style={{ flex: '1 0 auto' }}>
                 {isMobileView && activeSection && (
                   <button className="back-to-menu-btn" onClick={handleBackClick}>
@@ -354,16 +339,6 @@ function Settings() {
           )}
         </div>
       </div>
-
-      {showExpiredPopup && (
-        <div className="expired-popup-overlay">
-          <div className="expired-popup-content">
-            <h3>Session Expired</h3>
-            <p>Your session has expired. Redirecting to login page...</p>
-            <div className="loading-spinner-small"></div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

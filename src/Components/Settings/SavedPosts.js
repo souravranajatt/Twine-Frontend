@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import "../../Assets/Bundle/Settings.css";
+import "../../Assets/Bundle/GlobalSpinner.css";
 import { Heart, MessageCircle, Play, Bookmark } from "lucide-react";
 import { fetchSavedPostsAPI } from "../../Utils/SettingDataAPI.js";
 import useInfiniteScroll from "../../Lib/useInfiniteScroll.js";
@@ -28,7 +29,6 @@ function SavedPosts() {
           setHasMore(false);
         } else {
           setSavedPosts(data);
-          // Standard page size check (e.g. if we get less than 9 posts, there might be no more posts)
           if (data.length < 12) {
             setHasMore(false);
           }
@@ -75,7 +75,6 @@ function SavedPosts() {
         }
       } catch (err) {
         console.error("Error loading more saved posts!", err);
-        // Rollback page state update on failure
         setPage((prev) => prev - 1);
       } finally {
         setLoading(false);
@@ -104,12 +103,10 @@ function SavedPosts() {
         View and manage the posts you have saved.
       </p>
 
-      {/* Render 3x3 Skeleton Loader for Initial Fetch */}
+      {/* Spinner Loader for Initial Fetch */}
       {savedPosts.length === 0 && loading ? (
-        <div className="sp-grid-container">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
-            <div key={i} className="sp-skeleton-card" />
-          ))}
+        <div className="twine-setting-spinner-center">
+          <span className="twine-loader-spinner" />
         </div>
       ) : savedPosts.length > 0 ? (
         <>
@@ -156,15 +153,12 @@ function SavedPosts() {
             ))}
           </div>
 
-          {/* Load-More Skeleton Row */}
+          {/* Load-More Spinner */}
           {loading && (
-            <div className="sp-loadmore-skeleton">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="sp-skeleton-card" />
-              ))}
+            <div className="twine-loader-spinner-center">
+              <span className="twine-loader-spinner" />
             </div>
           )}
-
         </>
       ) : (
         /* Empty State */

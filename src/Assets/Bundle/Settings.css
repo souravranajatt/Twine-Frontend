@@ -1,4 +1,6 @@
-/* Container for the entire settings page */
+/* ====================================================
+   GLOBAL CONTAINER & LAYOUT
+   ==================================================== */
 .main-settings-container {
   background-color: #fafafa;
   width: 100%;
@@ -7,17 +9,17 @@
   flex-direction: column;
 }
 
-/* Settings Wrapper - Sidebar + Content Layout */
 .settings-wrapper {
   display: flex;
   flex: 1;
   margin-top: 71px;
   min-height: calc(100vh - 71px);
-  /* Default to row for desktop, will be overridden in mobile media query */
   flex-direction: row;
 }
 
-/*  3. Sidebar Navigation (Desktop First) */
+/* ====================================================
+   SIDEBAR NAVIGATION
+   ==================================================== */
 .settings-sidebar {
   width: 290px;
   background-color: #fafafa;
@@ -61,7 +63,7 @@
   padding: 0 24px;
   font-size: 11px;
   font-weight: 700;
-  color: #94a3b8;
+  color: #666;
   margin-bottom: 10px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
@@ -76,7 +78,7 @@
 .nav-item {
   background: none;
   border: none;
-  color: #64748b;
+  color: #8e8e93;
   font-size: 14px;
   font-weight: 500;
   padding: 10px 16px;
@@ -95,7 +97,7 @@
 }
 
 .nav-item svg {
-  color: #94a3b8;
+  color: #8e8e93;
   transition: color 0.2s ease;
   flex-shrink: 0;
 }
@@ -106,7 +108,7 @@
 }
 
 .nav-item:hover svg {
-  color: #475569;
+  color: #8e8e93;
 }
 
 .nav-item.active {
@@ -119,20 +121,33 @@
   color: #18181b;
 }
 
-/* ==========================================================================
-   4. Main Content Area
-   ========================================================================== */
+/* ====================================================
+   MAIN CONTENT AREA & COMMON FORM ELEMENTS
+   ==================================================== */
 .settings-content {
   flex: 1;
   background-color: #ffffff;
   padding: 40px 60px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.settings-form {
+.settings-form,
+.ep-main-container,
+.cd-main-container,
+.cp-main-container,
+.ad-main-container,
+.del-main-container,
+.tfa-main-container,
+.pa-main-container,
+.as-main-container,
+.bu-main-container {
   max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
 }
 
-/* Common h2 title for all settings pages */
 .sf-section-title {
   color: #1a1a1a;
   font-size: 24px;
@@ -147,29 +162,6 @@
   margin-bottom: 40px;
 }
 
-.empty-state {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50vh;
-}
-
-/* Status Messages */
-.status-text {
-  font-size: 14px;
-  font-weight: 500;
-  display: inline-block;
-}
-
-.status-text.success {
-  color: #059669;
-}
-
-.status-text.error {
-  color: #dc2626;
-}
-
-/* Back Button (Mobile Only, hidden by default on desktop) */
 .back-to-menu-btn {
   display: none;
   background: none;
@@ -199,75 +191,34 @@
   color: #ffffff;
 }
 
-/* ==========================================================================
-   5. Forms & Inputs
-   ========================================================================== */
-/* Profile Photo Section */
-.profile-photo-section {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 32px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.profile-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background-color: #f5f5f5;
+.empty-state {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
-  border: 1px solid #e0e0e0;
+  height: 50vh;
 }
 
-.avatar-placeholder {
-  width: 40px;
-  height: 40px;
-  color: #a0a0a0;
+.empty-text {
+  color: #8e8e93;
+  font-size: 15px;
+  text-align: center;
+  padding: 40px 20px;
 }
 
-.profile-photo-actions {
-  display: flex;
-  gap: 12px;
-}
-
-.change-photo-btn {
-  padding: 8px 16px;
-  background-color: #ffffff;
-  border: 1px solid #dbdbdb;
-  border-radius: 6px;
+.status-text {
   font-size: 14px;
   font-weight: 500;
-  color: #1a1a1a;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  display: inline-block;
 }
 
-.change-photo-btn:hover {
-  background-color: #f9f9f9;
+.status-text.success {
+  color: #059669;
 }
 
-.remove-photo-btn {
-  padding: 8px 16px;
-  background-color: transparent;
-  border: none;
-  font-size: 14px;
-  font-weight: 500;
-  color: #ef4444;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.remove-photo-btn:hover {
+.status-text.error {
   color: #dc2626;
-  text-decoration: underline;
 }
 
-/* Form Layout */
 .form-row {
   display: flex;
   gap: 20px;
@@ -307,7 +258,23 @@
   outline: none;
 }
 
-/* Datalist Input Styling to prevent white text and restore arrow */
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  background-color: #ffffff;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #8e8e93;
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
 .datalist-input {
   -webkit-appearance: auto !important;
   appearance: auto !important;
@@ -319,7 +286,6 @@ datalist option {
   color: #000000 !important;
 }
 
-/* Select specific styling */
 .select-wrapper {
   position: relative;
 }
@@ -340,26 +306,6 @@ datalist option {
   cursor: pointer;
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #b0b0b0;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-  outline: none;
-  background-color: #ffffff;
-}
-
-.form-group textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
-/* ==========================================================================
-   6. Buttons & Interactive Elements
-   ========================================================================== */
 .save-btn,
 .deactivate-btn,
 .delete-btn,
@@ -388,38 +334,6 @@ datalist option {
   background-color: #d61562;
 }
 
-.deactivate-btn {
-  background-color: #f59e0b;
-  color: #ffffff;
-  margin-top: 12px;
-}
-
-.deactivate-btn:hover {
-  background-color: #d97706;
-}
-
-.delete-btn {
-  background-color: #ef4444;
-  color: #ffffff;
-  margin-top: 12px;
-}
-
-.delete-btn:hover {
-  background-color: #dc2626;
-}
-
-.logout-btn {
-  background-color: #e5e7eb;
-  color: #1a1a1a;
-}
-
-.logout-btn:hover {
-  background-color: #d1d5db;
-}
-
-/* ==========================================================================
-   7. Specific Components (Text, Sessions, Toggles, Lists)
-   ========================================================================== */
 .warning-text {
   color: #8e8e93;
   font-size: 14px;
@@ -438,478 +352,153 @@ datalist option {
   margin-bottom: 24px;
 }
 
-.empty-text {
-  color: #b0b0b0;
-  font-size: 15px;
-  text-align: center;
-  padding: 40px 20px;
-}
-
-/* Blocked User List Styling */
-
-.blocked-user-item {
-  width: 100%;
+/* ====================================================
+   1. EDIT PROFILE
+   ==================================================== */
+.profile-photo-section {
   display: flex;
-  padding: 15px;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.blocked-user-avatar {
-  height: 50px;
-  width: 50px;
+.profile-avatar {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
-  margin-right: 20px;
   background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
   border: 1px solid #e0e0e0;
 }
 
-.AvaatarIcon-PFP {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  display: flex;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  object-position: center;
-}
-
-.blocked-user-name {
-  color: #1a1a1a;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.setting-unblock-Btn {
-  margin-left: auto;
-  width: auto;
+.avatar-placeholder {
+  width: 40px;
   height: 40px;
-  padding: 5px 15px;
-  border-radius: 5px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  -webkit-tap-highlight-color: transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 100px;
-}
-
-.setting-unblock-Btn:hover {
-  background-color: #d32f2f;
-}
-
-/* Spinner Animation */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Sessions List */
-.sessions-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.session-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  background-color: #fafafa;
-}
-
-.session-info {
-  flex: 1;
-}
-
-.session-device {
-  color: #1a1a1a;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
-
-.session-location {
   color: #8e8e93;
-  font-size: 13px;
 }
 
-/* Privacy Section Styles */
-.privacy-toggle-container {
+.profile-photo-actions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24px;
+  gap: 12px;
+}
+
+.change-photo-btn {
+  padding: 8px 16px;
   background-color: #ffffff;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.change-photo-btn:hover {
+  background-color: #f9f9f9;
+}
+
+.remove-photo-btn {
+  padding: 8px 16px;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ef4444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-photo-btn:hover {
+  color: #dc2626;
+  text-decoration: underline;
+}
+
+/* ====================================================
+   2. CHANGE DETAILS
+   ==================================================== */
+/* Uses common form elements & cd-skeleton below */
+
+/* ====================================================
+   3. DEACTIVATE ACCOUNT
+   ==================================================== */
+.deactivate-btn {
+  background-color: #f59e0b;
+  color: #ffffff;
+  margin-top: 12px;
+}
+
+.deactivate-btn:hover {
+  background-color: #d97706;
+}
+
+/* ====================================================
+   4. ACCOUNT DELETION
+   ==================================================== */
+.delete-btn {
+  background-color: #ef4444;
+  color: #ffffff;
+  margin-top: 12px;
+}
+
+.delete-btn:hover {
+  background-color: #dc2626;
+}
+
+.del-conditions-box {
+  background-color: #fafafa;
+  border: 1px solid #f0f0f0;
   border-radius: 12px;
-  margin-top: 20px;
-  transition: all 0.3s ease;
+  padding: 18px 20px;
+  margin: 20px 0 28px 0;
 }
 
-.privacy-toggle-container:hover {
-
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.05);
-}
-
-.privacy-info h3 {
-  font-size: 16px;
+.del-conditions-title {
+  font-size: 14px;
   font-weight: 600;
   color: #1a1a1a;
-  margin-bottom: 4px;
+  margin-bottom: 12px;
 }
 
-.privacy-info p {
-  font-size: 14px;
-  color: #8e8e93;
-  margin: 0;
-  max-width: 320px;
-}
-
-/* Modern Toggle Switch (iOS style) */
-.toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 46px;
-  height: 24px;
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.toggle-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.toggle-slider:before {
-  position: absolute;
-  content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-input:checked+.toggle-slider {
-  background-color: #6366f1;
-}
-
-input:checked+.toggle-slider:before {
-  transform: translateX(22px);
-}
-
-/* Blocked Users List */
-.blocked-list {
-  margin-top: 24px;
-}
-
-/* ==========================================================================
-   8. Responsive Design (Mobile View Settings)
-   ========================================================================== */
-@media (max-width: 1024px) {
-  .settings-content {
-    padding: 32px 40px;
-  }
-}
-
-@media (max-width: 768px) {
-
-  /* On mobile, stack layout */
-  .settings-wrapper {
-    flex-direction: column;
-    margin-top: 71px;
-    height: auto;
-    min-height: calc(100vh - 71px);
-  }
-
-  /* Mobile Sidebar styling: 
-     Takes full width, vertical list style. */
-  .settings-sidebar {
-    width: 100%;
-    height: auto;
-    border-right: none;
-    padding: 16px 0;
-    overflow-y: visible;
-    /* Let it grow naturally */
-  }
-
-  .settings-category {
-    margin-bottom: 16px;
-  }
-
-  .category-title {
-    font-size: 13px;
-    padding: 0 20px;
-    margin-bottom: 12px;
-  }
-
-  .nav-item {
-    padding: 16px 20px;
-    font-size: 16px;
-    border-left: none;
-    border-bottom: 1px solid #f0f0f0;
-  }
-
-  /* Hide left border logic for mobile menu */
-  .nav-item.active {
-    border-left-color: transparent;
-    background-color: #f5f5f5;
-  }
-
-  /* Show back button when content is active on mobile */
-  .back-to-menu-btn {
-    display: flex;
-  }
-
-  .settings-content {
-    padding: 24px 20px;
-    height: auto;
-    flex: 1;
-    overflow-y: visible;
-  }
-
-  .sf-section-title {
-    font-size: 26px;
-  }
-
-  .section-subtitle {
-    font-size: 14px;
-    margin-bottom: 24px;
-  }
-
-  .form-group input,
-  .form-group textarea {
-    font-size: 16px;
-  }
-
-  .save-btn,
-  .deactivate-btn,
-  .delete-btn,
-  .logout-btn {
-    width: 100%;
-    margin-top: 16px;
-  }
-
-  /* Session items stacking on small screens */
-  .session-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .logout-btn {
-    width: 100%;
-  }
-
-  .toggle-item {
-    padding: 12px;
-  }
-
-  .form-row {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .profile-photo-section {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .settings-content {
-    padding: 20px 16px;
-  }
-
-  .sf-section-title {
-    font-size: 22px;
-    margin-bottom: 8px;
-  }
-
-  .form-group {
-    margin-bottom: 20px;
-  }
-}
-
-/* ===== 9. Expired Session Popup ===== */
-.expired-popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  backdrop-filter: blur(4px);
-}
-
-.expired-popup-content {
-  background-color: #ffffff;
-  padding: 40px;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  animation: popupScale 0.3s ease-out;
-}
-
-.expired-popup-content h3 {
-  font-size: 24px;
-  color: #1a1a1a;
-  margin-bottom: 16px;
-}
-
-.expired-popup-content p {
-  color: #666;
-  font-size: 16px;
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-
-.loading-spinner-small {
-  width: 30px;
-  height: 30px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #18181b;
-  border-radius: 50%;
-  margin: 0 auto;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes popupScale {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Footer CSS for Right Side on Desktop and full width on Mobile */
-.main-settings-container .footer-wrapper {
-  margin-top: 60px;
-  border-top: 1px solid #f1f5f9;
-  padding: 24px 0 10px 0;
-  width: 100%;
-  max-width: 600px;
-  background-color: transparent;
-  align-self: center;
-}
-
-.main-settings-container .link-div {
-  justify-content: center;
+.del-conditions-list {
+  list-style: none;
   padding: 0;
-  margin-top: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.main-settings-container .link-tag {
-  margin: 0 12px;
-}
-
-.main-settings-container .link-style {
-  color: #94a3b8;
+.del-condition-item {
   font-size: 13px;
   font-weight: 500;
-  transition: color 0.2s ease;
+  color: #8e8e93;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 18px;
 }
 
-.main-settings-container .link-style:hover {
-  color: #6366f1;
+.del-condition-item::before {
+  content: "•";
+  position: absolute;
+  left: 4px;
+  top: 0;
+  color: #ef4444;
+  font-size: 14px;
 }
 
-.main-settings-container .company-reserved {
-  justify-content: center;
-  padding: 0;
-  margin-top: 8px;
-  margin-bottom: 0;
-}
-
-.main-settings-container .company-copyright-tag {
-  color: #cbd5e1;
-  font-size: 11px;
-}
-
-/* Loader Styling */
-.feed-loading-spinner-box {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 30px 0;
-}
-
-.spinner-icon {
-  animation: spin-loader 1s linear infinite;
-  color: #ff3b6c;
-}
-
-@keyframes spin-loader {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* =========================================
-   SAVED POSTS UI STYLING
-========================================= */
+/* ====================================================
+   5. SAVED POSTS
+   ==================================================== */
 .sp-main-container {
   max-width: 800px;
   width: 100%;
+  margin: 0 auto;
 }
 
 .sp-description {
@@ -1001,32 +590,6 @@ input:checked+.toggle-slider:before {
   opacity: 0;
 }
 
-.sp-skeleton-card {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-  background-size: 200% 100%;
-  animation: spSkeletonShimmer 1.6s infinite ease-in-out;
-}
-
-@keyframes spSkeletonShimmer {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-.sp-loadmore-skeleton {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 16px;
-}
-
 .sp-empty-state {
   display: flex;
   flex-direction: column;
@@ -1048,7 +611,7 @@ input:checked+.toggle-slider:before {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9ca3af;
+  color: #8e8e93;
   margin-bottom: 16px;
 }
 
@@ -1067,20 +630,349 @@ input:checked+.toggle-slider:before {
   line-height: 1.5;
 }
 
+/* ====================================================
+   6. ARCHIVE POSTS
+   ==================================================== */
+.archive-main-container {
+  display: flex;
+  flex-direction: column;
+}
 
-/* =========================================
-   INTERACTION PREFERENCES UI STYLING
-========================================= */
+.ap-main-container {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ap-description {
+  font-size: 14px;
+  color: #8e8e93;
+  margin-bottom: 24px;
+}
+
+.ap-feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 10px;
+}
+
+.ap-post-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ap-post-media-container {
+  position: relative;
+  width: 100%;
+  background-color: #f9fafb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ap-post-media {
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
+  display: block;
+}
+
+.ap-post-body {
+  padding: 16px;
+  border-top: 1px solid #f3f4f6;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ap-post-caption {
+  font-size: 14px;
+  color: #110110;
+  font-weight: 500;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.ap-post-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ap-post-date {
+  font-size: 11px;
+  color: #8e8e93;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ap-unarchive-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #262626;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  text-align: center;
+}
+
+.ap-unarchive-btn:hover {
+  background-color: #404040;
+}
+
+.ap-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  background-color: #fafafa;
+  border-radius: 16px;
+  border: 1px dashed #e5e7eb;
+  text-align: center;
+}
+
+.ap-empty-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #374151;
+  margin: 12px 0 6px 0;
+}
+
+.ap-empty-text {
+  color: #8e8e93;
+  font-size: 14px;
+  max-width: 320px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ====================================================
+   7. CHANGE PASSWORD
+   ==================================================== */
+/* Uses common form elements */
+
+/* ====================================================
+   8. ACTIVE SESSIONS
+   ==================================================== */
+.sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.session-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fafafa;
+}
+
+.session-info {
+  flex: 1;
+}
+
+.session-device {
+  color: #1a1a1a;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.session-location {
+  color: #8e8e93;
+  font-size: 13px;
+}
+
+.logout-btn {
+  background-color: #e5e7eb;
+  color: #1a1a1a;
+}
+
+.logout-btn:hover {
+  background-color: #d1d5db;
+}
+
+/* ====================================================
+   9. 2F AUTHENTICATION
+   ==================================================== */
+/* Uses common form elements */
+
+/* ====================================================
+   10. PRIVATE ACCOUNT
+   ==================================================== */
+.privacy-toggle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.privacy-toggle-container:hover {
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.05);
+}
+
+.privacy-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.privacy-info p {
+  font-size: 14px;
+  color: #8e8e93;
+  margin: 0;
+  max-width: 320px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input:checked+.toggle-slider {
+  background-color: #6366f1;
+}
+
+input:checked+.toggle-slider:before {
+  transform: translateX(22px);
+}
+
+/* ====================================================
+   11. BLOCKED USERS
+   ==================================================== */
+.blocked-list {
+  margin-top: 24px;
+}
+
+.blocked-user-item {
+  width: 100%;
+  display: flex;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.blocked-user-avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  margin-right: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #e0e0e0;
+}
+
+.AvaatarIcon-PFP {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  object-position: center;
+}
+
+.blocked-user-name {
+  color: #1a1a1a;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.setting-unblock-Btn {
+  margin-left: auto;
+  width: auto;
+  height: 40px;
+  padding: 5px 15px;
+  border-radius: 5px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 100px;
+}
+
+.setting-unblock-Btn:hover {
+  background-color: #d32f2f;
+}
+
+/* ====================================================
+   12. INTERACTION PREFERENCES
+   ==================================================== */
 .ip-main-container {
   max-width: 600px;
   width: 100%;
+  margin: 0 auto;
 }
-
-
 
 .ip-description {
   font-size: 14px;
-  color: #666;
+  color: #8e8e93;
   margin-bottom: 32px;
 }
 
@@ -1128,11 +1020,10 @@ input:checked+.toggle-slider:before {
 
 .ip-item-desc {
   font-size: 13px;
-  color: #777;
+  color: #8e8e93;
   line-height: 1.4;
 }
 
-/* Custom Select Dropdown */
 .ip-select-input {
   padding: 8px 30px 8px 12px;
   font-size: 14px;
@@ -1160,7 +1051,6 @@ input:checked+.toggle-slider:before {
   box-shadow: 0 0 0 2px rgba(240, 24, 110, 0.1);
 }
 
-/* iOS Style Toggle Switch */
 .ip-toggle-switch {
   position: relative;
   display: inline-block;
@@ -1218,159 +1108,294 @@ input:checked+.toggle-slider:before {
   border-radius: 50%;
 }
 
-/* ==========================================================================
-   Archive Posts specific styles (legacy stubs kept for safety)
-   ========================================================================== */
-.archive-main-container {
-  display: flex;
-  flex-direction: column;
+.ip-group-spaced {
+  margin-top: 30px;
 }
 
-.ap-main-container {
-  max-width: 600px;
+/* ====================================================
+   EXPIRED SESSION POPUP
+   ==================================================== */
+.expired-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  margin: 0 auto;
-}
-
-.ap-description {
-  font-size: 14px;
-  color: #8e8e93;
-  margin-bottom: 24px;
-}
-
-/* Feed Container */
-.ap-feed-container {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  margin-top: 10px;
-}
-
-/* Post Card styling */
-.ap-post-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Post Media */
-.ap-post-media-container {
-  position: relative;
-  width: 100%;
-  background-color: #f9fafb;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
 }
 
-.ap-post-media {
-  width: 100%;
-  max-height: 500px;
-  object-fit: contain;
-  display: block;
-}
-
-/* Post Body / Caption */
-.ap-post-body {
-  padding: 16px;
-  border-top: 1px solid #f3f4f6;
+.expired-popup-content {
   background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.ap-post-caption {
-  font-size: 14px;
-  color: #110110;
-  font-weight: 500;
-  line-height: 1.5;
-  margin: 0;
-}
-
-.ap-post-meta-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.ap-post-date {
-  font-size: 11px;
-  color: #8e8e93;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Unarchive Button */
-.ap-unarchive-btn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #262626;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  padding: 40px;
+  border-radius: 12px;
   text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: popupScale 0.3s ease-out;
 }
 
-.ap-unarchive-btn:hover {
-  background-color: #404040
+.expired-popup-content h3 {
+  font-size: 24px;
+  color: #1a1a1a;
+  margin-bottom: 16px;
 }
 
-/* Skeleton Loading Card */
-.ap-skeleton-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  overflow: hidden;
+.expired-popup-content p {
+  color: #8e8e93;
+  font-size: 16px;
   margin-bottom: 24px;
+  line-height: 1.5;
 }
 
-.ap-skeleton-media {
+.loading-spinner-small {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #18181b;
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: spin 1s linear infinite;
+}
+
+/* ====================================================
+   FOOTER
+   ==================================================== */
+.main-settings-container .footer-wrapper {
+  margin-top: 60px;
+  border-top: 1px solid #f1f5f9;
+  padding: 24px 0 10px 0;
   width: 100%;
-  height: 320px;
-  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-  background-size: 200% 100%;
-  animation: apShimmer 1.5s infinite ease-in-out;
+  max-width: 600px;
+  background-color: transparent;
+  align-self: center;
 }
 
-.ap-skeleton-body {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.main-settings-container .link-div {
+  justify-content: center;
+  padding: 0;
+  margin-top: 0;
 }
 
-.ap-skeleton-line {
-  width: 100%;
-  height: 12px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-  background-size: 200% 100%;
-  animation: apShimmer 1.5s infinite ease-in-out;
+.main-settings-container .link-tag {
+  margin: 0 12px;
 }
 
-.ap-skeleton-line.short {
-  width: 60%;
+.main-settings-container .link-style {
+  color: #666A72;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
-.ap-skeleton-button {
-  width: 100%;
-  height: 36px;
-  border-radius: 8px;
-  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
-  background-size: 200% 100%;
-  animation: apShimmer 1.5s infinite ease-in-out;
+.main-settings-container .link-style:hover {
+  color: #6366f1;
+}
+
+.main-settings-container .company-reserved {
+  justify-content: center;
+  padding: 0;
   margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.main-settings-container .company-copyright-tag {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+/* ====================================================
+   LOADER & SPINNER
+   ==================================================== */
+.feed-loading-spinner-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
+}
+
+.spinner-icon {
+  animation: spin-loader 1s linear infinite;
+  color: #ff3b6c;
+}
+
+/* ====================================================
+   MAX WIDTH & RESPONSIVE DESIGN
+   ==================================================== */
+@media (max-width: 1024px) {
+  .settings-content {
+    padding: 32px 40px;
+  }
+}
+
+@media (max-width: 786px) {
+
+  .settings-form,
+  .ep-main-container,
+  .cd-main-container,
+  .cp-main-container,
+  .ad-main-container,
+  .del-main-container,
+  .tfa-main-container,
+  .pa-main-container,
+  .as-main-container,
+  .bu-main-container {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .settings-wrapper {
+    flex-direction: column;
+    margin-top: 71px;
+    height: auto;
+    min-height: calc(100vh - 71px);
+  }
+
+  .settings-sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    padding: 16px 0;
+    overflow-y: visible;
+  }
+
+  .settings-category {
+    margin-bottom: 16px;
+  }
+
+  .category-title {
+    font-size: 13px;
+    padding: 0 20px;
+    margin-bottom: 12px;
+  }
+
+  .nav-item {
+    padding: 16px 20px;
+    font-size: 16px;
+    border-left: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .nav-item.active {
+    border-left-color: transparent;
+    background-color: #f5f5f5;
+  }
+
+  .back-to-menu-btn {
+    display: flex;
+  }
+
+  .settings-content {
+    padding: 24px 20px;
+    height: auto;
+    flex: 1;
+    overflow-y: visible;
+  }
+
+  .sf-section-title {
+    font-size: 26px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 16px;
+  }
+
+  .save-btn,
+  .deactivate-btn,
+  .delete-btn,
+  .logout-btn {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .session-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .logout-btn {
+    width: 100%;
+  }
+
+  .toggle-item {
+    padding: 12px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .profile-photo-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-content {
+    padding: 20px 16px;
+  }
+
+  .sf-section-title {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+}
+
+/* ====================================================
+   TRANSITIONS & KEYFRAMES
+   ==================================================== */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-loader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes popupScale {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes apShimmer {
@@ -1383,30 +1408,113 @@ input:checked+.toggle-slider:before {
   }
 }
 
-/* Empty State */
-.ap-empty-state {
+/* ====================================================
+   SKELETONS
+   ==================================================== */
+
+/* ***** Change Details Skeleton ***** */
+.cd-skeleton-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 24px;
-  background-color: #fafafa;
-  border-radius: 16px;
-  border: 1px dashed #e5e7eb;
-  text-align: center;
+  gap: 24px;
 }
 
-.ap-empty-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #374151;
-  margin: 12px 0 6px 0;
+.cd-skeleton-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.ap-empty-text {
-  color: #8e8e93;
-  font-size: 14px;
-  max-width: 320px;
-  line-height: 1.5;
-  margin: 0;
+.cd-skeleton-shimmer {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: apShimmer 1.5s infinite ease-in-out;
+  border-radius: 6px;
+}
+
+.cd-skeleton-label {
+  width: 110px;
+  height: 14px;
+}
+
+.cd-skeleton-input {
+  width: 100%;
+  height: 44px;
+  border-radius: 8px;
+}
+
+.cd-skeleton-btn {
+  width: 130px;
+  height: 44px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+/* ***** Interaction Preferences Skeleton ***** */
+.ip-skeleton-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.ip-skeleton-shimmer {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: apShimmer 1.5s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+.ip-skeleton-title {
+  width: 130px;
+  height: 18px;
+  margin-bottom: 16px;
+}
+
+.ip-skeleton-title.short {
+  width: 120px;
+}
+
+.ip-skeleton-label {
+  width: 140px;
+  height: 15px;
+  margin-bottom: 6px;
+}
+
+.ip-skeleton-label.short {
+  width: 130px;
+}
+
+.ip-skeleton-label.long {
+  width: 150px;
+}
+
+.ip-skeleton-desc {
+  width: 280px;
+  max-width: 100%;
+  height: 12px;
+}
+
+.ip-skeleton-desc.short {
+  width: 230px;
+}
+
+.ip-skeleton-desc.medium {
+  width: 260px;
+}
+
+.ip-skeleton-desc.long {
+  width: 310px;
+}
+
+.ip-skeleton-toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 24px;
+  flex-shrink: 0;
+}
+
+.ip-skeleton-select {
+  width: 150px;
+  height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
 }

@@ -82,7 +82,7 @@ function ChangePassword() {
   };
 
   return (
-    <div className="settings-form">
+    <div className="cp-main-container">
       <h2 className="sf-section-title">Change Password</h2>
       <p className="section-subtitle">Update your password to keep your account secure</p>
 

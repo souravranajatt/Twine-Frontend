@@ -99,7 +99,6 @@ function Header() {
       await logout();
       setProfileTabNav(false);
       setNotifyTabNav(false);
-      navigate("/login", { replace: true });
     } catch (err) {
       console.log("Logout Failed!");
     }

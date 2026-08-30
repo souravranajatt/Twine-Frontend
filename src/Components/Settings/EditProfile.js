@@ -165,7 +165,7 @@ function EditProfile({ profileData, setProfileData }) {
   };
 
   return (
-    <div className="settings-form">
+    <div className="ep-main-container">
       <h2 className="sf-section-title">Edit Profile</h2>
       <p className="section-subtitle">Update your profile information and how you appear on Twine.</p>
 

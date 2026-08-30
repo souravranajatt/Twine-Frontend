@@ -99,7 +99,7 @@ function ArchivePosts() {
     tabName: "archive-posts",
   });
 
-  // Placeholder Unarchive click handler
+  // Unarchive click handler
   const handleUnarchivePlaceholder = async (postId) => {
     if (isUnarchivingRef.current || !postId || isUnarchiving[postId]) {
       return;
@@ -118,7 +118,6 @@ function ArchivePosts() {
       isUnarchivingRef.current = false;
       setIsUnarchiving((prev) => ({ ...prev, [postId]: false }));
     }
-
   };
 
   return (
@@ -129,18 +128,9 @@ function ArchivePosts() {
       </p>
 
       {archivedPosts.length === 0 && loading ? (
-        /* Skeleton loading cards */
-        <div className="ap-feed-container">
-          {[1, 2].map((i) => (
-            <div key={i} className="ap-skeleton-card">
-              <div className="ap-skeleton-media" />
-              <div className="ap-skeleton-body">
-                <div className="ap-skeleton-line" />
-                <div className="ap-skeleton-line short" />
-                <div className="ap-skeleton-button" />
-              </div>
-            </div>
-          ))}
+        /* Spinner Loader for Initial Fetch */
+        <div className="twine-setting-spinner-center">
+          <span className="twine-loader-spinner" />
         </div>
       ) : archivedPosts.length > 0 ? (
         /* Archived Posts Feed List */
@@ -188,10 +178,10 @@ function ArchivePosts() {
             </div>
           ))}
 
-          {/* Load-more indicator */}
+          {/* Load-more spinner */}
           {loading && (
             <div className="twine-loader-spinner-center">
-              <span className="twine-loader-spinner"></span>
+              <span className="twine-loader-spinner" />
             </div>
           )}
         </div>

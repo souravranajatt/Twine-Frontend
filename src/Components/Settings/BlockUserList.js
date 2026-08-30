@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import "../../Assets/Bundle/Settings.css";
+import "../../Assets/Bundle/GlobalSpinner.css";
 import { fetchBlockedListAPI } from "../../Utils/SettingDataAPI.js";
 import { unblockUserAPI } from "../../Utils/userProfileAPI.js";
 
@@ -55,7 +57,7 @@ function BlockUserList() {
   };
 
   return (
-    <div className="settings-form">
+    <div className="bu-main-container">
       <h2 className="sf-section-title">Blocked Users</h2>
       <p className="section-subtitle">Manage users you've blocked</p>
       <div className="blocked-list">

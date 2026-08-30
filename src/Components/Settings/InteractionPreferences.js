@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import "../../Assets/Bundle/Settings.css";
-import { Loader2 } from "lucide-react";
 import {
   fetchInteractionPreferencesAPI,
   hideLikeDefaultSettingAPI,
@@ -168,14 +167,6 @@ function InteractionPreferences() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="st-loading-spinner-box">
-        <Loader2 size={40} className="spin-icon" />
-      </div>
-    );
-  }
-
   // Helper to convert backend enum to UI value
   const toUIValue = (enumVal) => {
     if (enumVal === "FOLLOWING_ONLY") return "following";
@@ -189,77 +180,125 @@ function InteractionPreferences() {
         Manage how others interact with you and your default post settings.
       </p>
 
-      <div className="ip-group-box">
-        <h3 className="ip-subtitle">Likes & Comments</h3>
+      {isLoading ? (
+        <div className="ip-skeleton-container">
+          {/* Skeleton Group 1: Likes & Comments */}
+          <div className="ip-group-box">
+            <div className="ip-skeleton-shimmer ip-skeleton-title" />
 
-        <div className="ip-item-row">
-          <div className="ip-item-info">
-            <span className="ip-item-label">Hide Like Counts</span>
-            <span className="ip-item-desc">Hide the number of likes on your new posts by default.</span>
+            <div className="ip-item-row">
+              <div className="ip-item-info">
+                <div className="ip-skeleton-shimmer ip-skeleton-label" />
+                <div className="ip-skeleton-shimmer ip-skeleton-desc" />
+              </div>
+              <div className="ip-skeleton-shimmer ip-skeleton-toggle" />
+            </div>
+
+            <div className="ip-item-row">
+              <div className="ip-item-info">
+                <div className="ip-skeleton-shimmer ip-skeleton-label short" />
+                <div className="ip-skeleton-shimmer ip-skeleton-desc medium" />
+              </div>
+              <div className="ip-skeleton-shimmer ip-skeleton-toggle" />
+            </div>
           </div>
-          <label className="ip-toggle-switch">
-            <input
-              type="checkbox"
-              checked={preferences.likeVisible === false}
-              onChange={handleLikeToggle}
-            />
-            <span className="ip-slider round"></span>
-          </label>
-        </div>
 
-        <div className="ip-item-row">
-          <div className="ip-item-info">
-            <span className="ip-item-label">Disable Comments</span>
-            <span className="ip-item-desc">Turn off commenting on your new posts by default.</span>
+          {/* Skeleton Group 2: Tags & Mentions */}
+          <div className="ip-group-box ip-group-spaced">
+            <div className="ip-skeleton-shimmer ip-skeleton-title short" />
+
+            <div className="ip-item-row">
+              <div className="ip-item-info">
+                <div className="ip-skeleton-shimmer ip-skeleton-label" />
+                <div className="ip-skeleton-shimmer ip-skeleton-desc short" />
+              </div>
+              <div className="ip-skeleton-shimmer ip-skeleton-select" />
+            </div>
+
+            <div className="ip-item-row">
+              <div className="ip-item-info">
+                <div className="ip-skeleton-shimmer ip-skeleton-label long" />
+                <div className="ip-skeleton-shimmer ip-skeleton-desc long" />
+              </div>
+              <div className="ip-skeleton-shimmer ip-skeleton-select" />
+            </div>
           </div>
-          <label className="ip-toggle-switch">
-            <input
-              type="checkbox"
-              checked={preferences.commentingEnable === false}
-              onChange={handleCommentingToggle}
-            />
-            <span className="ip-slider round"></span>
-          </label>
         </div>
-      </div>
+      ) : (
+        <>
+          <div className="ip-group-box">
+            <h3 className="ip-subtitle">Likes & Comments</h3>
 
-      <div className="ip-group-box" style={{ marginTop: "30px" }}>
-        <h3 className="ip-subtitle">Tags & Mentions</h3>
+            <div className="ip-item-row">
+              <div className="ip-item-info">
+                <span className="ip-item-label">Hide Like Counts</span>
+                <span className="ip-item-desc">Hide the number of likes on your new posts by default.</span>
+              </div>
+              <label className="ip-toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={preferences.likeVisible === false}
+                  onChange={handleLikeToggle}
+                />
+                <span className="ip-slider round"></span>
+              </label>
+            </div>
 
-        <div className="ip-item-row">
-          <div className="ip-item-info">
-            <span className="ip-item-label">Who can tag you</span>
-            <span className="ip-item-desc">Choose who can tag you in their posts.</span>
+            <div className="ip-item-row">
+              <div className="ip-item-info">
+                <span className="ip-item-label">Disable Comments</span>
+                <span className="ip-item-desc">Turn off commenting on your new posts by default.</span>
+              </div>
+              <label className="ip-toggle-switch">
+                <input
+                  type="checkbox"
+                  checked={preferences.commentingEnable === false}
+                  onChange={handleCommentingToggle}
+                />
+                <span className="ip-slider round"></span>
+              </label>
+            </div>
           </div>
-          <select
-            className="ip-select-input"
-            value={toUIValue(preferences.taggingEnable)}
-            onChange={handleTaggingChange}
-            disabled={isUpdatingTagging.current}
-          >
-            <option value="everyone">Everyone</option>
-            <option value="following">People you follow</option>
-            <option value="no_one">No one</option>
-          </select>
-        </div>
 
-        <div className="ip-item-row">
-          <div className="ip-item-info">
-            <span className="ip-item-label">Who can mention you</span>
-            <span className="ip-item-desc">Choose who can @mention you in their captions or comments.</span>
+          <div className="ip-group-box ip-group-spaced">
+            <h3 className="ip-subtitle">Tags & Mentions</h3>
+
+            <div className="ip-item-row">
+              <div className="ip-item-info">
+                <span className="ip-item-label">Who can tag you</span>
+                <span className="ip-item-desc">Choose who can tag you in their posts.</span>
+              </div>
+              <select
+                className="ip-select-input"
+                value={toUIValue(preferences.taggingEnable)}
+                onChange={handleTaggingChange}
+                disabled={isUpdatingTagging.current}
+              >
+                <option value="everyone">Everyone</option>
+                <option value="following">People you follow</option>
+                <option value="no_one">No one</option>
+              </select>
+            </div>
+
+            <div className="ip-item-row">
+              <div className="ip-item-info">
+                <span className="ip-item-label">Who can mention you</span>
+                <span className="ip-item-desc">Choose who can @mention you in their captions or comments.</span>
+              </div>
+              <select
+                className="ip-select-input"
+                value={toUIValue(preferences.mentionEnable)}
+                onChange={handleMentionChange}
+                disabled={isUpdatingMention.current}
+              >
+                <option value="everyone">Everyone</option>
+                <option value="following">People you follow</option>
+                <option value="no_one">No one</option>
+              </select>
+            </div>
           </div>
-          <select
-            className="ip-select-input"
-            value={toUIValue(preferences.mentionEnable)}
-            onChange={handleMentionChange}
-            disabled={isUpdatingMention.current}
-          >
-            <option value="everyone">Everyone</option>
-            <option value="following">People you follow</option>
-            <option value="no_one">No one</option>
-          </select>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }

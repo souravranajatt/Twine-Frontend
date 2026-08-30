@@ -36,7 +36,7 @@ function AccountPrivate({ profileData, setProfileData }) {
   };
 
   return (
-    <div className="settings-form">
+    <div className="pa-main-container">
       <h2 className="sf-section-title">Private Account</h2>
       <p className="section-subtitle">Control who can see your profile and posts</p>
 

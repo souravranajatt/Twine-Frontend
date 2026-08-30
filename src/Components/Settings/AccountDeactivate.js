@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { deactivateAccountAPI } from "../../Utils/SettingDataAPI.js";
-import { logoutHandleAPI } from "../../Utils/authAPI.js";
+import { useAuth } from "../../AuthChecker/AuthContext.js";
 import "../../Assets/Bundle/GlobalSpinner.css";
 
-function AccountDeactivate({ setShowExpiredPopup }) {
+function AccountDeactivate() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [deactivatePassword, setDeactivatePassword] = useState("");
   const [deactivateReason, setDeactivateReason] = useState("Need a break");
   const [statusMessage, setStatusMessage] = useState(null);
@@ -37,13 +38,13 @@ function AccountDeactivate({ setShowExpiredPopup }) {
 
       await deactivateAccountAPI(deactivationData);
 
-      setShowExpiredPopup(true);
-      await logoutHandleAPI();
+      setStatusMessage("Account deactivated successfully. Logging out...");
+      setStatusType("success");
 
-      navigate("/login", { replace: true });
-
+      // ProtectedRoute will automatically redirect to /login once auth becomes false.
+      await logout();
     } catch (err) {
-      setStatusMessage(err.message || err.error || "Failed to deactivate account.");
+      setStatusMessage(err.message || err.error || (typeof err === 'string' ? err : "Failed to deactivate account."));
       setStatusType("error");
     } finally {
       setIsLoading(false);
@@ -52,7 +53,7 @@ function AccountDeactivate({ setShowExpiredPopup }) {
   };
 
   return (
-    <div className="settings-form">
+    <div className="ad-main-container">
       <h2 className="sf-section-title">Deactivate Account</h2>
       <p className="section-subtitle">Temporarily deactivate your account</p>
       <p className="warning-text">Your account will be hidden from public view. You can reactivate it anytime by logging back in.</p>
@@ -84,8 +85,13 @@ function AccountDeactivate({ setShowExpiredPopup }) {
         </div>
 
         <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
-          <button type="submit" className="deactivate-btn" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '180px' }}>
-            {isLoading ? <span className="twine-setting-btn-spinner"></span> : 'Deactivate Account'}
+          <button
+            type="submit"
+            className="deactivate-btn"
+            disabled={isLoading}
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '180px' }}
+          >
+            {isLoading ? <span className="twine-setting-btn-spinner" /> : 'Deactivate Account'}
           </button>
           {statusMessage && (
             <span className={`status-text ${statusType}`}>

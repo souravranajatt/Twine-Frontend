@@ -1,27 +1,46 @@
 import React, { useState, useEffect, useRef } from "react";
-import { userPersonalDetailsUpdateAPI } from "../../Utils/SettingDataAPI.js";
+import {
+  userPersonalDetailsFetchAPI,
+  userPersonalDetailsUpdateAPI
+} from "../../Utils/SettingDataAPI.js";
 
-function ChangeDetails({ personalDetails, setPersonalDetails }) {
-  const [statusMessage, setStatusMessage] = useState(null);
-  const [statusType, setStatusType] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const isSubmitting = useRef(false);
-
-  // Local state for personal details fields
+function ChangeDetails() {
   const [formData, setFormData] = useState({
     emailId: "",
     mobileNumber: ""
   });
+  const [isFetching, setIsFetching] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState(null);
+  const [statusType, setStatusType] = useState("");
 
-  // Sync prop data with local state
+  const hasFetched = useRef(false);
+  const isSubmitting = useRef(false);
+
+  // Fetch personal details on mount — once only (double fetch avoided via ref)
   useEffect(() => {
-    if (personalDetails) {
-      setFormData({
-        emailId: personalDetails.emailId || "",
-        mobileNumber: personalDetails.mobileNumber || ""
-      });
-    }
-  }, [personalDetails]);
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
+    const fetchPersonalDetails = async () => {
+      try {
+        setIsFetching(true);
+        const data = await userPersonalDetailsFetchAPI();
+        if (data) {
+          setFormData({
+            emailId: data.emailId || "",
+            mobileNumber: data.mobileNumber || ""
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching personal details:", err);
+      } finally {
+        setIsFetching(false);
+      }
+    };
+
+    fetchPersonalDetails();
+  }, []);
 
   // Handle Input Changes
   const handleInputChange = (e) => {
@@ -73,16 +92,15 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
       };
       await userPersonalDetailsUpdateAPI(personalDetailData);
 
-      // Update parent state so parent has current data
-      setPersonalDetails(prev => ({
-        ...prev,
-        ...personalDetailData
-      }));
+      // Update local form data with saved values
+      setFormData({
+        emailId: emailId || "",
+        mobileNumber: mobileNumber || ""
+      });
 
       setStatusMessage("Personal details updated successfully!");
       setStatusType("success");
 
-      // Clear status message after 5 seconds
       setTimeout(() => {
         setStatusMessage(null);
       }, 5000);
@@ -97,44 +115,65 @@ function ChangeDetails({ personalDetails, setPersonalDetails }) {
   };
 
   return (
-    <div className="settings-form">
+    <div className="cd-main-container">
       <h2 className="sf-section-title">Change Details</h2>
       <p className="section-subtitle">Update your email and phone number</p>
 
-      <form onSubmit={handlePersonalDetailSubmit}>
-        <div className="form-group">
-          <label>Email Address</label>
-          <input
-            type="email"
-            name="emailId"
-            value={formData.emailId}
-            onChange={handleInputChange}
-            placeholder="your@email.com"
-          />
-        </div>
+      {isFetching ? (
+        <div className="cd-skeleton-container">
+          <div className="cd-skeleton-group">
+            <div className="cd-skeleton-shimmer cd-skeleton-label" />
+            <div className="cd-skeleton-shimmer cd-skeleton-input" />
+          </div>
 
-        <div className="form-group">
-          <label>Phone Number</label>
-          <input
-            type="tel"
-            name="mobileNumber"
-            value={formData.mobileNumber}
-            onChange={handleInputChange}
-            placeholder="+1 (555) 000-0000"
-          />
-        </div>
+          <div className="cd-skeleton-group">
+            <div className="cd-skeleton-shimmer cd-skeleton-label" />
+            <div className="cd-skeleton-shimmer cd-skeleton-input" />
+          </div>
 
-        <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <button className="save-btn" type="submit" disabled={isLoading} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '130px' }}>
-            {isLoading ? <span className="twine-setting-btn-spinner" /> : 'Save changes'}
-          </button>
-          {statusMessage && (
-            <span className={`status-text ${statusType}`}>
-              {statusMessage}
-            </span>
-          )}
+          <div className="cd-skeleton-shimmer cd-skeleton-btn" />
         </div>
-      </form>
+      ) : (
+        <form onSubmit={handlePersonalDetailSubmit}>
+          <div className="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              name="emailId"
+              value={formData.emailId}
+              onChange={handleInputChange}
+              placeholder="your@email.com"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Phone Number</label>
+            <input
+              type="tel"
+              name="mobileNumber"
+              value={formData.mobileNumber}
+              onChange={handleInputChange}
+              placeholder="+1 (555) 000-0000"
+            />
+          </div>
+
+          <div className="form-actions-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <button
+              className="save-btn"
+              type="submit"
+              disabled={isLoading}
+              style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: '130px' }}
+            >
+              {isLoading ? <span className="twine-setting-btn-spinner" /> : 'Save changes'}
+            </button>
+            {statusMessage && (
+              <span className={`status-text ${statusType}`}>
+                {statusMessage}
+              </span>
+            )}
+          </div>
+        </form>
+      )}
     </div>
   );
 }
