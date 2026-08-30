@@ -76,7 +76,15 @@ function PostCard({ loggedUserData }) {
         const uId = user.userId || user._id || user.id;
         setTaggedUsers((prev) => {
             const exists = prev.some((u) => (u.userId || u._id || u.id) === uId);
-            if (exists) return prev.filter((u) => (u.userId || u._id || u.id) !== uId);
+            if (exists) {
+                setError("");
+                return prev.filter((u) => (u.userId || u._id || u.id) !== uId);
+            }
+            if (prev.length >= 10) {
+                setError("You can only tag up to 10 users!");
+                return prev;
+            }
+            setError("");
             return [...prev, user];
         });
     };
@@ -107,6 +115,7 @@ function PostCard({ loggedUserData }) {
         if (!file) { setError("Please select an image or video!"); return; }
         if (captionPost.length > 1000) { setError("Caption too long! (1000 limit)"); return; }
         if (file.size > MAX_SIZE) { setError("File too large! (500 MB limit)"); return; }
+        if (taggedUsers.length > 10) { setError("You can only tag up to 10 users!"); return; }
 
         // 3. Lock + Reset UI state
         uploadingRef.current = true;
