@@ -9,11 +9,11 @@ import FooterArea from "../Components/Footer/Footer.js";
 function ForgotPassword() {
   const [identifier, setIdentifier] = useState("");
   const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState(""); // "error" | "success"
+  const [messageType, setMessageType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const isSubmittingRef = useRef(false);
 
-  // Submit Handler (Frontend structure ready for backend hookup)
+  // Submit Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
 
