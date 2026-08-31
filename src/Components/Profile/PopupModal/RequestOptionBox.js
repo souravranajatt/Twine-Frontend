@@ -10,7 +10,7 @@ function RequestOptionBox({ userProfileDataURL, onProfileRefresh }) {
 
     const isProcessing = isAccepting || isRejecting;
 
-    // If profile is own, or no data, or no incoming follow request
+    // If profile is mine
     if (!userProfileDataURL || userProfileDataURL.searchLoggedUser || !userProfileDataURL.followReqOptStatus) {
         return null;
     }
