@@ -93,7 +93,7 @@ function TimelinePosts({ username, userProfileDataURL, contentVisibleTab }) {
                 <TimelineSkeleton />
             ) : (
                 <div className="contentSectionDesignTimeline-Box">
-                    {userProfileDataURL.searchUserTimeline ? (
+                    {userProfileDataURL.searchUserTimeline && userProfileDataURL.searchPrivateShow === false ? (
                         <div className="timelineConectionContentMainBox">
                             <div className="connectionTimelineHeaderBar-Box">
                                 <Users size={16} className="timelineHeaderIcon" />
