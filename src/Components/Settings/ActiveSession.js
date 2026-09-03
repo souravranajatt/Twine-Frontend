@@ -1,19 +1,90 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import "../../Assets/Bundle/Settings.css";
+import "../../Assets/Bundle/GlobalSpinner.css";
+import { Monitor } from "lucide-react";
+import { activeSessionFetchAPI } from "../../Utils/SettingDataAPI.js";
+import formatPostTime from "../../Lib/formatPostTime.js";
 
 function ActiveSession() {
+  const [sessions, setSessions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const hasFetched = useRef(false);
+
+  useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
+    const fetchSessions = async () => {
+      try {
+        setIsLoading(true);
+        const data = await activeSessionFetchAPI();
+        setSessions(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Error fetching active sessions:", err);
+        setError(err?.message || "Failed to load active sessions.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSessions();
+  }, []);
+
   return (
     <div className="as-main-container">
       <h2 className="sf-section-title">Active Sessions</h2>
       <p className="section-subtitle">Manage your active login sessions</p>
-      <div className="sessions-list">
-        <div className="session-item">
-          <div className="session-info">
-            <p className="session-device">Chrome on macOS</p>
-            <p className="session-location">Last active: 2 hours ago</p>
-          </div>
-          <button className="logout-btn">Logout</button>
+
+      {isLoading ? (
+        <div className="twine-loader-spinner-center">
+          <span className="twine-loader-spinner" />
         </div>
-      </div>
+      ) : error ? (
+        <div className="sp-empty-state">
+          <div className="sp-empty-icon-box">
+            <Monitor size={32} />
+          </div>
+          <h3 className="sp-empty-title">Failed to load sessions</h3>
+          <p className="sp-empty-text">{error}</p>
+        </div>
+      ) : sessions.length === 0 ? (
+        <div className="sp-empty-state">
+          <div className="sp-empty-icon-box">
+            <Monitor size={32} />
+          </div>
+          <h3 className="sp-empty-title">No Active Sessions</h3>
+          <p className="sp-empty-text">
+            No active login sessions found for your account.
+          </p>
+        </div>
+      ) : (
+        <div className="sessions-list">
+          {sessions.map((session, index) => (
+            <div className="session-item" key={session.sessionId || index}>
+              <div className="session-info">
+                <p className="session-device">
+                  {session.browser || "Unknown Browser"} on {session.deviceName || "Unknown Device"}
+                  {session.currentDevice && (
+                    <span className="current-device-badge">
+                      (This device)
+                    </span>
+                  )}
+                </p>
+                <p className="session-location">
+                  IP: {session.ipAddress || "Unknown"} • Location: {session.location || "Unknown"}
+                </p>
+                {session.lastActive && (
+                  <p className="session-location" style={{ marginTop: "2px" }}>
+                    Last active: {formatPostTime(session.lastActive)}
+                  </p>
+                )}
+              </div>
+              <button className="logout-btn">Logout</button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

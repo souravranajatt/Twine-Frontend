@@ -24,7 +24,7 @@ function ChangePassword() {
     if (isSubmitting.current || isLoading) return;
     setStatusMessage(null);
 
-    // ====== Frontend Validation ======
+    //  Frontend Validation 
     if (!password.oldPassword) {
       setStatusType("error");
       return setStatusMessage("Current password is required!");
@@ -32,6 +32,10 @@ function ChangePassword() {
     if (!password.newPassword) {
       setStatusType("error");
       return setStatusMessage("New password is required!");
+    }
+    if (!password.confirmPassword) {
+      setStatusType("error");
+      return setStatusMessage("Confirm password is required!");
     }
     if (password.newPassword.length < 8) {
       setStatusType("error");
@@ -57,7 +61,8 @@ function ChangePassword() {
 
       const passwordData = {
         oldPassword: password.oldPassword,
-        newPassword: password.newPassword
+        newPassword: password.newPassword,
+        confirmPassword: password.confirmPassword
       };
       await updatePasswordAPI(passwordData);
 

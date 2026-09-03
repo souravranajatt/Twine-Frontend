@@ -58,6 +58,17 @@ export const updatePasswordAPI = async (passwordData) => {
     }
 };
 
+// Login Active Session Fetch 
+export const activeSessionFetchAPI = async () => {
+    try {
+        const res = await api.get("/setting/security/login-activity");
+        return res.data;
+    } catch (err) {
+        const errorData = err.response?.data || err;
+        throw typeof errorData === 'string' ? { message: errorData } : errorData;
+    }
+};
+
 // Fetch Blocked List API
 export const fetchBlockedListAPI = async () => {
     try {
