@@ -45,6 +45,17 @@
     margin: 0 auto;
 }
 
+.twine-logout-session-btn-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px dashed #F0186E;
+    border-radius: 50%;
+    animation: twineSpinnerRotation 0.9s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 auto;
+}
+
 .twine-profile-actions-unblock-btn-spinner {
     width: 20px;
     height: 20px;
@@ -115,7 +126,25 @@
     display: block;
 }
 
-/* Global Button Spinner  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Global Button Spinner - Main Loader  */
 .twine-loader-spinner {
     display: inline-block;
     vertical-align: middle;
@@ -143,6 +172,7 @@
     animation: twineSpinnerRotation 0.7s linear infinite;
 }
 
+/* for Small box */
 .twine-loader-spinner-center {
     display: flex;
     align-items: center;
@@ -153,7 +183,6 @@
 }
 
 /* For Post Comment Loader */
-
 .twine-postmodal-spinner-center {
     display: flex;
     align-items: center;

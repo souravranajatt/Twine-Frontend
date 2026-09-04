@@ -40,7 +40,7 @@ export const verifyOtpAuthAPI = async (otpData) => {
   }
 };
 
-// Logout Functionality ..
+// Logout Functionality
 export const logoutHandleAPI = async () => {
   try {
     const response = await api.post("/auth/logout");
@@ -49,3 +49,13 @@ export const logoutHandleAPI = async () => {
     throw error.response?.data || "Something went wrong!";
   }
 }
+
+// Logout a specific session 
+export const logoutSessionAPI = async (sessionId) => {
+  try {
+    const response = await api.delete(`/auth/logout-device/${sessionId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Something went wrong!";
+  }
+};

@@ -203,7 +203,7 @@ const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCount
 
                     {/* Pagination Loader */}
                     {loadingComments && comments.length > 0 && (
-                        <div className="twine-spinner-center">
+                        <div className="twine-postmodal-spinner-center">
                             <span className="twine-loader-spinner"></span>
                         </div>
                     )}

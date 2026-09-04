@@ -3,13 +3,16 @@ import "../../Assets/Bundle/Settings.css";
 import "../../Assets/Bundle/GlobalSpinner.css";
 import { Monitor } from "lucide-react";
 import { activeSessionFetchAPI } from "../../Utils/SettingDataAPI.js";
+import { logoutSessionAPI } from "../../Utils/authAPI.js";
 import formatPostTime from "../../Lib/formatPostTime.js";
 
 function ActiveSession() {
   const [sessions, setSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [loggingOut, setLoggingOut] = useState(null);
   const hasFetched = useRef(false);
+  const isLoggingOutRef = useRef(false);
 
   useEffect(() => {
     if (hasFetched.current) return;
@@ -31,13 +34,29 @@ function ActiveSession() {
     fetchSessions();
   }, []);
 
+  // Handle Logout Specific Device 
+  const handleLogoutSession = async (sessionId) => {
+    if (isLoggingOutRef.current) return;
+    isLoggingOutRef.current = true;
+    setLoggingOut(sessionId);
+    try {
+      await logoutSessionAPI(sessionId);
+      setSessions((prev) => prev.filter((s) => s.sessionId !== sessionId));
+    } catch (err) {
+      console.error("Failed to logout session:", err);
+    } finally {
+      isLoggingOutRef.current = false;
+      setLoggingOut(null);
+    }
+  };
+
   return (
     <div className="as-main-container">
       <h2 className="sf-section-title">Active Sessions</h2>
       <p className="section-subtitle">Manage your active login sessions</p>
 
       {isLoading ? (
-        <div className="twine-loader-spinner-center">
+        <div className="twine-setting-spinner-center">
           <span className="twine-loader-spinner" />
         </div>
       ) : error ? (
@@ -80,7 +99,13 @@ function ActiveSession() {
                   </p>
                 )}
               </div>
-              <button className="logout-btn">Logout</button>
+              <button
+                className="logout-btn"
+                disabled={loggingOut === session.sessionId}
+                onClick={() => handleLogoutSession(session.sessionId)}
+              >
+                {loggingOut === session.sessionId ? (<span className="twine-logout-session-btn-spinner" />) : "Logout"}
+              </button>
             </div>
           ))}
         </div>
