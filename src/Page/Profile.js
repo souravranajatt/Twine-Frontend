@@ -242,7 +242,8 @@ function Profile() {
       await unblockUserAPI(userProfileDataURL.searchUserId);
       setUserProfileDataURL((prev) => ({
         ...prev,
-        blockedStatus: false
+        blockedStatus: false,
+        searchPrivateShow: !prev.searchPrivate
       }));
     } catch (error) {
       console.log("Error occured!", error);
@@ -397,7 +398,7 @@ function Profile() {
 
             { /* Profile Middle Tabs Feed, Timeline & Tagged */}
 
-            {userProfileDataURL.blockedStatus === true ? (
+            {(userProfileDataURL.blockedStatus === true && userProfileDataURL.searchLoggedUser === false) ? (
               <div className="AccountPrivateContentMsgBox">
                 <div className="AccountPrivateDilaugeBox">
                   <div className="LockedAccountIconBox">
@@ -423,7 +424,7 @@ function Profile() {
                 )}
               </div>
 
-            ) : userProfileDataURL.searchPrivateShow === true ? (
+            ) : (userProfileDataURL.searchPrivateShow === true || userProfileDataURL.searchLoggedUser === true) ? (
               /* 2. Public / Following — Tabs */
               <>
                 <div className="profileMiddle-Box">

@@ -25,19 +25,40 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
     const handleBlock = async () => {
         if (blockActionPendingRef.current || isBlocking || !localData) return;
 
-        const previousStatus = localData.blockedStatus;
-        const newStatus = !previousStatus;
+        const previousState = {
+            blockedStatus: localData.blockedStatus,
+            searchPrivateShow: localData.searchPrivateShow,
+            followingStatus: localData.followingStatus,
+            followerStatus: localData.followerStatus,
+            followReqStatus: localData.followReqStatus,
+            followReqOptStatus: localData.followReqOptStatus,
+            crushStatus: localData.crushStatus,
+            crushSentStatus: localData.crushSentStatus
+        };
+
+        const newStatus = !previousState.blockedStatus;
+        const newPrivateShow = newStatus ? false : !localData.searchPrivate;
+
+        const updatedFields = {
+            blockedStatus: newStatus,
+            searchPrivateShow: newPrivateShow,
+            followingStatus: newStatus ? false : localData.followingStatus,
+            followerStatus: newStatus ? false : localData.followerStatus,
+            followReqStatus: newStatus ? false : localData.followReqStatus,
+            followReqOptStatus: newStatus ? false : localData.followReqOptStatus,
+            crushStatus: newStatus ? false : localData.crushStatus,
+            crushSentStatus: newStatus ? false : localData.crushSentStatus
+        };
 
         // Optimistic update
-        const optimisticData = { ...localData, blockedStatus: newStatus };
-        setLocalData(optimisticData);
-        onProfileRefresh((prev) => ({ ...prev, blockedStatus: newStatus }));
+        setLocalData({ ...localData, ...updatedFields });
+        onProfileRefresh((prev) => ({ ...prev, ...updatedFields }));
 
         blockActionPendingRef.current = true;
         setIsBlocking(true);
 
         try {
-            if (previousStatus) {
+            if (previousState.blockedStatus) {
                 await unblockUserAPI(userProfileDataURL.searchUserId);
             } else {
                 await blockUserAPI(userProfileDataURL.searchUserId);
@@ -45,9 +66,8 @@ function PopupModal({ isOpen, onClose, userProfileDataURL, onProfileRefresh, use
             onClose();
         } catch (error) {
             // Revert optimistic update on failure
-            const revertedData = { ...localData, blockedStatus: previousStatus };
-            setLocalData(revertedData);
-            onProfileRefresh((prev) => ({ ...prev, blockedStatus: previousStatus }));
+            setLocalData({ ...localData, ...previousState });
+            onProfileRefresh((prev) => ({ ...prev, ...previousState }));
             console.error("Block/unblock failed:", error);
         } finally {
             setIsBlocking(false);
