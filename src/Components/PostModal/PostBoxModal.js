@@ -250,28 +250,23 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                     </div>
 
                     {/* CommentSection */}
-                    {localPost.commentEnable ? (
-                        <CommentSection
-                            ref={commentSectionRef}
-                            postId={localPost.fetchPostId}
-                            isModal={true}
-                            loggedUser={loggedUser}
-                            onCommentCountUpdate={(change) => {
-                                const updatedPost = {
-                                    ...localPost,
-                                    commentCount: Math.max(0, (localPost.commentCount || 0) + change)
-                                };
-                                setLocalPost(updatedPost);
-                                if (onPostUpdate) {
-                                    onPostUpdate(updatedPost);
-                                }
-                            }}
-                        />
-                    ) : (
-                        <div style={{ padding: "20px", textAlign: "center" }}>
-                            <p style={{ color: "#8e8e93", fontSize: "13px" }}><i>Comments are disabled for this post</i></p>
-                        </div>
-                    )}
+                    <CommentSection
+                        ref={commentSectionRef}
+                        postId={localPost.fetchPostId}
+                        isModal={true}
+                        loggedUser={loggedUser}
+                        commentEnable={localPost.commentEnable}
+                        onCommentCountUpdate={(change) => {
+                            const updatedPost = {
+                                ...localPost,
+                                commentCount: Math.max(0, (localPost.commentCount || 0) + change)
+                            };
+                            setLocalPost(updatedPost);
+                            if (onPostUpdate) {
+                                onPostUpdate(updatedPost);
+                            }
+                        }}
+                    />
 
                     {/* Action indicators (Like, comment count, share, save) */}
                     <div className="post-modal-actions-container">

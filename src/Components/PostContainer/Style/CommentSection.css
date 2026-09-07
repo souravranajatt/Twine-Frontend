@@ -195,6 +195,21 @@
     padding: 10px 0;
 }
 
+/* Comments Disabled placeholder */
+.twine-comments-disabled-wrapper {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px 20px;
+}
+
+.twine-comments-disabled-text {
+    color: #8e8e93;
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0;
+}
+
 @media screen and (max-width: 767px) {
     .twine-comment-scrollview {
         padding: 14px 16px;

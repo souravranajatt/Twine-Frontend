@@ -8,7 +8,7 @@ import "../../../Assets/Bundle/GlobalSpinner.css";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
-const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCountUpdate }, ref) => {
+const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCountUpdate, commentEnable = true }, ref) => {
     const [comments, setComments] = useState([]);
     const [loadingComments, setLoadingComments] = useState(false);
     const [hasMoreComments, setHasMoreComments] = useState(true);
@@ -19,7 +19,7 @@ const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCount
 
     // Initial Fetch
     useEffect(() => {
-        if (!postId) return;
+        if (!postId || !commentEnable) return;
 
         setComments([]);
         setCommentPage(0);
@@ -44,7 +44,7 @@ const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCount
             }
         };
         getComments();
-    }, [postId]);
+    }, [postId, commentEnable]);
 
     // Pagination logic for infinite scroll
     const loadNextPage = async () => {
@@ -141,7 +141,16 @@ const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCount
         }
     }));
 
-    // Show skeletons during initial load
+    // If comments are disabled for this post
+    if (!commentEnable) {
+        return (
+            <div className={isModal ? "twine-comment-scrollview twine-comments-disabled-wrapper" : "twine-comment-pageview twine-comments-disabled-wrapper"}>
+                <p className="twine-comments-disabled-text">Comments are disabled for this post</p>
+            </div>
+        );
+    }
+
+    // Skeleton load
     if (loadingComments && comments.length === 0) {
         return (
             <div className={isModal ? "twine-comment-scrollview" : "twine-comment-pageview"}>

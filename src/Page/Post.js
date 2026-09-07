@@ -357,24 +357,19 @@ function Post() {
                         </div>
 
                         {/* Comments Section */}
-                        {post.commentEnable ? (
-                            <CommentSection
-                                ref={commentSectionRef}
-                                postId={post.fetchPostId}
-                                isModal={false}
-                                loggedUser={loggedUser}
-                                onCommentCountUpdate={(change) => {
-                                    setPost(prev => ({
-                                        ...prev,
-                                        commentCount: Math.max(0, (prev.commentCount || 0) + change)
-                                    }));
-                                }}
-                            />
-                        ) : (<>
-                            <div style={{ padding: "20px", textAlign: "center" }}>
-                                <p style={{ color: "#8e8e93", fontSize: "13px" }}><i>Comments are disabled for this post</i></p>
-                            </div>
-                        </>)}
+                        <CommentSection
+                            ref={commentSectionRef}
+                            postId={post.fetchPostId}
+                            isModal={false}
+                            loggedUser={loggedUser}
+                            commentEnable={post.commentEnable}
+                            onCommentCountUpdate={(change) => {
+                                setPost(prev => ({
+                                    ...prev,
+                                    commentCount: Math.max(0, (prev.commentCount || 0) + change)
+                                }));
+                            }}
+                        />
 
                     </div>
                 )
