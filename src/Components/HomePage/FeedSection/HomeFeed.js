@@ -1,19 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, MoreHorizontal } from "lucide-react";
-import { Link } from "react-router-dom";
 import "./HomeFeed.css";
 import "../../../Assets/Bundle/GlobalSpinner.css";
 import { homeFeedFetch } from "../../../Utils/homePageAPI.js";
-import { likePostAPI, dislikePostAPI, postCommentAPI } from "../../../Utils/PostActionAPI.js";
-import formatPostTime from "../../../Lib/formatPostTime.js";
-import renderFormattedCaption from "../../../Lib/renderFormattedCaption.js";
-import RenderTaggedUsers from "../../PostContainer/Structure/RenderTaggedUsers.js";
-import CustomVideoPlayer from "../../../Lib/CustomVideoPlayer.js";
 import PostsSkeleton from "../../Profile/SkeletonBody/PostsSkeleton.js";
 import PostBoxModal from "../../PostModal/PostBoxModal.js";
-import PostDropDown from "../../PostModal/PostDropDown.js";
-
-const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
+import PostCard from "../../PostContainer/Structure/PostCard.js";
 
 function HomeFeed() {
 
@@ -23,19 +14,6 @@ function HomeFeed() {
     const [loadingPosts, setLoadingPosts] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const isFetchingRef = useRef(false);
-    const [expandedCaptions, setExpandedCaptions] = useState({});
-    const [openDropdownId, setOpenDropdownId] = useState(null);
-
-    // Close dropdown on outside click
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (!event.target.closest('.postDropdownWrapper')) {
-                setOpenDropdownId(null);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
 
     // Lock body scroll when modal open
     useEffect(() => {
@@ -46,16 +24,6 @@ function HomeFeed() {
         }
         return () => { document.body.style.overflow = ""; };
     }, [activePostForModal]);
-
-    // post comment state
-    const [commentTexts, setCommentTexts] = useState({});
-    const [submittingComments, setSubmittingComments] = useState({});
-    const submittingCommentsRef = useRef({});
-    const likingPostsRef = useRef({});
-
-    const toggleCaption = (postId) => {
-        setExpandedCaptions(prev => ({ ...prev, [postId]: !prev[postId] }));
-    };
 
     // Fetch Feed
     useEffect(() => {
@@ -101,82 +69,12 @@ function HomeFeed() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [hasMore]);
 
-    // Handle Like/Unlike Button
-    const handleLike = async (postId) => {
-        if (likingPostsRef.current[postId]) return;
-        likingPostsRef.current[postId] = true;
-
-        const post = posts.find(p => p.fetchPostId === postId);
-        const isLiked = post.likedByCurrentUser;
-
-        // Optimistic UI update
-        setPosts(prev => prev.map(p =>
-            p.fetchPostId === postId
-                ? {
-                    ...p,
-                    likedByCurrentUser: !isLiked,
-                    likeCount: isLiked ? p.likeCount - 1 : p.likeCount + 1
-                }
-                : p
-        ));
-        try {
-            if (isLiked) {
-                await dislikePostAPI(postId);
-            } else {
-                await likePostAPI(postId);
-            }
-        } catch (error) {
-            console.log("Like error:", error);
-            // Rollback on failure
-            setPosts(prev => prev.map(p =>
-                p.fetchPostId === postId
-                    ? {
-                        ...p,
-                        likedByCurrentUser: isLiked,
-                        likeCount: post.likeCount
-                    }
-                    : p
-            ));
-        } finally {
-            likingPostsRef.current[postId] = false;
-        }
+    // Called by PostCard when post state changes (like, dropdown action etc)
+    const handlePostUpdate = (updatedPost) => {
+        setPosts(prev =>
+            prev.map(p => p.fetchPostId === updatedPost.fetchPostId ? updatedPost : p)
+        );
     };
-
-    // Handle Comment Submit
-    const handleCommentSubmit = async (e, postId) => {
-        e.preventDefault();
-
-        const text = (commentTexts[postId] || "").trim();
-        if (!text || submittingCommentsRef.current[postId]) return;
-        submittingCommentsRef.current[postId] = true;
-
-        setSubmittingComments(prev => ({ ...prev, [postId]: true }));
-        setCommentTexts(prev => ({ ...prev, [postId]: "" }));
-
-        // Change Comment Count 
-        setPosts(prev => prev.map(p =>
-            p.fetchPostId === postId
-                ? { ...p, commentCount: (p.commentCount || 0) + 1 }
-                : p
-        ));
-
-        try {
-            await postCommentAPI(postId, { commentText: text, parentId: null });
-        } catch (error) {
-            console.error("Comment failed!", error);
-            // Revert on Fsilure API
-            setPosts(prev => prev.map(p =>
-                p.fetchPostId === postId
-                    ? { ...p, commentCount: Math.max(0, (p.commentCount || 1) - 1) }
-                    : p
-            ));
-            setCommentTexts(prev => ({ ...prev, [postId]: text }));
-        } finally {
-            submittingCommentsRef.current[postId] = false;
-            setSubmittingComments(prev => ({ ...prev, [postId]: false }));
-        }
-    };
-
 
     return (
         <>
@@ -187,191 +85,13 @@ function HomeFeed() {
             ) : (
                 <div className="feed-wrapper">
                     {posts.map(post => (
-                        <div className="feed-post-box" key={post.fetchPostId}>
-
-                            {/* Post Header */}
-                            <div className="post-header">
-                                <div className="postHeaderImageMainFeed">
-                                    <img
-                                        src={post.profileImage && post.profileImage !== "null"
-                                            ? post.profileImage : DEFAULT_IMAGE}
-                                        className="imageFeedPostMainHeader"
-                                        alt="user-profile"
-                                    />
-                                </div>
-                                <div className="post-header-userText">
-                                    <div className="post-header-userTextBox">
-                                        <span className="username-title">
-                                            <Link to={`/${post.username}`} className="userLinkTextStyle">
-                                                {post.username}
-                                            </Link>
-                                        </span>
-                                        {post.fetchVerified && (
-                                            <BadgeCheck height="19" width="19"
-                                                className="profilePostUsernameVerifyBadgeIcon-Box" />
-                                        )}
-                                        {post.fetchUploadAt && (
-                                            <span className="profilePostTimeText">
-                                                • {formatPostTime(post.fetchUploadAt)}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                                {/* Three-dot dropdown */}
-                                <div className="postDropdownWrapper" style={{ position: "relative", marginLeft: "auto", display: "flex", alignItems: "center" }}>
-                                    <button
-                                        type="button"
-                                        onClick={() => setOpenDropdownId(prev => prev === post.fetchPostId ? null : post.fetchPostId)}
-                                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '5px', display: 'flex' }}
-                                    >
-                                        <MoreHorizontal size={20} color="#111010" />
-                                    </button>
-                                    {openDropdownId === post.fetchPostId && (
-                                        <PostDropDown
-                                            isOpen={openDropdownId === post.fetchPostId}
-                                            onClose={() => setOpenDropdownId(null)}
-                                            Post={post}
-                                            onPostUpdate={(updatedPost) => {
-                                                setPosts(prev => prev.map(p => p.fetchPostId === post.fetchPostId ? updatedPost : p));
-                                            }}
-                                        />
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Post Media */}
-                            <div className="postFeedMainContent">
-                                <div className="postMainFeedContentMiddleBox" style={{
-                                    paddingBottom: post.width && post.height
-                                        ? `${(post.height / post.width) * 100}%`
-                                        : "100%"
-                                }}>
-                                    {post.postType === 'VIDEO' ? (
-                                        <CustomVideoPlayer
-                                            src={post.fetchFileName}
-                                            className="mainContentMediaBox video-post"
-                                            isParentModalOpen={activePostForModal !== null}
-                                        />
-                                    ) : (
-                                        <img
-                                            src={post.fetchFileName}
-                                            alt="post-content"
-                                            className="mainContentMediaBox image-post"
-                                        />
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Caption */}
-                            {post?.fetchPostCaption && (
-                                <div className="post-caption-wrapper">
-                                    <p className="caption-paraHead">
-                                        {renderFormattedCaption(
-                                            post.fetchPostCaption,
-                                            post.fetchPostId,
-                                            expandedCaptions[post.fetchPostId],
-                                            toggleCaption,
-                                            post.fetchPostCaption.length
-                                        )}
-                                    </p>
-                                </div>
-                            )}
-
-                            {/* Location + Tagged */}
-                            {(post.fetchPostLocation || post.fetchTaggedUsers?.length > 0) && (
-                                <div className="postMetaInfoRow">
-                                    {post.fetchPostLocation && (
-                                        <span className="postMetaLocation">{post.fetchPostLocation}</span>
-                                    )}
-                                    {post.fetchPostLocation && post.fetchTaggedUsers?.length > 0 && (
-                                        <span className="metaDivider">•</span>
-                                    )}
-                                    {post.fetchTaggedUsers?.length > 0 && (
-                                        <RenderTaggedUsers taggedUsers={post.fetchTaggedUsers} />
-                                    )}
-                                </div>
-                            )}
-
-                            {/* Actions */}
-                            <div className="postBottomAction">
-                                <div className="action-toogles">
-
-                                    <div className="postAction-Icons">
-                                        <button type="button" className="postActionContentBtn-ToogleBox"
-                                            onClick={() => handleLike(post.fetchPostId)}>
-                                            <Heart size={23} className="bottomAction-icons"
-                                                fill={post.likedByCurrentUser ? "#ff3b6c" : "none"}
-                                                color={post.likedByCurrentUser ? "#ff3b6c" : "currentColor"}
-                                            />
-                                            {post.likeVisible === true && (
-                                                <span className="postActionCountText">
-                                                    {post.likeCount || 0}
-                                                </span>
-                                            )}
-                                        </button>
-                                    </div>
-
-                                    {post.commentEnable && (
-                                        <div className="postAction-Icons">
-                                            <button type="button" className="postActionContentBtn-ToogleBox" onClick={() => setActivePostForModal(post)}>
-                                                <MessageCircle size={23} className="bottomAction-icons" />
-                                                <span className="postActionCountText">
-                                                    {post.commentCount || 0}
-                                                </span>
-                                            </button>
-                                        </div>
-                                    )}
-
-                                    {post.shareEnable && (
-                                        <div className="postAction-Icons shareIconRight">
-                                            <button type="button" className="postActionContentBtn-ToogleBox">
-                                                <Forward size={23} className="bottomAction-icons" />
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Comment Form */}
-                                {post.commentEnable && (
-                                    <div className="action-toogles commentFormToggleBox">
-                                        <form
-                                            onSubmit={(e) => handleCommentSubmit(e, post.fetchPostId)}
-                                            className="commentPost-Box"
-                                        >
-                                            <input
-                                                type="text"
-                                                className="commentPost-field"
-                                                placeholder="Drop a comment..."
-                                                autoCapitalize="none"
-                                                autoComplete="off"
-                                                autoCorrect="off"
-                                                value={commentTexts[post.fetchPostId] || ""}
-                                                onChange={(e) =>
-                                                    setCommentTexts(prev => ({
-                                                        ...prev,
-                                                        [post.fetchPostId]: e.target.value
-                                                    }))
-                                                }
-                                                disabled={submittingComments[post.fetchPostId]}
-                                            />
-                                            <button
-                                                type="submit"
-                                                className="commentIcon-box"
-                                                disabled={
-                                                    submittingComments[post.fetchPostId] ||
-                                                    !(commentTexts[post.fetchPostId] || "").trim()
-                                                }
-                                            >
-                                                {submittingComments[post.fetchPostId]
-                                                    ? <span className="twine-comment-btn-spinner"></span>
-                                                    : <SendHorizontal size={18} className="comment-icon" />}
-                                            </button>
-                                        </form>
-                                    </div>
-                                )}
-                            </div>
-
-                        </div>
+                        <PostCard
+                            key={post.fetchPostId}
+                            post={post}
+                            onPostUpdate={handlePostUpdate}
+                            onCommentClick={(p) => setActivePostForModal(p)}
+                            isParentModalOpen={activePostForModal !== null}
+                        />
                     ))}
 
                     {loadingPosts && (
@@ -381,6 +101,7 @@ function HomeFeed() {
                     )}
                 </div>
             )}
+
             <PostBoxModal
                 isOpen={activePostForModal !== null}
                 onClose={() => setActivePostForModal(null)}

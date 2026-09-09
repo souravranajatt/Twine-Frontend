@@ -1,0 +1,25 @@
+/* PostCard.css — Styles for the unified PostCard wrapper */
+
+/* ─── Card Wrapper ─── */
+.postCard-wrapper {
+    width: 100%;
+    height: auto;
+    margin: 16px auto 24px;
+    background-color: #fff;
+    border: 1px solid #f2f2f6;
+    border-radius: 16px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.04), 0px 1px 2px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Mobile: full-width, no border-radius/shadow on edges */
+@media (max-width: 768px) {
+    .postCard-wrapper {
+        margin: 16px 0 12px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+    }
+}

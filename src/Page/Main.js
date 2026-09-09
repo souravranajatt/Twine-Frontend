@@ -3,7 +3,7 @@ import "../Assets/Bundle/Main.css";
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import HomeFeed from "../Components/HomePage/FeedSection/HomeFeed.js";
-import PostCard from "../Components/HomePage/PostSection/PostCard.js";
+import PostUploadCard from "../Components/HomePage/PostSection/PostUploadCard.js";
 import UserSuggestion from "../Components/HomePage/UserSuggestion/UserSuggestion.js";
 import { useAuth } from "../AuthChecker/AuthContext.js";
 
@@ -16,11 +16,11 @@ function Main() {
       {/* Header Section */}
       <HeaderArea />
 
-      {/* Main Wrapper - PostCard and HomeFeed */}
+      {/* Main Wrapper - PostUploadCard and HomeFeed */}
       <main className="main-wrapper">
 
         <div className="slide-bar-wrapper">
-          <PostCard loggedUserData={loggedUser} />
+          <PostUploadCard loggedUserData={loggedUser} />
           <UserSuggestion />
         </div>
 

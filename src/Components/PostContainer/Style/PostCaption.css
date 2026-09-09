@@ -1,0 +1,86 @@
+/* ==========================================================================
+   PostCaption Styles
+   Handles caption text, hashtags, @mentions, location tag and tagged users.
+   ========================================================================== */
+
+/* Caption Wrapper */
+.post-caption-wrapper {
+    padding: 8px 20px 4px;
+}
+
+.caption-paraHead {
+    font-weight: 400;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1c1c1e;
+    margin: 0;
+}
+
+/* Hashtag links */
+.caption-hashtag {
+    color: #0969da;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.caption-hashtag:hover {
+    color: #03449d;
+    text-decoration: underline;
+}
+
+/* User mention links */
+.caption-mention {
+    color: #09090b;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.caption-mention:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+/* Show more / Show less toggle button */
+.captionShowMoreBtn {
+    color: #8e8e8e;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 4px;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.captionShowMoreBtn:hover {
+    color: #555555;
+}
+
+/* Location and Tagged Users Meta Row */
+.postMetaInfoRow {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 20px 8px;
+    flex-wrap: wrap;
+}
+
+.postMetaLocation {
+    font-size: 12px;
+    color: #8e8e93;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+}
+
+.metaDivider {
+    font-size: 11px;
+    color: #8e8e93;
+}

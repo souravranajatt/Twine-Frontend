@@ -1,0 +1,54 @@
+/* ==========================================================================
+   PostContent Styles
+   Handles post media container (Image / Video Player) and aspect ratios.
+   ========================================================================== */
+
+/* Media Outer Wrapper */
+.postFeedMainContent {
+    height: auto;
+    background-color: transparent;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+/* Aspect Ratio Box (maintains height/width ratio via padding-bottom) */
+.postMainFeedContentMiddleBox {
+    width: 100%;
+    position: relative;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #f1f1f1;
+    overflow: hidden;
+    max-height: 520px;
+}
+
+.postMainFeedContentMiddleBox::after {
+    content: '';
+    display: block;
+}
+
+/* Absolute Media Element (fills the aspect-ratio container) */
+.mainContentMediaBox {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    background-color: transparent;
+    border: none;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Video specific styling */
+.mainContentMediaBox.video-post {
+    object-fit: contain;
+    background-color: #000000;
+}
+
+/* Image specific styling */
+.mainContentMediaBox.image-post {
+    object-fit: cover;
+    object-position: center top;
+}

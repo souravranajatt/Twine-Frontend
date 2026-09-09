@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Image, Heart, Tag, MapPin, Check, X, Search } from "lucide-react";
-import "./PostCard.css";
+import "./PostUploadCard.css";
 import "../../../Assets/Bundle/GlobalSpinner.css";
 import { uploadPostAPI } from "../../../Utils/PostFeaturesAPI.js";
 import { searchUsersForTaggingAPI } from "../../../Utils/searchAPI.js";
@@ -9,7 +9,7 @@ import PostCardSkeleton from "./PostCardSkeleton.js";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
-function PostCard({ loggedUserData }) {
+function PostUploadCard({ loggedUserData }) {
 
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
@@ -358,4 +358,4 @@ function PostCard({ loggedUserData }) {
     );
 }
 
-export default PostCard;
+export default PostUploadCard;

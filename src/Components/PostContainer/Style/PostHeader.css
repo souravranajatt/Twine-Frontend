@@ -1,0 +1,127 @@
+/* ==========================================================================
+   PostHeader Styles
+   Contains author avatar, username, badge, upload time, and 3-dot dropdown.
+   ========================================================================== */
+
+/* Main Header Container */
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: transparent;
+}
+
+/* User Avatar Wrapper */
+.postHeaderImageMainFeed {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: 1.5px solid #dbdbdb;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.postHeaderAvatarLink {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* User Avatar Image */
+.imageFeedPostMainHeader {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    object-position: center top;
+    display: block;
+}
+
+/* Username and Meta Text Column */
+.post-header-userText {
+    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.post-header-userTextBox {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-wrap: nowrap;
+}
+
+/* Username Link Styling */
+.username-title {
+    color: #111010;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.userLinkTextStyle {
+    text-decoration: none;
+    color: #111010;
+    transition: color 0.15s ease;
+}
+
+.userLinkTextStyle:hover {
+    color: #000000;
+}
+
+/* Verified Pink Badge */
+.profilePostUsernameVerifyBadgeIcon-Box {
+    fill: #F0186E;
+    color: white;
+    stroke-width: 2;
+    flex-shrink: 0;
+    margin-left: 2px;
+}
+
+/* Timestamp Text */
+.profilePostTimeText {
+    font-size: 12px;
+    color: #8e8e93;
+    margin-left: 4px;
+    font-weight: 400;
+    flex-shrink: 0;
+}
+
+/* Three-dot Dropdown Positioning */
+.postDropdownWrapper {
+    position: relative;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.postDropdownToggleBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.postDropdownToggleBtn:hover {
+    background-color: #f4f4f5;
+}
+
+.postDropdownToggleBtn:active {
+    transform: scale(0.92);
+}

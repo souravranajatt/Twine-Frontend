@@ -42,7 +42,7 @@ function RenderTaggedUsers({ taggedUsers }) {
                 </span>
             </button>
 
-            {/* overlay modal */}
+            {/* List modal open */}
             {open && (
                 <div
                     className="twine-tagged-overlay"
@@ -64,7 +64,7 @@ function RenderTaggedUsers({ taggedUsers }) {
                             </button>
                         </div>
 
-                        {/* Scrollable list */}
+                        {/* Tagged list */}
                         <div className="twine-tagged-modal-list">
                             {taggedUsers.map((item, idx) => {
                                 const userData = getUserData(item);

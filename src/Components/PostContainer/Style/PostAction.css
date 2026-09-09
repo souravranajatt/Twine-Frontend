@@ -1,0 +1,161 @@
+/* ==========================================================================
+   PostAction Styles
+   Handles like button, comment button, share button, and quick comment form.
+   ========================================================================== */
+
+/* Main Bottom Action Container */
+.postBottomAction {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 16px 10px;
+    gap: 4px;
+}
+
+/* Action Toggles Row */
+.action-toogles {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Individual Action Icon Box */
+.postAction-Icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    margin: 0 3px;
+}
+
+.postAction-Icons:first-child {
+    margin-left: -2px;
+}
+
+/* Push share button to the far right */
+.shareIconRight {
+    margin-left: auto;
+}
+
+/* Like / Comment Count Numbers */
+.postActionCountText {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1c1c1e;
+    user-select: none;
+}
+
+/* Action Buttons (Like / Comment / Share) */
+.postActionContentBtn-ToogleBox {
+    background: transparent;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 2px 0;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.postActionContentBtn-ToogleBox:hover {
+    opacity: 0.8;
+}
+
+.postActionContentBtn-ToogleBox:active {
+    transform: scale(0.95);
+}
+
+/* Lucide Icon Styling */
+.bottomAction-icons {
+    stroke-width: 2.5;
+    color: #000000;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.bottomAction-icons:hover {
+    color: #ff3b6c;
+}
+
+.postActionContentBtn-ToogleBox:hover .bottomAction-icons {
+    transform: scale(1.08);
+}
+
+/* ==========================================================================
+   Inline Quick Comment Form
+   ========================================================================== */
+
+.commentFormToggleBox {
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
+
+.commentPost-Box {
+    display: flex;
+    align-items: center;
+    background-color: #f3f3f6cc;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    border-radius: 9999px;
+    padding: 6px 4px 6px 14px;
+    transition: all 0.25s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.commentPost-Box:focus-within {
+    background-color: #ffffff;
+    border-color: #dbdbdb;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.commentPost-field {
+    flex-grow: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 13.5px;
+    color: #111010;
+    min-width: 0;
+}
+
+.commentPost-field::placeholder {
+    color: #9ca3af;
+}
+
+/* Circular Send Button */
+.commentIcon-box {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, background-color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.commentIcon-box:hover:not(:disabled) {
+    transform: scale(1.1);
+    background-color: rgba(240, 24, 110, 0.08);
+}
+
+.commentIcon-box:active:not(:disabled) {
+    transform: scale(0.9);
+}
+
+.commentIcon-box:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.comment-icon {
+    color: #4b5563;
+    transition: color 0.2s ease;
+}
+
+.commentIcon-box:hover:not(:disabled) .comment-icon {
+    color: #F0186E;
+}
