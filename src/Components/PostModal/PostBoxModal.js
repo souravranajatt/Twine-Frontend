@@ -324,7 +324,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                                     {submittingComment ? (
                                         <span className="twine-comment-modal-post-spinner"></span>
                                     ) : (
-                                        <SendHorizontal size={16} />
+                                        <SendHorizontal size={18} />
                                     )}
                                 </button>
                             </form>

@@ -300,8 +300,17 @@
     transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
+.post-modal-action-btn svg {
+    stroke-width: 2.5;
+    transition: transform 0.2s ease;
+}
+
 .post-modal-action-btn:hover {
     opacity: 0.8;
+}
+
+.post-modal-action-btn:hover svg {
+    transform: scale(1.08);
 }
 
 .post-modal-action-btn:active {
