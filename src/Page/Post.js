@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, MapPin, Lock, MoreHorizontal } from 'lucide-react';
+import { BadgeCheck, Heart, MessageCircle, Forward, SendHorizontal, Lock } from 'lucide-react';
 import HeaderArea from "../Components/Header/Header.js";
 import FooterArea from "../Components/Footer/Footer.js";
 import { postFetchAPI } from "../Utils/PostFeaturesAPI.js";
 import { likePostAPI, dislikePostAPI } from "../Utils/PostActionAPI.js";
 import { useAuth } from "../AuthChecker/AuthContext.js";
-import formatPostTime from "../Lib/formatPostTime.js";
-import renderFormattedCaption from "../Lib/renderFormattedCaption.js";
-import RenderTaggedUsers from "../Components/PostContainer/Structure/RenderTaggedUsers.js";
-import CustomVideoPlayer from "../Lib/CustomVideoPlayer.js";
-import PostDropDown from "../Components/PostModal/PostDropDown.js";
+import PostHeader from "../Components/PostContainer/Structure/PostHeader.js";
+import PostContent from "../Components/PostContainer/Structure/PostContent.js";
+import PostCaption from "../Components/PostContainer/Structure/PostCaption.js";
 import CommentSection from "../Components/PostContainer/Structure/CommentSection.js";
 import "../Assets/Bundle/Post.css";
 import "../Assets/Bundle/GlobalSpinner.css";
@@ -29,24 +27,9 @@ function Post() {
 
     const [commentText, setCommentText] = useState("");
     const [submittingComment, setSubmittingComment] = useState(false);
-    const [expandedCaption, setExpandedCaption] = useState(false);
-    const [openDropdown, setOpenDropdown] = useState(false);
 
     const likingRef = useRef(false);
     const commentSectionRef = useRef(null);
-
-    // Close dropdown on outside click
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (!e.target.closest('.postDropdownWrapper')) {
-                setOpenDropdown(false);
-            }
-        };
-        if (openDropdown) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [openDropdown]);
 
     // Fetch post
     useEffect(() => {
@@ -187,172 +170,102 @@ function Post() {
                 {!loading && post && !post.privateAccount && (
                     <div className="post-page-card">
 
-                        {/* Post Header */}
-                        <div className="post-page-header">
-                            <div className="post-page-avatar-wrapper">
-                                <img
-                                    src={post.profileImage && post.profileImage !== "null"
-                                        ? post.profileImage : DEFAULT_IMAGE}
-                                    className="post-page-avatar"
-                                    alt={post.username}
-                                />
-                            </div>
-                            <div className="post-page-header-info">
-                                <div className="post-page-header-row">
-                                    <Link to={`/${post.username}`} className="post-page-username-link">
-                                        {post.username}
-                                    </Link>
-                                    {post.fetchVerified && (
-                                        <BadgeCheck size={17} className="post-page-verify-badge" />
-                                    )}
-                                    {post.fetchUploadAt && (
-                                        <span className="post-page-time">
-                                            • {formatPostTime(post.fetchUploadAt)}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-                            {/* Three-dot dropdown */}
-                            <div className="postDropdownWrapper" style={{ position: "relative", marginLeft: "auto", display: "flex", alignItems: "center" }}>
-                                <button
-                                    type="button"
-                                    onClick={() => setOpenDropdown(prev => !prev)}
-                                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '5px', display: 'flex' }}
-                                >
-                                    <MoreHorizontal size={20} color="#111010" />
-                                </button>
-                                {openDropdown && (
-                                    <PostDropDown
-                                        isOpen={openDropdown}
-                                        onClose={() => setOpenDropdown(false)}
-                                        Post={post}
-                                        onPostUpdate={(updatedPost) => setPost(updatedPost)}
-                                    />
-                                )}
-                            </div>
-                        </div>
+                        {/* Header: Avatar, Username, Badge, Time, 3-dot dropdown */}
+                        <PostHeader
+                            post={post}
+                            onPostUpdate={(updatedPost) => setPost(updatedPost)}
+                        />
 
-                        {/* Post Media */}
-                        <div className="post-page-media-wrapper">
-                            <div
-                                className="post-page-media-box"
-                                style={{
-                                    paddingBottom: post.width && post.height
-                                        ? `${(post.height / post.width) * 100}%`
-                                        : "100%"
-                                }}
-                            >
-                                {post.postType === "VIDEO" ? (
-                                    <CustomVideoPlayer
-                                        src={post.fetchFileName}
-                                        className="post-page-media video-post"
-                                        autoPlay={true}
-                                    />
-                                ) : (
-                                    <img
-                                        src={post.fetchFileName}
-                                        alt="post"
-                                        className="post-page-media image-post"
-                                    />
-                                )}
-                            </div>
-                        </div>
+                        {/* Media: Responsive Image or CustomVideoPlayer */}
+                        <PostContent
+                            post={post}
+                            isParentModalOpen={false}
+                        />
 
-                        {/* Caption */}
-                        {post.fetchPostCaption && (
-                            <div className="post-page-caption-box">
-                                <p className="post-page-caption-text">
-                                    {renderFormattedCaption(
-                                        post.fetchPostCaption,
-                                        post.fetchPostId,
-                                        expandedCaption,
-                                        () => setExpandedCaption(!expandedCaption),
-                                        post.fetchPostCaption.length
-                                    )}
-                                </p>
-                            </div>
-                        )}
+                        {/* Caption, Hashtags, Mentions, Location & Tagged Users */}
+                        <PostCaption post={post} />
 
-                        {/* Location & Tagged */}
-                        {(post.fetchPostLocation || post.fetchTaggedUsers?.length > 0) && (
-                            <div className="post-page-meta-row">
-                                {post.fetchPostLocation && (
-                                    <span className="post-page-location">
-                                        <MapPin size={11} style={{ marginRight: 3 }} />
-                                        {post.fetchPostLocation}
-                                    </span>
-                                )}
-                                {post.fetchPostLocation && post.fetchTaggedUsers?.length > 0 && (
-                                    <span className="post-page-meta-divider">•</span>
-                                )}
-                                {post.fetchTaggedUsers?.length > 0 && (
-                                    <RenderTaggedUsers taggedUsers={post.fetchTaggedUsers} />
-                                )}
-                            </div>
-                        )}
 
                         {/* Actions */}
                         <div className="post-page-actions">
                             <div className="post-page-action-row">
 
                                 {/* Like */}
-                                <button
-                                    type="button"
-                                    className="post-page-action-btn"
-                                    onClick={handleLike}
-                                >
-                                    <Heart
-                                        size={23}
-                                        fill={post.likedByCurrentUser ? "#ff3b6c" : "none"}
-                                        color={post.likedByCurrentUser ? "#ff3b6c" : "currentColor"}
-                                        className="post-page-action-icon"
-                                    />
-                                    {post.likeVisible === true && (
-                                        <span className="post-page-action-count">{post.likeCount || 0}</span>
-                                    )}
-                                </button>
-
-                                {/* Comment */}
-                                {post.commentEnable && (
-                                    <button type="button" className="post-page-action-btn">
-                                        <MessageCircle size={23} className="post-page-action-icon" />
-                                        <span className="post-page-action-count">{post.commentCount || 0}</span>
+                                <div className="post-page-action-icon-box">
+                                    <button
+                                        type="button"
+                                        className="post-page-action-btn"
+                                        onClick={handleLike}
+                                        aria-label={post.likedByCurrentUser ? "Unlike post" : "Like post"}
+                                    >
+                                        <Heart
+                                            size={23}
+                                            fill={post.likedByCurrentUser ? "#ff3b6c" : "none"}
+                                            color={post.likedByCurrentUser ? "#ff3b6c" : "currentColor"}
+                                            className="post-page-action-icon"
+                                        />
+                                        {post.likeVisible === true && (
+                                            <span className="post-page-action-count">{post.likeCount || 0}</span>
+                                        )}
                                     </button>
+                                </div>
+
+                                {/* Comment (display only) */}
+                                {post.commentEnable && (
+                                    <div className="post-page-action-icon-box">
+                                        <button
+                                            type="button"
+                                            className="post-page-action-btn post-page-comment-btn-static"
+                                            aria-label="Comments"
+                                        >
+                                            <MessageCircle size={23} className="post-page-action-icon" />
+                                            <span className="post-page-action-count">{post.commentCount || 0}</span>
+                                        </button>
+                                    </div>
                                 )}
 
                                 {/* Share */}
                                 {post.shareEnable && (
-                                    <button type="button" className="post-page-action-btn post-page-share-btn">
-                                        <Forward size={23} className="post-page-action-icon" />
-                                    </button>
+                                    <div className="post-page-action-icon-box post-page-share-box">
+                                        <button
+                                            type="button"
+                                            className="post-page-action-btn"
+                                            aria-label="Share post"
+                                        >
+                                            <Forward size={23} className="post-page-action-icon" />
+                                        </button>
+                                    </div>
                                 )}
                             </div>
 
                             {/* Comment Form */}
                             {post.commentEnable && (
-                                <form onSubmit={handleCommentSubmit} className="post-page-comment-form">
-                                    <input
-                                        type="text"
-                                        className="post-page-comment-input"
-                                        placeholder="Drop a comment..."
-                                        value={commentText}
-                                        onChange={(e) => setCommentText(e.target.value)}
-                                        disabled={submittingComment}
-                                        autoComplete="off"
-                                        autoCorrect="off"
-                                        autoCapitalize="none"
-                                    />
-                                    <button
-                                        type="submit"
-                                        className="post-page-comment-submit"
-                                        disabled={submittingComment || !commentText.trim()}
-                                    >
-                                        {submittingComment
-                                            ? <span className='twine-comment-modal-post-spinner'></span>
-                                            : <SendHorizontal size={16} />
-                                        }
-                                    </button>
-                                </form>
+                                <div className="post-page-comment-wrapper">
+                                    <form onSubmit={handleCommentSubmit} className="post-page-comment-form">
+                                        <input
+                                            type="text"
+                                            className="post-page-comment-input"
+                                            placeholder="Drop a comment..."
+                                            value={commentText}
+                                            onChange={(e) => setCommentText(e.target.value)}
+                                            disabled={submittingComment}
+                                            autoComplete="off"
+                                            autoCorrect="off"
+                                            autoCapitalize="none"
+                                        />
+                                        <button
+                                            type="submit"
+                                            className="post-page-comment-submit"
+                                            disabled={submittingComment || !commentText.trim()}
+                                            aria-label="Send comment"
+                                        >
+                                            {submittingComment
+                                                ? <span className='twine-comment-modal-post-spinner'></span>
+                                                : <SendHorizontal size={18} />
+                                            }
+                                        </button>
+                                    </form>
+                                </div>
                             )}
                         </div>
 

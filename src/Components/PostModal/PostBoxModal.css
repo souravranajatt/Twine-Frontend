@@ -162,8 +162,8 @@
 
 /* PFP Wrapper for Header */
 .post-modal-header-avatar-div {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     overflow: hidden;
     border: 1px solid #e4e4e7;
@@ -194,7 +194,7 @@
 }
 
 .post-modal-author-link {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: #111010;
     text-decoration: none;
@@ -229,7 +229,10 @@
 .post-modal-time-badge {
     font-size: 12px;
     color: #8e8e93;
-    font-weight: 500;
+    font-weight: 400;
+    margin-left: 2px;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 /* Caption row */

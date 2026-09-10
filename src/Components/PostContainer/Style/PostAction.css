@@ -1,8 +1,3 @@
-/* ==========================================================================
-   PostAction Styles
-   Handles like button, comment button, share button, and quick comment form.
-   ========================================================================== */
-
 /* Main Bottom Action Container */
 .postBottomAction {
     display: flex;
@@ -10,6 +5,7 @@
     padding: 5px 16px 10px;
     gap: 4px;
 }
+
 
 /* Action Toggles Row */
 .action-toogles {
@@ -69,20 +65,14 @@
 .bottomAction-icons {
     stroke-width: 2.5;
     color: #000000;
-    transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.bottomAction-icons:hover {
-    color: #ff3b6c;
+    transition: transform 0.2s ease;
 }
 
 .postActionContentBtn-ToogleBox:hover .bottomAction-icons {
     transform: scale(1.08);
 }
 
-/* ==========================================================================
-   Inline Quick Comment Form
-   ========================================================================== */
+/* Inline Quick Comment Form */
 
 .commentFormToggleBox {
     width: 100%;

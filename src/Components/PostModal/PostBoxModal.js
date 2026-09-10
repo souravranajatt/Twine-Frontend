@@ -182,15 +182,14 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                                         {localPost.fetchVerified && (
                                             <BadgeCheck size={16} className="post-modal-verify-badge" />
                                         )}
+                                        {localPost.fetchUploadAt && (
+                                            <span className="post-modal-time-badge">
+                                                • {formatPostTime(localPost.fetchUploadAt)}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             </div>
-
-                            {localPost.fetchUploadAt && (
-                                <span className="post-modal-time-badge">
-                                    {formatPostTime(localPost.fetchUploadAt)}
-                                </span>
-                            )}
                             {/* Three-dot dropdown */}
                             <div className="postDropdownWrapper" style={{ position: "relative", display: "flex", alignItems: "center" }}>
                                 <button
