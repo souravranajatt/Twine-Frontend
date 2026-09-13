@@ -89,7 +89,7 @@ function Post() {
         }
     };
 
-    // Comment handler via CommentSection ref
+    // Comment handler 
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         const text = commentText.trim();
