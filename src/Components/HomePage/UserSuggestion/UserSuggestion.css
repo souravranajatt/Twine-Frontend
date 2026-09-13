@@ -61,6 +61,7 @@
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center;
   flex-shrink: 0;
 }
 

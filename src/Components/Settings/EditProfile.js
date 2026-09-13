@@ -1,11 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { updateProfileAPI } from "../../Utils/SettingDataAPI.js";
+import ProfilePhotoCropModal from "./Modal/ProfilePhotoCropModal.js";
 import "../../Assets/Bundle/GlobalSpinner.css";
 
 function EditProfile({ profileData, setProfileData }) {
   const [statusMessage, setStatusMessage] = useState(null);
   const [statusType, setStatusType] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [tempImageSrc, setTempImageSrc] = useState(null);
   const fileInputRef = useRef(null);
   const isSubmitting = useRef(false);
 
@@ -46,27 +49,52 @@ function EditProfile({ profileData, setProfileData }) {
     }));
   };
 
-  // Handle Photo Upload (Convert to Base64)
+  // Handle Photo Upload (Opens Crop Modal)
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Allowed image formats
+      const validTypes = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"];
+      if (!validTypes.includes(file.type)) {
+        setStatusType("error");
+        setStatusMessage("Only JPEG, PNG, WEBP, and HEIC images allowed!");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        return;
+      }
 
-      // Size Check
+      // Size Check (20MB max)
       if (file.size > 20 * 1024 * 1024) {
         setStatusType("error");
         setStatusMessage("Photo too large! Max 20MB allowed.");
+        if (fileInputRef.current) fileInputRef.current.value = "";
         return;
       }
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData(prev => ({
-          ...prev,
-          profilePictureUrl: reader.result // Base64 string
-        }));
+        setTempImageSrc(reader.result);
+        setCropModalOpen(true);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  // On Crop Applied
+  const handleCropApply = (croppedDataUrl) => {
+    setFormData(prev => ({
+      ...prev,
+      profilePictureUrl: croppedDataUrl
+    }));
+    setCropModalOpen(false);
+    setTempImageSrc(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  // On Crop Cancel/Close
+  const handleCropClose = () => {
+    setCropModalOpen(false);
+    setTempImageSrc(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   // Trigger hidden file input
@@ -176,7 +204,7 @@ function EditProfile({ profileData, setProfileData }) {
             <img
               src={formData.profilePictureUrl || "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png"}
               alt="Profile Avatar"
-              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
             />
           </div>
           <div className="profile-photo-actions">
@@ -333,6 +361,14 @@ function EditProfile({ profileData, setProfileData }) {
           )}
         </div>
       </form>
+
+      {/* Profile Photo Crop Modal */}
+      <ProfilePhotoCropModal
+        imageSrc={tempImageSrc}
+        isOpen={cropModalOpen}
+        onClose={handleCropClose}
+        onCropApply={handleCropApply}
+      />
     </div>
   );
 }

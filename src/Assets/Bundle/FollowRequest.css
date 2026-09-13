@@ -102,6 +102,7 @@
   height: 52px;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center;
   flex-shrink: 0;
   border: 1px solid #f0f0f0;
 }
