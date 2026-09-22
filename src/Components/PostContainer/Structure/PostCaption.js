@@ -9,7 +9,6 @@ function PostCaption({ post }) {
     if (!post) return null;
 
     const hasCaption = Boolean(post.fetchPostCaption);
-    const hasLocation = Boolean(post.fetchPostLocation);
     const hasTaggedUsers = Boolean(post.fetchTaggedUsers && post.fetchTaggedUsers.length > 0);
 
     return (
@@ -29,18 +28,10 @@ function PostCaption({ post }) {
                 </div>
             )}
 
-            {/* Post Location & Tagged Users Meta Row */}
-            {(hasLocation || hasTaggedUsers) && (
+            {/* Tagged Users Meta Row */}
+            {hasTaggedUsers && (
                 <div className="postMetaInfoRow">
-                    {hasLocation && (
-                        <span className="postMetaLocation">{post.fetchPostLocation}</span>
-                    )}
-                    {hasLocation && hasTaggedUsers && (
-                        <span className="metaDivider">•</span>
-                    )}
-                    {hasTaggedUsers && (
-                        <RenderTaggedUsers taggedUsers={post.fetchTaggedUsers} />
-                    )}
+                    <RenderTaggedUsers taggedUsers={post.fetchTaggedUsers} />
                 </div>
             )}
         </>

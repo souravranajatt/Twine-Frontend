@@ -442,3 +442,71 @@
         height: 18px;
     }
 }
+
+/* ── Location Feature Styles ── */
+
+.twine-location-active-icon {
+    color: #0a7cff;
+    fill: rgba(10, 124, 255, 0.1);
+    stroke-width: 2.5;
+}
+
+.twine-location-chip-row {
+    margin: 4px 0 8px;
+    width: 100%;
+}
+
+.twine-location-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(10, 124, 255, 0.08);
+    border: 1px solid rgba(10, 124, 255, 0.25);
+    padding: 4px 10px 4px 8px;
+    border-radius: 99px;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.twine-location-chip-icon {
+    color: #0a7cff;
+    flex-shrink: 0;
+}
+
+.twine-location-chip-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #0a7cff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+}
+
+.twine-location-result-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+}
+
+.twine-location-result-icon {
+    color: #8e8e93;
+    flex-shrink: 0;
+}
+
+.twine-location-result-text {
+    font-size: 13px;
+    color: #111010;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.twine-location-check-icon {
+    color: #0a7cff;
+    flex-shrink: 0;
+    stroke-width: 2.5;
+}

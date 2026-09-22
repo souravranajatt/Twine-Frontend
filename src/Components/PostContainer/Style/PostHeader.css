@@ -97,6 +97,18 @@
     flex-shrink: 0;
 }
 
+/* Location Under Username */
+.postHeaderLocation {
+    font-size: 11px;
+    color: #8e8e93;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 /* Three-dot Dropdown Positioning */
 .postDropdownWrapper {
     position: relative;

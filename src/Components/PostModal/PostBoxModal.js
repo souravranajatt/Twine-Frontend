@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { X, Heart, MessageCircle, Forward, SendHorizontal, BadgeCheck, MapPin, MoreHorizontal } from "lucide-react";
+import { X, Heart, MessageCircle, Forward, SendHorizontal, BadgeCheck, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { likePostAPI, dislikePostAPI } from "../../Utils/PostActionAPI.js";
 import { useAuth } from "../../AuthChecker/AuthContext.js";
@@ -188,6 +188,11 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                                             </span>
                                         )}
                                     </div>
+                                    {localPost.fetchPostLocation && (
+                                        <span className="post-modal-location-text">
+                                            {localPost.fetchPostLocation}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                             {/* Three-dot dropdown */}
@@ -228,21 +233,10 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                             </div>
                         )}
 
-                        {/* Location & Tagged */}
-                        {(localPost.fetchPostLocation || (localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0)) && (
-                            <div className="post-modal-location-tagged-row" style={{ display: "flex", alignItems: "center", gap: "6px", margin: "4px 0 8px" }}>
-                                {localPost.fetchPostLocation && (
-                                    <span className="post-modal-location-text" style={{ display: "inline-flex", alignItems: "center", fontSize: "11px", color: "#8e8e93" }}>
-                                        <MapPin size={10} style={{ marginRight: 2 }} />
-                                        {localPost.fetchPostLocation}
-                                    </span>
-                                )}
-                                {localPost.fetchPostLocation && localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0 && (
-                                    <span style={{ fontSize: "10px", color: "#8e8e93" }}>•</span>
-                                )}
-                                {localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0 && (
-                                    <RenderTaggedUsers taggedUsers={localPost.fetchTaggedUsers} />
-                                )}
+                        {/* Tagged users */}
+                        {localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0 && (
+                            <div className="post-modal-location-tagged-row">
+                                <RenderTaggedUsers taggedUsers={localPost.fetchTaggedUsers} />
                             </div>
                         )}
 

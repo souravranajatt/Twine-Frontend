@@ -70,6 +70,9 @@ function PostHeader({ post, onPostUpdate }) {
                         </span>
                     )}
                 </div>
+                {post.fetchPostLocation && (
+                    <span className="postHeaderLocation">{post.fetchPostLocation}</span>
+                )}
             </div>
 
             {/* Three-dot Dropdown Menu */}
