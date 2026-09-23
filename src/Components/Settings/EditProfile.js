@@ -103,7 +103,7 @@ function EditProfile({ profileData, setProfileData }) {
     fileInputRef.current.click();
   };
 
-  // Remove photo locally
+  // Remove photo locally 
   const handleRemovePhoto = (e) => {
     e.preventDefault();
     setFormData(prev => ({
