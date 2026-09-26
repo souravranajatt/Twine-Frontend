@@ -37,9 +37,6 @@ function RenderTaggedUsers({ taggedUsers }) {
                 onClick={() => setOpen(true)}
             >
                 <Tag size={12} className="twine-tagged-toggle-icon" />
-                <span className="twine-tagged-btn-text">
-                    Tagged
-                </span>
             </button>
 
             {/* List modal open */}
