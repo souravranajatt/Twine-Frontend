@@ -52,3 +52,17 @@
     object-fit: cover;
     object-position: center top;
 }
+
+/* ── Tagged Overlay Container ─────────────────────────────────
+   Sits absolute at bottom-left of the media box.
+   The parent (.postMainFeedContentMiddleBox) already has
+   position:relative and overflow:hidden, so this just slots in.
+   ─────────────────────────────────────────────────────────── */
+.postContent-tagged-overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 5;
+    pointer-events: all;
+}
+

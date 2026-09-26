@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { X, ZoomIn, ZoomOut, RotateCw } from "lucide-react";
 import getCroppedImg from "../../../Lib/cropImage.js";
+import useScrollLock from "../../../Lib/useScrollLock.js";
 import "./ProfilePhotoCropModal.css";
 
 
@@ -11,6 +12,9 @@ function ProfilePhotoCropModal({ imageSrc, isOpen, onClose, onCropApply }) {
   const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Lock background scroll while crop modal is open
+  useScrollLock(isOpen);
 
   const onCropCompleteCallback = useCallback((croppedArea, currentCroppedAreaPixels) => {
     setCroppedAreaPixels(currentCroppedAreaPixels);

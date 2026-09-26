@@ -6,6 +6,7 @@ import { maskEmail } from "../Lib/maskEmail.js"; // Email Masker
 import { Image, UserRoundPlus, TrendingUp } from "lucide-react";
 import FooterArea from "../Components/Footer/Footer.js";
 import { useAuth } from "../AuthChecker/AuthContext.js";
+import useScrollLock from "../Lib/useScrollLock.js";
 
 function Signup() {
   const { login } = useAuth();
@@ -29,6 +30,9 @@ function Signup() {
   const isVerifyRef = useRef(false);
 
   const [OTPBox, setOTPBox] = useState(false);
+
+  // Lock background scroll when OTP overlay is visible
+  useScrollLock(OTPBox);
 
   const navigate = useNavigate();
 

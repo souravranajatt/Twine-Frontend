@@ -2,6 +2,7 @@ import { Bell, User, Search, LogOut, CircleUserRound } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useDebounce from "../../Lib/useDebounce.js";
+import useScrollLock from "../../Lib/useScrollLock.js";
 import "./Header.css";
 import { searchUsersAPI } from "../../Utils/searchAPI.js";
 import { useAuth } from "../../AuthChecker/AuthContext.js";
@@ -19,6 +20,18 @@ function Header() {
   const [profileTabNav, setProfileTabNav] = useState(false);
   const [notifyTabNav, setNotifyTabNav] = useState(false);
   const navigate = useNavigate();
+
+  // Screen width detection for mobile
+  const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" && window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Lock background scroll only on mobile when profile dropdown is open
+  useScrollLock(profileTabNav && isMobile);
 
   // Refs to detect outside click
   const profileRef = useRef(null);

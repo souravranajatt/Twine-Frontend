@@ -158,6 +158,13 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                             className="post-modal-media-content"
                         />
                     )}
+
+                    {/* Tagged Users — frosted glass overlay, bottom-left of modal media */}
+                    {localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0 && (
+                        <div className="postContent-tagged-overlay">
+                            <RenderTaggedUsers taggedUsers={localPost.fetchTaggedUsers} />
+                        </div>
+                    )}
                 </div>
 
                 {/* Post Details & Comments Panel (Right) */}
@@ -233,12 +240,6 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                             </div>
                         )}
 
-                        {/* Tagged users */}
-                        {localPost.fetchTaggedUsers && localPost.fetchTaggedUsers.length > 0 && (
-                            <div className="post-modal-location-tagged-row">
-                                <RenderTaggedUsers taggedUsers={localPost.fetchTaggedUsers} />
-                            </div>
-                        )}
 
                     </div>
 

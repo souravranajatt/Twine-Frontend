@@ -26,15 +26,6 @@ function FeedPosts({ username, userProfileDataURL, contentVisibleTab }) {
         hasFetchedInitialRef.current = false;
     }, [username]);
 
-    // Lock body scroll when modal open
-    useEffect(() => {
-        if (activePostForModal) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-        return () => { document.body.style.overflow = ""; };
-    }, [activePostForModal]);
 
     // Initial Load
     useEffect(() => {

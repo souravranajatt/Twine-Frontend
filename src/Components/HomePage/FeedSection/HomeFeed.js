@@ -15,15 +15,6 @@ function HomeFeed() {
     const [hasMore, setHasMore] = useState(true);
     const isFetchingRef = useRef(false);
 
-    // Lock body scroll when modal open
-    useEffect(() => {
-        if (activePostForModal) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-        }
-        return () => { document.body.style.overflow = ""; };
-    }, [activePostForModal]);
 
     // Fetch Feed
     useEffect(() => {

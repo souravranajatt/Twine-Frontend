@@ -217,12 +217,6 @@
     margin-right: 5px;
 }
 
-.post-modal-location-tagged-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin: 4px 0 8px;
-}
 
 .post-modal-location-text {
     display: inline-flex;

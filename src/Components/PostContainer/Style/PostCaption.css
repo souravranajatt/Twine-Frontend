@@ -62,12 +62,3 @@
 .captionShowMoreBtn:hover {
     color: #555555;
 }
-
-/* Tagged Users Meta Row */
-.postMetaInfoRow {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 20px 8px;
-    flex-wrap: wrap;
-}
