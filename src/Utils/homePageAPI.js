@@ -15,7 +15,7 @@ export const homeFeedFetch = async (page = 0) => {
 // Fetch Logged User Data...
 export const loggedUserDataAPI = async () => {
     try {
-        const response = await api.get("/profile/data/loggeduser");
+        const response = await api.get("/profile/me");
         return response.data;
     } catch (error) {
         throw error.response?.data || "Something went wrong!";
@@ -25,7 +25,7 @@ export const loggedUserDataAPI = async () => {
 // Fetch User Suggestions API
 export const fetchUserSuggestionsAPI = async (page = 0, size = 10) => {
     try {
-        const response = await api.get(`/suggestions?page=${page}&size=${size}`);
+        const response = await api.get(`/users/suggestions?page=${page}&size=${size}`);
         return response.data;
     } catch (error) {
         throw error.response?.data || "Failed to fetch user suggestions!";
@@ -35,7 +35,7 @@ export const fetchUserSuggestionsAPI = async (page = 0, size = 10) => {
 // Fetch Follow Requests API
 export const fetchFollowRequestsAPI = async (page = 0, size = 15) => {
     try {
-        const response = await api.get(`/follow-requests?page=${page}&size=${size}`);
+        const response = await api.get(`/users/follow-requests?page=${page}&size=${size}`);
         return response.data;
     } catch (error) {
         throw error.response?.data || "Failed to fetch follow requests!";

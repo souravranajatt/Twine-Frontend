@@ -3,7 +3,7 @@ import api from "./instanceAPI";
 // Add like on a post
 export const likePostAPI = async (postId) => {
     try {
-        const response = await api.post(`/v2/posts/${postId}/like`);
+        const response = await api.post(`/posts/${postId}/like`);
         return response.data;
     } catch (error) {
         throw error;
@@ -13,7 +13,7 @@ export const likePostAPI = async (postId) => {
 // Dislike on a post
 export const dislikePostAPI = async (postId) => {
     try {
-        const response = await api.delete(`/v2/posts/${postId}/unlike`);
+        const response = await api.delete(`/posts/${postId}/unlike`);
         return response.data;
     } catch (error) {
         throw error;
@@ -23,7 +23,7 @@ export const dislikePostAPI = async (postId) => {
 // Save a Post 
 export const savePostAPI = async (postId) => {
     try {
-        const response = await api.post(`/v2/posts/${postId}/save`);
+        const response = await api.post(`/posts/${postId}/save`);
         return response.data;
     } catch (error) {
         throw error;
@@ -33,7 +33,7 @@ export const savePostAPI = async (postId) => {
 // Unsaved a post
 export const unsavePostAPI = async (postId) => {
     try {
-        const response = await api.delete(`/v2/posts/${postId}/unsave`);
+        const response = await api.delete(`/posts/${postId}/unsave`);
         return response.data;
     } catch (error) {
         throw error;
@@ -43,7 +43,7 @@ export const unsavePostAPI = async (postId) => {
 // Post a Comment
 export const postCommentAPI = async (postId, data) => {
     try {
-        const response = await api.post(`/v2/posts/${postId}/comment`, data);
+        const response = await api.post(`/posts/${postId}/comment`, data);
         return response.data;
     } catch (error) {
         throw error;
@@ -53,7 +53,7 @@ export const postCommentAPI = async (postId, data) => {
 // Archive a post
 export const archivePostAPI = async (postId) => {
     try {
-        const response = await api.patch(`/v2/posts/${postId}/archive`);
+        const response = await api.patch(`/posts/${postId}/archive`);
         return response.data;
     } catch (error) {
         throw error;
@@ -63,7 +63,7 @@ export const archivePostAPI = async (postId) => {
 // Unarchive a post
 export const unarchivePostAPI = async (postId) => {
     try {
-        const response = await api.patch(`/v2/posts/${postId}/unarchive`);
+        const response = await api.patch(`/posts/${postId}/unarchive`);
         return response.data;
     } catch (error) {
         throw error;
@@ -73,7 +73,7 @@ export const unarchivePostAPI = async (postId) => {
 // Hide Likes
 export const hideLikeAPI = async (postId) => {
     try {
-        const response = await api.patch(`/v2/posts/${postId}/hide-likes`);
+        const response = await api.patch(`/posts/${postId}/hide-likes`);
         return response.data;
     } catch (error) {
         throw error;
@@ -83,7 +83,7 @@ export const hideLikeAPI = async (postId) => {
 // Unhide Likes
 export const unhideLikeAPI = async (postId) => {
     try {
-        const response = await api.patch(`/v2/posts/${postId}/show-likes`);
+        const response = await api.patch(`/posts/${postId}/show-likes`);
         return response.data;
     } catch (error) {
         throw error;
@@ -93,7 +93,7 @@ export const unhideLikeAPI = async (postId) => {
 // Disable Commenting on a Post 
 export const disableCommentingAPI = async (postId) => {
     try {
-        const response = await api.patch(`/v2/posts/${postId}/disable-comments`);
+        const response = await api.patch(`/posts/${postId}/disable-comments`);
         return response.data;
     } catch (error) {
         throw error;
@@ -103,7 +103,7 @@ export const disableCommentingAPI = async (postId) => {
 // Enable Commenting on a Post 
 export const enableCommentingAPI = async (postId) => {
     try {
-        const response = await api.patch(`/v2/posts/${postId}/enable-comments`);
+        const response = await api.patch(`/posts/${postId}/enable-comments`);
         return response.data;
     } catch (error) {
         throw error;
@@ -113,11 +113,9 @@ export const enableCommentingAPI = async (postId) => {
 // Delete a post
 export const deletePostAPI = async (postId) => {
     try {
-        const response = await api.delete(`/v2/posts/${postId}/delete`);
+        const response = await api.delete(`/posts/${postId}`);
         return response.data;
     } catch (error) {
         throw error;
     }
 };
-
-

@@ -17,7 +17,7 @@ export const userProfilePageAPI = async (username) => {
 // Follow User API
 export const followUserAPI = async (targetUserId) => {
   try {
-    const res = await api.post(`/v1/user/follow/${targetUserId}`);
+    const res = await api.post(`/users/${targetUserId}/follow`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -27,7 +27,7 @@ export const followUserAPI = async (targetUserId) => {
 // Unfollow User API
 export const unfollowUserAPI = async (targetUserId) => {
   try {
-    const res = await api.delete(`/v1/user/unfollow/${targetUserId}`);
+    const res = await api.delete(`/users/${targetUserId}/unfollow`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -37,7 +37,7 @@ export const unfollowUserAPI = async (targetUserId) => {
 // Cancel Follow Request API
 export const cancelFollowRequestAPI = async (targetUserId) => {
   try {
-    const res = await api.delete(`/v1/user/follow/cancel/${targetUserId}`);
+    const res = await api.delete(`/users/${targetUserId}/follow/cancel`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -47,7 +47,7 @@ export const cancelFollowRequestAPI = async (targetUserId) => {
 // Accept Request 
 export const acceptRequestAPI = async (targetUserId) => {
   try {
-    const res = await api.post(`/v1/user/follow/accept/${targetUserId}`);
+    const res = await api.post(`/users/${targetUserId}/follow/accept`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -57,7 +57,7 @@ export const acceptRequestAPI = async (targetUserId) => {
 // Reject Request 
 export const rejectRequestAPI = async (targetUserId) => {
   try {
-    const res = await api.delete(`/v1/user/follow/reject/${targetUserId}`);
+    const res = await api.delete(`/users/${targetUserId}/follow/reject`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -67,7 +67,7 @@ export const rejectRequestAPI = async (targetUserId) => {
 // Block User API....
 export const blockUserAPI = async (targetUserId) => {
   try {
-    const res = await api.post(`/v1/user/block/${targetUserId}`);
+    const res = await api.post(`/users/${targetUserId}/block`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -77,7 +77,7 @@ export const blockUserAPI = async (targetUserId) => {
 // UnBlock User API....
 export const unblockUserAPI = async (targetUserId) => {
   try {
-    const res = await api.delete(`/v1/user/unblock/${targetUserId}`);
+    const res = await api.delete(`/users/${targetUserId}/unblock`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -87,7 +87,7 @@ export const unblockUserAPI = async (targetUserId) => {
 // Search User Posts API...
 export const searchUserPostsAPI = async (username, page = 0) => {
   try {
-    const response = await api.get(`/profile/${encodeURIComponent(username)}/post?page=${page}`);
+    const response = await api.get(`/profile/${encodeURIComponent(username)}/posts?page=${page}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || "Something went wrong!";
@@ -121,7 +121,7 @@ export const searchUserTaggedPostsAPI = async (username, page = 0) => {
 // Send Secret Crush API
 export const sendSecretCrushAPI = async (targetUserId) => {
   try {
-    const res = await api.post(`/v1/user/secret-crush/${targetUserId}`);
+    const res = await api.post(`/users/${targetUserId}/crush`);
     return res.data;
   } catch (err) {
     throw err.response?.data || "Something went wrong!";
@@ -131,7 +131,7 @@ export const sendSecretCrushAPI = async (targetUserId) => {
 // Fetch followers list (paginated)
 export const fetchFollowersAPI = async (targetUserId, page = 0) => {
   try {
-    const response = await api.get(`/profile/${targetUserId}/follower?page=${page}`);
+    const response = await api.get(`/profile/${targetUserId}/followers?page=${page}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || "Something went wrong!";

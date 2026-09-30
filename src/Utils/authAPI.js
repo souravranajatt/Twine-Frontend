@@ -53,7 +53,7 @@ export const logoutHandleAPI = async () => {
 // Logout a specific session 
 export const logoutSessionAPI = async (sessionId) => {
   try {
-    const response = await api.delete(`/auth/logout-device/${sessionId}`);
+    const response = await api.delete(`/auth/sessions/${sessionId}`);
     return response.data;
   } catch (error) {
     throw error.response?.data || "Something went wrong!";

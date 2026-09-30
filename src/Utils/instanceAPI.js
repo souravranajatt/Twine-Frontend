@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Nginx will proxy /api requests to backend
-const API_BASE_URL = process.env.REACT_APP_API_URL || "/api";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "/api/v1";
 
 // Create axios instance
 const api = axios.create({
