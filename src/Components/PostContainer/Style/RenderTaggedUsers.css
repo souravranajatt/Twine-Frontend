@@ -29,14 +29,21 @@
 /* ── Full-screen blur overlay ───────────────────── */
 .twine-tagged-overlay {
     position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: center;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
     animation: twine-tagged-fade-in 0.18s ease;
 }
 
@@ -53,15 +60,17 @@
 /* ── Modal card ─────────────────────────────────── */
 .twine-tagged-modal {
     background: #ffffff;
-    border-radius: 14px;
-    width: 340px;
-    max-width: 92vw;
+    border-radius: 16px;
+    width: 360px;
+    max-width: 90vw;
     max-height: 70vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
-    animation: twine-tagged-slide-up 0.2s ease;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+    position: relative;
+    z-index: 1000000;
+    animation: twine-tagged-slide-up 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes twine-tagged-slide-up {

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { createPortal } from "react-dom";
 import { BadgeCheck, Tag, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import useScrollLock from "../../../Lib/useScrollLock";
@@ -26,24 +27,29 @@ function RenderTaggedUsers({ taggedUsers }) {
         };
     };
 
-    const count = taggedUsers.length;
-
     return (
         <>
             {/* Trigger pill */}
             <button
                 type="button"
                 className="twine-tagged-toggle-btn"
-                onClick={() => setOpen(true)}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(true);
+                }}
+                aria-label="View tagged users"
             >
                 <Tag size={12} className="twine-tagged-toggle-icon" />
             </button>
 
-            {/* List modal open */}
-            {open && (
+            {/* List modal open - Portalled to body to escape parent overflow:hidden and transform */}
+            {open && createPortal(
                 <div
                     className="twine-tagged-overlay"
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setOpen(false);
+                    }}
                 >
                     <div
                         className="twine-tagged-modal"
@@ -55,7 +61,11 @@ function RenderTaggedUsers({ taggedUsers }) {
                             <button
                                 type="button"
                                 className="twine-tagged-modal-close"
-                                onClick={() => setOpen(false)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpen(false);
+                                }}
+                                aria-label="Close"
                             >
                                 <X size={18} />
                             </button>
@@ -90,7 +100,8 @@ function RenderTaggedUsers({ taggedUsers }) {
                             })}
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </>
     );
