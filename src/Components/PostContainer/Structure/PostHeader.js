@@ -14,6 +14,10 @@ function PostHeader({ post, onPostUpdate }) {
     // Close 3-dot dropdown on clicking outside
     useEffect(() => {
         const handleClickOutside = (e) => {
+            // Don't close dropdown if clicking inside portalled Delete Confirmation Modal
+            if (e.target && e.target.closest && e.target.closest(".delete-confirm-overlay")) {
+                return;
+            }
             if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
                 setOpenDropdown(false);
             }
