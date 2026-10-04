@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { savePostAPI, unsavePostAPI, archivePostAPI, hideLikeAPI, unhideLikeAPI, disableCommentingAPI, enableCommentingAPI, deletePostAPI } from '../../Utils/PostActionAPI';
 import { useNavigate } from "react-router-dom";
 import useScrollLock from "../../Lib/useScrollLock";
@@ -218,8 +219,8 @@ function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
             )}
         </div>
 
-        {/* Delete Confirmation Modal */}
-        {showDeleteConfirm && (
+        {/* Delete Confirmation Modal - Portalled to body */}
+        {showDeleteConfirm && createPortal(
             <div className="delete-confirm-overlay" onClick={() => !deletingState && setShowDeleteConfirm(false)}>
                 <div className="delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
                     <div className="delete-confirm-header">
@@ -243,7 +244,8 @@ function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
                         </button>
                     </div>
                 </div>
-            </div>
+            </div>,
+            document.body
         )}
     </>);
 }
