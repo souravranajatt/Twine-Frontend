@@ -9,6 +9,7 @@ import RenderTaggedUsers from "../PostContainer/Structure/RenderTaggedUsers.js";
 import CustomVideoPlayer from "../../Lib/CustomVideoPlayer.js";
 import PostDropDown from "./PostDropDown.js";
 import useScrollLock from "../../Lib/useScrollLock.js";
+import useClickOutside from "../../Lib/useClickOutside.js";
 import CommentSection from "../PostContainer/Structure/CommentSection.js";
 import "./PostBoxModal.css";
 import "../../Assets/Bundle/GlobalSpinner.css";
@@ -26,6 +27,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
     const originalUrlRef = useRef("");
     const likingRef = useRef(false);
     const commentSectionRef = useRef(null);
+    const dropdownBoxRef = useRef(null);
 
     // Update local post state if prop changes
     useEffect(() => {
@@ -51,18 +53,8 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
         };
     }, [isOpen, post]);
 
-    // Close dropdown on outside click
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (!e.target.closest('.postDropdownWrapper')) {
-                setOpenDropdown(false);
-            }
-        };
-        if (openDropdown) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [openDropdown]);
+    // Close dropdown on outside click using shared hook
+    useClickOutside(dropdownBoxRef, () => setOpenDropdown(false), openDropdown);
 
 
 
@@ -203,7 +195,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                                 </div>
                             </div>
                             {/* Three-dot dropdown */}
-                            <div className="postDropdownWrapper" style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                            <div className="postDropdownWrapper" ref={dropdownBoxRef} style={{ position: "relative", display: "flex", alignItems: "center" }}>
                                 <button
                                     type="button"
                                     onClick={() => setOpenDropdown(prev => !prev)}

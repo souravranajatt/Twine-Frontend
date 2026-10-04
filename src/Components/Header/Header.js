@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useDebounce from "../../Lib/useDebounce.js";
 import useScrollLock from "../../Lib/useScrollLock.js";
+import useClickOutside from "../../Lib/useClickOutside.js";
 import "./Header.css";
 import { searchUsersAPI } from "../../Utils/searchAPI.js";
 import { useAuth } from "../../AuthChecker/AuthContext.js";
@@ -51,25 +52,10 @@ function Header() {
     setProfileTabNav(false);
   }
 
-  // Close dropdowns on outside click
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setProfileTabNav(false);
-      }
-      if (notifyRef.current && !notifyRef.current.contains(event.target)) {
-        setNotifyTabNav(false);
-      }
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setShowResults(false);
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
+  // Close each dropdown/panel on outside click using shared hook
+  useClickOutside(profileRef, () => setProfileTabNav(false), profileTabNav);
+  useClickOutside(notifyRef, () => setNotifyTabNav(false), notifyTabNav);
+  useClickOutside(searchRef, () => setShowResults(false), showResults);
 
   // Define Search Variable & Search Handle
   useEffect(() => {

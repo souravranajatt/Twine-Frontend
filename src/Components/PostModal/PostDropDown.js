@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { savePostAPI, unsavePostAPI, archivePostAPI, hideLikeAPI, unhideLikeAPI, disableCommentingAPI, enableCommentingAPI, deletePostAPI } from '../../Utils/PostActionAPI';
 import { useNavigate } from "react-router-dom";
 import useScrollLock from "../../Lib/useScrollLock";
+import useClickOutside from "../../Lib/useClickOutside";
 import "./PostDropDown.css";
 import "../../Assets/Bundle/GlobalSpinner.css";
 
@@ -21,7 +22,11 @@ function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
     const isArchivingRef = useRef(false);
     const isCommentTogglingRef = useRef(false);
     const isDeletingRef = useRef(false);
+    const dropdownRef = useRef(null);
     const navigate = useNavigate();
+
+    // Close dropdown on outside click — disabled when delete confirmation modal is showing
+    useClickOutside(dropdownRef, onClose, !showDeleteConfirm);
 
 
     // Set Post to local state
@@ -191,7 +196,7 @@ function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
     if (!isOpen || !localPost) return null;
 
     return (<>
-        <div className='post-dropdown-main'>
+        <div className='post-dropdown-main' ref={dropdownRef}>
             {localPost.ownPost ? (
                 <>
                     <button className='post-dropdown-action'>Edit Post</button>

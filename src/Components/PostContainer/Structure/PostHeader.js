@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { BadgeCheck, MoreHorizontal } from "lucide-react";
 import formatPostTime from "../../../Lib/formatPostTime.js";
 import PostDropDown from "../../PostModal/PostDropDown.js";
+import useClickOutside from "../../../Lib/useClickOutside.js";
 import "../Style/PostHeader.css";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
@@ -11,26 +12,8 @@ function PostHeader({ post, onPostUpdate }) {
     const [openDropdown, setOpenDropdown] = useState(false);
     const dropdownRef = useRef(null);
 
-    // Close 3-dot dropdown on clicking outside
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-            // Don't close dropdown if clicking inside portalled Delete Confirmation Modal
-            if (e.target && e.target.closest && e.target.closest(".delete-confirm-overlay")) {
-                return;
-            }
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-                setOpenDropdown(false);
-            }
-        };
-
-        if (openDropdown) {
-            document.addEventListener("mousedown", handleClickOutside);
-        }
-
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [openDropdown]);
+    // Close 3-dot dropdown on outside click using shared hook
+    useClickOutside(dropdownRef, () => setOpenDropdown(false), openDropdown);
 
     if (!post) return null;
 
