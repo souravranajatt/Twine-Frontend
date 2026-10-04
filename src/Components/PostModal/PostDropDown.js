@@ -226,7 +226,7 @@ function PostDropDown({ isOpen, onClose, Post, onPostUpdate }) {
 
         {/* Delete Confirmation Modal - Portalled to body */}
         {showDeleteConfirm && createPortal(
-            <div className="delete-confirm-overlay" onClick={() => !deletingState && setShowDeleteConfirm(false)}>
+            <div className="delete-confirm-overlay">
                 <div className="delete-confirm-modal" onClick={(e) => e.stopPropagation()}>
                     <div className="delete-confirm-header">
                         <h3 className="delete-confirm-title">Delete Post?</h3>
