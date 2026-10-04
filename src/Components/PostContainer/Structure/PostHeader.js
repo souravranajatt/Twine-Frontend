@@ -13,7 +13,7 @@ function PostHeader({ post, onPostUpdate }) {
     const dropdownRef = useRef(null);
 
     // Close 3-dot dropdown on outside click using shared hook
-    useClickOutside(dropdownRef, () => setOpenDropdown(false), openDropdown);
+    useClickOutside(dropdownRef, () => setOpenDropdown(false), openDropdown, ['.delete-confirm-overlay']);
 
     if (!post) return null;
 

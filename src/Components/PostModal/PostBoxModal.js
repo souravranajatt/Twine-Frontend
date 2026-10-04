@@ -54,7 +54,7 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
     }, [isOpen, post]);
 
     // Close dropdown on outside click using shared hook
-    useClickOutside(dropdownBoxRef, () => setOpenDropdown(false), openDropdown);
+    useClickOutside(dropdownBoxRef, () => setOpenDropdown(false), openDropdown, ['.delete-confirm-overlay']);
 
 
 

@@ -1,12 +1,17 @@
 import { useEffect } from 'react';
 
-// Reusable hook — closes element when user clicks outside of it
-// Pass enabled=false to temporarily disable (e.g. when a confirm modal is open on top)
-function useClickOutside(ref, onClose, enabled = true) {
+function useClickOutside(ref, onClose, enabled = true, ignoreSelectors = []) {
     useEffect(() => {
         if (!enabled) return;
 
         const handleClick = (e) => {
+            // Skip if click landed inside any ignored selector (useful for portalled modals)
+            for (const selector of ignoreSelectors) {
+                if (e.target.closest && e.target.closest(selector)) {
+                    return;
+                }
+            }
+
             if (ref.current && !ref.current.contains(e.target)) {
                 onClose();
             }
@@ -21,7 +26,7 @@ function useClickOutside(ref, onClose, enabled = true) {
             clearTimeout(timer);
             document.removeEventListener('mousedown', handleClick);
         };
-    }, [ref, onClose, enabled]);
+    }, [ref, onClose, enabled, ignoreSelectors]);
 }
 
 export default useClickOutside;
