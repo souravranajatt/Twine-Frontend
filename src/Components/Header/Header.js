@@ -1,9 +1,17 @@
 import { Bell, User, Search, LogOut, CircleUserRound } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useDebounce from "../../Lib/useDebounce.js";
 import useScrollLock from "../../Lib/useScrollLock.js";
 import useClickOutside from "../../Lib/useClickOutside.js";
+import formatPostTime from "../../Lib/formatPostTime.js";
+import useNotificationSocket from "../../Lib/useNotificationSocket.js";
+import {
+  getNotificationsAPI,
+  getUnreadCountAPI,
+  markAsReadAPI,
+  markAllAsReadAPI,
+} from "../../Utils/notificationAPI.js";
 import "./Header.css";
 import { searchUsersAPI } from "../../Utils/searchAPI.js";
 import { useAuth } from "../../AuthChecker/AuthContext.js";
@@ -20,6 +28,12 @@ function Header() {
 
   const [profileTabNav, setProfileTabNav] = useState(false);
   const [notifyTabNav, setNotifyTabNav] = useState(false);
+
+  // Notification States
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const [loadingNotifs, setLoadingNotifs] = useState(false);
+
   const navigate = useNavigate();
 
   // Screen width detection for mobile
@@ -30,6 +44,25 @@ function Header() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Fetch initial unread count on login/mount
+  useEffect(() => {
+    if (!loggedUser) return;
+    getUnreadCountAPI()
+      .then((res) => {
+        setUnreadCount(res?.unreadCount || 0);
+      })
+      .catch(() => {});
+  }, [loggedUser]);
+
+  // Connect to Real-Time WebSocket STOMP
+  const currentUserId = loggedUser?.userUid || loggedUser?.userId;
+  const handleRealtimeNotification = useCallback((newNotif) => {
+    setUnreadCount((prev) => prev + 1);
+    setNotifications((prev) => [newNotif, ...prev]);
+  }, []);
+
+  useNotificationSocket(currentUserId, handleRealtimeNotification);
 
   // Lock background scroll only on mobile when profile dropdown is open
   useScrollLock(profileTabNav && isMobile);
@@ -42,15 +75,77 @@ function Header() {
   // Debounced value
   const debouncedSearch = useDebounce(searchGo, 500);
 
-  // Toogle Nav Bar
+  // Toggle Nav Bar
   const HandleprofileTabNavToogleBtn = () => {
-    setProfileTabNav(!profileTabNav); // Change true/false
+    setProfileTabNav(!profileTabNav);
     setNotifyTabNav(false);
-  }
+  };
+
   const HandlenotifyTabNavToogleBtn = () => {
-    setNotifyTabNav(!notifyTabNav); // Change true/false
+    const nextState = !notifyTabNav;
+    setNotifyTabNav(nextState);
     setProfileTabNav(false);
-  }
+
+    if (nextState) {
+      setLoadingNotifs(true);
+      getNotificationsAPI(0)
+        .then((data) => {
+          setNotifications(Array.isArray(data) ? data : []);
+        })
+        .catch((err) => {
+          console.error("Failed to load notifications:", err);
+        })
+        .finally(() => {
+          setLoadingNotifs(false);
+        });
+    }
+  };
+
+  // Mark all notifications as read
+  const handleMarkAllRead = async () => {
+    try {
+      await markAllAsReadAPI();
+      setUnreadCount(0);
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    } catch (err) {
+      console.error("Failed to mark all as read:", err);
+    }
+  };
+
+  // Click on individual notification
+  const handleNotificationClick = async (notif) => {
+    if (!notif.read) {
+      try {
+        await markAsReadAPI(notif.notificationId);
+        setUnreadCount((prev) => Math.max(0, prev - 1));
+        setNotifications((prev) =>
+          prev.map((n) =>
+            n.notificationId === notif.notificationId ? { ...n, read: true } : n
+          )
+        );
+      } catch (err) {
+        console.error("Failed to mark notification as read:", err);
+      }
+    }
+
+    setNotifyTabNav(false);
+
+    // Navigation based on notification type
+    if (notif.type === "USER_FOLLOW" || notif.type === "FOLLOW_ACCEPT") {
+      if (notif.actorUsername) navigate(`/${notif.actorUsername}`);
+    } else if (notif.type === "FOLLOW_REQUEST") {
+      navigate("/people/follow-requests");
+    } else if (
+      notif.type === "POST_LIKE" ||
+      notif.type === "POST_COMMENT" ||
+      notif.type === "COMMENT_REPLY"
+    ) {
+      const userParam = loggedUser?.userName || loggedUser?.username || "p";
+      navigate(`/${userParam}/posts/${notif.targetId}`);
+    } else if (notif.type === "SECRET_CRUSH_MATCH") {
+      if (notif.actorUsername) navigate(`/${notif.actorUsername}`);
+    }
+  };
 
   // Close each dropdown/panel on outside click using shared hook
   useClickOutside(profileRef, () => setProfileTabNav(false), profileTabNav);
@@ -229,14 +324,78 @@ function Header() {
           <div className="nav-bar-icons">
             {/* Notification DropDown */}
             <div className="icon-left" ref={notifyRef}>
-              <button type="button" className="headerRightIconBtn-ToogleBox" onClick={HandlenotifyTabNavToogleBtn}><Bell size={20} className="iconTabRight" /></button>
+              <button
+                type="button"
+                className="headerRightIconBtn-ToogleBox"
+                onClick={HandlenotifyTabNavToogleBtn}
+                title="Notifications"
+              >
+                <Bell size={20} className="iconTabRight" />
+                {unreadCount > 0 && (
+                  <span className="notification-badge">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                )}
+              </button>
+
               {notifyTabNav && (
                 <div className="dropdown notify-dropdown">
-                  <ul className="dropdown-unorderList">
-                    <li className="dropdown-listItem">❤️ Liked your post</li>
-                    <li className="dropdown-listItem">👀 Someone sent a like</li>
-                    <li className="dropdown-listItem">✅ twine.ceo followed you</li>
-                  </ul>
+                  <div className="notify-header">
+                    <h4 className="notify-title">Notifications</h4>
+                    {unreadCount > 0 && (
+                      <button
+                        type="button"
+                        className="notify-mark-all-btn"
+                        onClick={handleMarkAllRead}
+                      >
+                        Mark all as read
+                      </button>
+                    )}
+                  </div>
+
+                  {loadingNotifs ? (
+                    <div className="notify-loading">
+                      <div className="twine-loader-spinner"></div>
+                    </div>
+                  ) : notifications.length === 0 ? (
+                    <p className="notify-empty-state">No notifications yet</p>
+                  ) : (
+                    <ul className="notify-list">
+                      {notifications.map((notif) => (
+                        <li
+                          key={notif.notificationId}
+                          className={`notify-item ${!notif.read ? "unread" : ""}`}
+                          onClick={() => handleNotificationClick(notif)}
+                        >
+                          <img
+                            src={notif.actorProfilePhoto || Default_ProfilePhoto}
+                            alt={notif.actorUsername || "User"}
+                            className="notify-avatar"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = Default_ProfilePhoto;
+                            }}
+                          />
+                          <div className="notify-content">
+                            <p className="notify-text">
+                              {notif.message || (
+                                <>
+                                  <span className="notify-actor-name">
+                                    {notif.actorUsername ? `@${notif.actorUsername} ` : ""}
+                                  </span>
+                                  interacted with you.
+                                </>
+                              )}
+                            </p>
+                            <span className="notify-time">
+                              {formatPostTime(notif.createdAt)}
+                            </span>
+                          </div>
+                          {!notif.read && <span className="notify-unread-dot"></span>}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )}
             </div>
