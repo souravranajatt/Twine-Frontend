@@ -52,14 +52,23 @@ function Header() {
       .then((res) => {
         setUnreadCount(res?.unreadCount || 0);
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [loggedUser]);
 
   // Connect to Real-Time WebSocket STOMP
   const currentUserId = loggedUser?.userUid || loggedUser?.userId;
   const handleRealtimeNotification = useCallback((newNotif) => {
-    setUnreadCount((prev) => prev + 1);
-    setNotifications((prev) => [newNotif, ...prev]);
+    if (!newNotif || !newNotif.notificationId) return;
+
+    setNotifications((prev) => {
+      const alreadyExists = prev.some(
+        (n) => String(n.notificationId) === String(newNotif.notificationId)
+      );
+      if (alreadyExists) return prev;
+
+      setUnreadCount((count) => count + 1);
+      return [newNotif, ...prev];
+    });
   }, []);
 
   useNotificationSocket(currentUserId, handleRealtimeNotification);

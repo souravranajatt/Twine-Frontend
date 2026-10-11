@@ -46,24 +46,11 @@ export default function useNotificationSocket(userId, onNotificationReceived) {
       onConnect: () => {
         console.log("[STOMP] Connected to notification stream for user:", userId);
 
-        // 1. Private User Queue: /user/queue/notifications
-        client.subscribe("/user/queue/notifications", (message) => {
-          try {
-            const data = JSON.parse(message.body);
-            console.log("[STOMP] Live notification received via user queue:", data);
-            if (onNotificationRef.current) {
-              onNotificationRef.current(data);
-            }
-          } catch (err) {
-            console.error("Error parsing websocket notification:", err);
-          }
-        });
-
-        // 2. User Topic Fallback: /topic/notifications.{userId}
+        // Real-Time Notification Stream for this user
         client.subscribe(`/topic/notifications.${userId}`, (message) => {
           try {
             const data = JSON.parse(message.body);
-            console.log("[STOMP] Live notification received via topic:", data);
+            console.log("[STOMP] Live notification received:", data);
             if (onNotificationRef.current) {
               onNotificationRef.current(data);
             }
