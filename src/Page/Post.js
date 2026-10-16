@@ -272,10 +272,9 @@ function Post() {
                         {/* Comments Section */}
                         <CommentSection
                             ref={commentSectionRef}
-                            postId={post.fetchPostId}
+                            post={post}
                             isModal={false}
                             loggedUser={loggedUser}
-                            commentEnable={post.commentEnable}
                             onCommentCountUpdate={(change) => {
                                 setPost(prev => ({
                                     ...prev,

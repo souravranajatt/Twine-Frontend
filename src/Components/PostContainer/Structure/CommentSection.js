@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
-import { BadgeCheck } from "lucide-react";
+import { BadgeCheck, Trash2 } from "lucide-react";
 import { fetchCommentsAPI } from "../../../Utils/PostFeaturesAPI.js";
-import { postCommentAPI } from "../../../Utils/PostActionAPI.js";
+import { postCommentAPI, deleteCommentAPI } from "../../../Utils/PostActionAPI.js";
 import formatPostTime from "../../../Lib/formatPostTime.js";
 import "../Style/CommentSection.css";
 import "../../../Assets/Bundle/GlobalSpinner.css";
 
 const DEFAULT_IMAGE = "https://res.cloudinary.com/dgoqiyoeq/image/upload/v1776851796/Twine_DefaultNullImage_qosaiv.png";
 
-const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCountUpdate, commentEnable = true }, ref) => {
+const CommentSection = forwardRef(({ post, isModal, loggedUser, onCommentCountUpdate }, ref) => {
     const [comments, setComments] = useState([]);
     const [loadingComments, setLoadingComments] = useState(false);
     const [hasMoreComments, setHasMoreComments] = useState(true);
@@ -16,6 +16,23 @@ const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCount
 
     const isFetchingRef = useRef(false);
     const commentsEndRef = useRef(null);
+
+    const postId = post?.fetchPostId || post?.postId;
+    const commentEnable = post?.commentEnable ?? true;
+
+    // Current user identification for authorization
+    const currentUsername = (loggedUser?.userName || loggedUser?.username || "").trim().toLowerCase().replace(/^@/, "");
+    const currentUserId = String(loggedUser?.userUid || loggedUser?.userId || "").trim();
+
+    // Post owner identification
+    const postOwnerUsername = (post?.username || post?.userName || "").trim().toLowerCase().replace(/^@/, "");
+    const postOwnerId = String(post?.userId || post?.userUid || "").trim();
+
+    const isPostOwner = Boolean(
+        post?.ownPost ||
+        (postOwnerId && currentUserId && postOwnerId === currentUserId) ||
+        (postOwnerUsername && currentUsername && postOwnerUsername === currentUsername)
+    );
 
     // Initial Fetch
     useEffect(() => {
@@ -100,6 +117,33 @@ const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCount
         return () => window.removeEventListener("scroll", handleWindowScroll);
     }, [hasMoreComments, commentPage, loadingComments, postId, isModal]);
 
+    // Delete comment handler 
+    const handleDeleteComment = async (commentId) => {
+        const commentToDelete = comments.find((c) => c.commentId === commentId);
+
+        // Optimistic UI update
+        setComments((prev) => prev.filter((c) => c.commentId !== commentId));
+        if (onCommentCountUpdate) {
+            onCommentCountUpdate(-1);
+        }
+
+        // If it was a temporary unsubmitted comment, don't call server
+        if (String(commentId).startsWith("temp-")) return;
+
+        try {
+            await deleteCommentAPI(postId, commentId);
+        } catch (err) {
+            console.error("Failed to delete comment:", err);
+            // Revert on error
+            if (commentToDelete) {
+                setComments((prev) => [...prev, commentToDelete].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+                if (onCommentCountUpdate) {
+                    onCommentCountUpdate(1);
+                }
+            }
+        }
+    };
+
     // Let parent components trigger comment submission
     useImperativeHandle(ref, () => ({
         async submitNewComment(text) {
@@ -107,7 +151,8 @@ const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCount
 
             const newCommentObj = {
                 commentId: `temp-${Date.now()}`,
-                username: loggedUser?.userName || "you",
+                userId: loggedUser?.userUid || loggedUser?.userId || null,
+                username: loggedUser?.userName || loggedUser?.username || "you",
                 profileImage: loggedUser?.profilePhoto || DEFAULT_IMAGE,
                 commentText: text,
                 createdAt: new Date().toISOString(),
@@ -180,35 +225,60 @@ const CommentSection = forwardRef(({ postId, isModal, loggedUser, onCommentCount
                 </div>
             ) : (
                 <div className="twine-comments-list">
-                    {comments.map((comment) => (
-                        <div key={comment.commentId} className="twine-comment-row">
-                            <div className="twine-comment-avatar-div">
-                                <img
-                                    src={comment.profileImage && comment.profileImage !== "null"
-                                        ? comment.profileImage
-                                        : DEFAULT_IMAGE}
-                                    className="twine-comment-avatar-img"
-                                    alt={comment.username}
-                                />
-                            </div>
-                            <div className="twine-comment-body">
-                                <div className="twine-comment-meta">
-                                    <span className="twine-comment-username">
-                                        {comment.username}
-                                    </span>
-                                    {comment.fetchVerified && (
-                                        <BadgeCheck size={14} className="twine-comment-verify-badge inline-badge" />
-                                    )}
-                                    <span className="twine-comment-time">
-                                        {formatPostTime(comment.createdAt)}
-                                    </span>
+                    {comments.map((comment) => {
+                        const commentUsername = (comment.username || "").trim().toLowerCase().replace(/^@/, "");
+                        const commentUserId = String(comment.userId || "").trim();
+
+                        const isCommentAuthor = Boolean(
+                            (commentUserId && currentUserId && commentUserId === currentUserId) ||
+                            (commentUsername && currentUsername && commentUsername === currentUsername)
+                        );
+
+                        // Only comment author or post owner can delete
+                        const canDelete = Boolean(isCommentAuthor || isPostOwner);
+
+                        return (
+                            <div key={comment.commentId} className="twine-comment-row">
+                                <div className="twine-comment-avatar-div">
+                                    <img
+                                        src={comment.profileImage && comment.profileImage !== "null"
+                                            ? comment.profileImage
+                                            : DEFAULT_IMAGE}
+                                        className="twine-comment-avatar-img"
+                                        alt={comment.username}
+                                    />
                                 </div>
-                                <p className="twine-comment-text">
-                                    {comment.commentText}
-                                </p>
+                                <div className="twine-comment-body">
+                                    <div className="twine-comment-meta">
+                                        <span className="twine-comment-username">
+                                            {comment.username}
+                                        </span>
+                                        {comment.fetchVerified && (
+                                            <BadgeCheck size={14} className="twine-comment-verify-badge inline-badge" />
+                                        )}
+                                        <span className="twine-comment-time">
+                                            {formatPostTime(comment.createdAt)}
+                                        </span>
+                                    </div>
+                                    <p className="twine-comment-text">
+                                        {comment.commentText}
+                                    </p>
+                                </div>
+
+                                {canDelete && (
+                                    <button
+                                        type="button"
+                                        className="twine-comment-delete-btn"
+                                        title="Delete comment"
+                                        aria-label="Delete comment"
+                                        onClick={() => handleDeleteComment(comment.commentId)}
+                                    >
+                                        <Trash2 size={13} />
+                                    </button>
+                                )}
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
 
                     {/* Pagination Loader */}
                     {loadingComments && comments.length > 0 && (

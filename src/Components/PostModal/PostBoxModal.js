@@ -238,10 +238,9 @@ function PostBoxModal({ isOpen, onClose, post, onPostUpdate }) {
                     {/* CommentSection */}
                     <CommentSection
                         ref={commentSectionRef}
-                        postId={localPost.fetchPostId}
+                        post={localPost}
                         isModal={true}
                         loggedUser={loggedUser}
-                        commentEnable={localPost.commentEnable}
                         onCommentCountUpdate={(change) => {
                             const updatedPost = {
                                 ...localPost,

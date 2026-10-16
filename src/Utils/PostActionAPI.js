@@ -50,6 +50,16 @@ export const postCommentAPI = async (postId, data) => {
     }
 };
 
+// Delete a Comment
+export const deleteCommentAPI = async (postId, commentId) => {
+    try {
+        const response = await api.delete(`/posts/${postId}/comment/${commentId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 // Archive a post
 export const archivePostAPI = async (postId) => {
     try {

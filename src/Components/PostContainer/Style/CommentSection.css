@@ -215,3 +215,28 @@
         padding: 14px 16px;
     }
 }
+
+/* Comment Delete Button - Always visible, simple direct action */
+.twine-comment-delete-btn {
+    background: transparent;
+    border: none;
+    color: #a1a1aa;
+    padding: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: auto;
+    transition: color 0.15s ease, background-color 0.15s ease, transform 0.1s ease;
+}
+
+.twine-comment-delete-btn:hover {
+    color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.08);
+}
+
+.twine-comment-delete-btn:active {
+    transform: scale(0.9);
+}
